@@ -1,26 +1,299 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   ASTRA STUDIO — design tokens
+   The base tones are sampled from the 3D assets so the imagery
+   dissolves into the page instead of sitting on top of it.
+   ============================================================ */
+@theme {
+  --color-void: #04050f;
+  --color-ink: #070a1a;
+  --color-panel: #0a0d20;
+  --color-panel-2: #0e1128;
+
+  --color-violet-300: #c4aeff;
+  --color-violet-400: #9a6bff;
+  --color-violet-500: #7c3af5;
+  --color-violet-600: #6522e4;
+  --color-violet-700: #500fd9;
+
+  --color-chalk: #eceaf7;
+  --color-mist: #a9a6c4;
+  --color-slate-dim: #6f6c8c;
+
+  --font-display: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --hairline: rgba(255, 255, 255, 0.08);
+    --hairline-strong: rgba(255, 255, 255, 0.14);
+    --nav-h: 78px;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --nav-h: 96px;
+    }
+  }
+
+  * {
+    border-color: var(--hairline);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* The sticky nav must never cover an anchored heading. */
+    scroll-padding-top: calc(var(--nav-h) + 24px);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-chalk);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  /* Film grain, applied once to the whole page rather than per section.
+     Scoped to a single section it lifts that section's black by a measurable
+     amount and the difference shows as a step at the section boundary. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-violet-500) 45%, transparent);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-violet-400);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Editorial eyebrow: small, wide-tracked, always paired with a rule. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-mist);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      var(--color-violet-500),
+      color-mix(in oklab, var(--color-violet-500) 10%, transparent)
+    );
+  }
+
+  .hairline {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--hairline-strong) 18%,
+      var(--hairline-strong) 82%,
+      transparent
+    );
+  }
+
+  /* Link with an underline that wipes in from the left. */
+  .link-wipe {
+    position: relative;
+    display: inline-block;
+  }
+  .link-wipe::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+  .link-wipe:hover::after,
+  .link-wipe:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+@layer utilities {
+  .text-gradient-violet {
+    background: linear-gradient(
+      100deg,
+      var(--color-violet-300) 0%,
+      var(--color-violet-500) 55%,
+      var(--color-violet-700) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Soft violet light source. Sits behind content, never in front. */
+  .glow {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(90px);
+    pointer-events: none;
+    will-change: opacity;
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+
+  .noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.032;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* ---------- keyframes ---------- */
+@keyframes astra-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -18px, 0); }
+}
+
+@keyframes astra-breathe {
+  0%, 100% { opacity: 0.42; }
+  50% { opacity: 0.72; }
+}
+
+@keyframes astra-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes astra-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-40px, 22px, 0); }
+}
+
+@keyframes astra-rise {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes astra-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes astra-float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.02); }
+  50% { transform: translate3d(0, -10px, 0) scale(1.035); }
+}
+
+.animate-float { animation: astra-float 9s var(--ease-soft) infinite; }
+.animate-float-slow { animation: astra-float-slow 18s var(--ease-soft) infinite; }
+.animate-breathe { animation: astra-breathe 7s var(--ease-soft) infinite; }
+.animate-drift { animation: astra-drift 60s linear infinite alternate; }
+.animate-marquee { animation: astra-marquee 46s linear infinite; }
+
+/* Reveal-on-scroll. The element is authored in its final state and
+   only *hidden* once JS confirms it can animate — no flash of blank
+   content if scripting fails. */
+[data-reveal] {
+  opacity: 1;
+}
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+}
+/* Page transition. A short rise on the main landmark, keyed to the route via
+   React's remount — enough to register as a change of place, not enough to
+   delay the content. Pure CSS: a transition library for one fade would be
+   a disproportionate dependency. */
+@keyframes astra-page-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+html.js .page-enter {
+  animation: astra-page-in 0.5s var(--ease-out-expo) both;
+}
+
+/* Variant: a rule that draws itself left-to-right rather than rising.
+   Shares the one page observer — it is still `data-reveal`, only the
+   hidden and visible transforms differ. */
+[data-reveal].draw-x {
+  transform-origin: left;
+}
+html.js [data-reveal].draw-x {
+  opacity: 1;
+  transform: scaleX(0);
+}
+html.js [data-reveal].draw-x.is-visible {
+  transform: scaleX(1);
+  transition: transform 1.6s var(--ease-out-expo);
+}
+
+html.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
 }
