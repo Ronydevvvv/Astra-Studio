@@ -279,7 +279,7 @@ export function Hero() {
 
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute right-[10%] top-[2%] hidden sm:block lg:right-[22%]"
+              className="pointer-events-none absolute right-[14%] top-[-5%] hidden sm:block lg:right-[27%] lg:top-[-4%]"
             >
               <div style={rise(360)}>
                 <div
@@ -303,7 +303,7 @@ export function Hero() {
 
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute bottom-[6%] right-0 hidden md:block lg:right-[4%]"
+              className="pointer-events-none absolute bottom-[11%] right-0 hidden md:block lg:right-[7%]"
             >
               <div style={rise(400)}>
                 <div

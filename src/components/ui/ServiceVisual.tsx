@@ -67,10 +67,20 @@ export function ServiceVisual({ icon }: { icon: IconName }) {
 
     case "devices":
       return (
-        <div className="flex h-16 items-end gap-3" aria-hidden="true">
-          <span className="h-16 w-10 rounded-[3px] border border-white/15 bg-white/[0.03] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1" />
-          <span className="h-12 w-9 rounded-[3px] border border-white/15 bg-white/[0.03] transition-transform delay-75 duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1" />
-          <span className="h-8 w-4 rounded-[2px] border border-white/15 bg-white/[0.03] transition-transform delay-150 duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1" />
+        <div className="relative flex h-16 items-end gap-3" aria-hidden="true">
+          {/* A single baseline linking the three screens — one layout
+              adapting across sizes, not three unrelated boxes. */}
+          <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-violet-500/40 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100" />
+          <span className="relative h-16 w-10 rounded-[3px] border border-white/15 bg-white/[0.03] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1">
+            <span className="absolute inset-x-1.5 top-2 h-px bg-white/15" />
+            <span className="absolute inset-x-1.5 top-4 h-px w-2/3 bg-white/10" />
+          </span>
+          <span className="relative h-12 w-9 rounded-[3px] border border-white/15 bg-white/[0.03] transition-transform delay-75 duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1">
+            <span className="absolute inset-x-1.5 top-2 h-px bg-white/15" />
+          </span>
+          <span className="relative h-8 w-4 rounded-[2px] border border-white/15 bg-white/[0.03] transition-transform delay-150 duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1">
+            <span className="absolute inset-x-1 top-1.5 h-px bg-white/15" />
+          </span>
         </div>
       );
 
