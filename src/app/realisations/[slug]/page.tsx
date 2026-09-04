@@ -44,12 +44,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 /**
  * Case-study page.
  *
- * The `study` block is optional and unset for every current entry, because no
- * project has been delivered yet. Rather than print empty headings, the page
- * renders what it actually has — the brief, the services, the category — and
- * says plainly that the full study follows the delivery. Fill `study` in
- * content.ts and the objective / direction / approach / outcome sections and
- * the gallery appear on their own.
+ * The `study` block is optional per project: when it's set (all three
+ * current entries have one), the full narrative — context, objective,
+ * direction, build, outcome, gallery — renders below. When a future project
+ * is added without one yet, the page falls back to what it actually has —
+ * the brief, the services, the category — rather than printing empty
+ * headings, and says plainly that the full study follows.
  */
 export default async function ProjectPage({ params }: Params) {
   const { slug } = await params;

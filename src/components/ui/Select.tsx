@@ -105,6 +105,7 @@ export function Select({
         id={listboxId}
         role="listbox"
         aria-labelledby={id}
+        aria-activedescendant={open ? `${listboxId}-${activeIndex}` : undefined}
         tabIndex={-1}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown") {
@@ -138,6 +139,7 @@ export function Select({
         {options.map((opt, i) => (
           <li
             key={opt}
+            id={`${listboxId}-${i}`}
             role="option"
             aria-selected={opt === value}
             onMouseEnter={() => setActiveIndex(i)}

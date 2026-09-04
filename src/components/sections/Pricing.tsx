@@ -9,9 +9,6 @@ import { Starfield } from "@/components/ui/Starfield";
  * sit beside it instead of stacking into a feature checklist — the single
  * most template-looking pattern on the web. No cards, no badges, no pills:
  * inclusions are hairline-ruled entries.
- *
- * PRICES ARE UNSET. `from === "—"` renders a dashed rule, which reads as a
- * field left blank; an invented figure would read as a quote.
  */
 export function Pricing() {
   return (

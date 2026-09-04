@@ -2,16 +2,16 @@ import Image from "next/image";
 import { trust } from "@/lib/content";
 
 /**
- * Two named references, each labelled for what it actually is.
+ * Named references, each labelled for what it actually is.
  *
- * The word "client" appears nowhere: one entry is work for a real business,
- * the other a creative direction that was never commissioned, and conflating
- * them would be the one claim a visitor can check and catch. `relation`
- * carries that distinction from content.ts to the label.
+ * The word "client" appears nowhere: some entries are work for a real
+ * business, others a creative direction that was never commissioned, and
+ * conflating them would be the one claim a visitor can check and catch.
+ * `relation` carries that distinction from content.ts to the label.
  *
- * Logos render the moment a real file is set. Until then the name is set in
- * display type — a wordmark is an honest stand-in; a hand-redrawn logo is a
- * misrepresentation of someone else's brand.
+ * A logo renders the moment its file exists in content.ts; an entry without
+ * one falls back to its name in display type — a wordmark is an honest
+ * stand-in, a hand-redrawn logo would misrepresent someone else's brand.
  */
 export function TrustBar() {
   return (

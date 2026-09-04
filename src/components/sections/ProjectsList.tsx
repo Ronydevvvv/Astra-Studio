@@ -42,14 +42,24 @@ function ProjectVisual({ project }: { project: Project }) {
   );
 }
 
+/**
+ * Three distinct visual tiers, not a binary live/not-live — "built" (real
+ * work, not yet published) and "creative" (an ASTRA concept, no client) look
+ * different from each other on purpose. Collapsing them into the same dim
+ * badge would flatten exactly the honesty distinction content.ts encodes:
+ * Terralec is finished work; Mistral Pizza never had a client at all.
+ */
 function StatusBadge({ status }: { status: Project["status"] }) {
   const isLive = status === "delivered";
+  const isBuilt = status === "built";
   return (
     <span
       className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[0.6875rem] uppercase tracking-[0.16em] ${
         isLive
           ? "border-violet-400/40 bg-violet-500/10 text-violet-300"
-          : "border-white/[0.12] bg-white/[0.02] text-slate-dim"
+          : isBuilt
+            ? "border-violet-300/25 bg-transparent text-violet-200/90"
+            : "border-white/[0.12] bg-white/[0.02] text-slate-dim"
       }`}
     >
       {isLive && (
@@ -57,6 +67,9 @@ function StatusBadge({ status }: { status: Project["status"] }) {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400/70" />
           <span className="relative inline-flex size-1.5 rounded-full bg-violet-400" />
         </span>
+      )}
+      {isBuilt && (
+        <Icon name="check" className="size-3 shrink-0 text-violet-300" />
       )}
       {projectStatusLabel[status]}
     </span>
