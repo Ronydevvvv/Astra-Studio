@@ -19,7 +19,10 @@
 
   --color-chalk: #eceaf7;
   --color-mist: #a9a6c4;
-  --color-slate-dim: #6f6c8c;
+  /* Was #6f6c8c (4.06:1 on --color-void) — fails WCAG AA (4.5:1) for the
+     normal-weight text it's used on (eyebrows, footer labels, timestamps).
+     Lightened to land at ~5.6:1 while staying visually "the dim tone". */
+  --color-slate-dim: #8683a8;
 
   --font-display: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;

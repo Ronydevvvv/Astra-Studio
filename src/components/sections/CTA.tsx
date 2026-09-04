@@ -14,7 +14,7 @@ import { MouseParallax } from "@/components/ui/MouseParallax";
  */
 export function CTA() {
   return (
-    <section id="contact" className="relative px-6 py-24 md:px-10 md:py-32 xl:px-16">
+    <section className="relative px-6 py-24 md:px-10 md:py-32 xl:px-16">
       <MouseParallax className="relative mx-auto max-w-[1440px] overflow-hidden rounded-[28px] border border-white/[0.09] bg-ink">
         {/* --- scenery --- */}
         <div className="absolute inset-0" aria-hidden="true">

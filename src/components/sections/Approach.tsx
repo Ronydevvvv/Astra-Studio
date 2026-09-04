@@ -216,7 +216,7 @@ export function Approach({ heading = true }: { heading?: boolean }) {
                   <li
                     key={block.title}
                     data-step
-                    className="group grid grid-cols-[auto_minmax(0,1fr)] gap-x-6 border-t border-white/[0.09] py-7 pl-6 opacity-55 transition-[opacity,transform] duration-700 [transition-timing-function:var(--ease-out-expo)] data-[active]:translate-x-1.5 data-[active]:opacity-100"
+                    className="group grid grid-cols-[auto_minmax(0,1fr)] gap-x-6 border-t border-white/[0.09] py-7 pl-6 opacity-75 transition-[opacity,transform] duration-700 [transition-timing-function:var(--ease-out-expo)] data-[active]:translate-x-1.5 data-[active]:opacity-100"
                   >
                     <span className="font-display text-[1.75rem] font-medium tracking-[-0.03em] text-white/15 transition-colors duration-500 group-hover:text-violet-300 group-data-[active]:text-violet-400">
                       {block.index}
