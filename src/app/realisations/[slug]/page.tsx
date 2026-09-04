@@ -267,7 +267,7 @@ export default async function ProjectPage({ params }: Params) {
                 >
                   <div className="relative aspect-[16/10] overflow-hidden rounded-sm border border-white/[0.07]">
                     <Image
-                      src={project.image ?? study.gallery?.[0] ?? study.mobileImage}
+                      src={project.image ?? study.gallery?.[0]?.src ?? study.mobileImage}
                       alt={`${project.name} — version desktop`}
                       fill
                       sizes="(max-width: 640px) 70vw, 60vw"
@@ -288,9 +288,9 @@ export default async function ProjectPage({ params }: Params) {
 
               {study?.gallery && study.gallery.length > 0 && (
                 <div className="mt-16 grid gap-6 sm:grid-cols-2" data-reveal>
-                  {study.gallery.map((src, i) => (
+                  {study.gallery.map((img, i) => (
                     <div
-                      key={src}
+                      key={img.src}
                       className={
                         i === 0
                           ? "relative aspect-[16/10] overflow-hidden rounded-sm sm:col-span-2"
@@ -298,8 +298,8 @@ export default async function ProjectPage({ params }: Params) {
                       }
                     >
                       <Image
-                        src={src}
-                        alt={`${project.name} — visuel du projet`}
+                        src={img.src}
+                        alt={img.alt}
                         fill
                         sizes={i === 0 ? "100vw" : "(max-width: 640px) 100vw, 50vw"}
                         className="object-cover"

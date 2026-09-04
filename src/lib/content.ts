@@ -368,7 +368,10 @@ export type Project = {
     direction: string;
     build: string;
     outcome: string;
-    gallery?: string[];
+    /** Each image carries its own alt — a generic "visuel du projet"
+     * repeated across every gallery photo tells a screen-reader user
+     * nothing that distinguishes one from the next. */
+    gallery?: { src: string; alt: string }[];
     /** A real mobile capture, shown next to the desktop hero — proof the
      * responsive work actually happened, not a claim about it. */
     mobileImage?: string;
@@ -412,7 +415,9 @@ export const projects: Project[] = [
         "Développement sur un thème Shopify Liquid sur mesure, incluant une section de simulateur de personnalisation produit et une section FAQ dédiée.",
       outcome:
         "Boutique en ligne, thème sur mesure livré et déployé.",
-      gallery: ["/assets/projects/mister-dalle/logo.png"],
+      gallery: [
+        { src: "/assets/projects/mister-dalle/logo.png", alt: "Logo Mister Dalle" },
+      ],
     },
   },
   {
@@ -437,9 +442,9 @@ export const projects: Project[] = [
       outcome:
         "Concept abouti, non publié et sans client réel à ce jour : c'est une pièce de portfolio, pas une commande.",
       gallery: [
-        "/assets/projects/mistral-pizza/pizza-table.jpg",
-        "/assets/projects/mistral-pizza/margherita.jpg",
-        "/assets/projects/mistral-pizza/pizza-charcuterie-four.jpg",
+        { src: "/assets/projects/mistral-pizza/pizza-table.jpg", alt: "Pizzas dressées sur une table en bois, concept Mistral Pizza" },
+        { src: "/assets/projects/mistral-pizza/margherita.jpg", alt: "Gros plan sur une pizza margherita cuite au feu de bois" },
+        { src: "/assets/projects/mistral-pizza/pizza-charcuterie-four.jpg", alt: "Pizza à la charcuterie devant le four à bois" },
       ],
       video: "/assets/projects/mistral-pizza/mistral-four.mp4",
     },
@@ -466,9 +471,9 @@ export const projects: Project[] = [
       outcome:
         "Le site est fonctionnellement terminé. Il n'est pas encore publié : la configuration de la messagerie de devis et la finalisation des mentions légales restent à faire avant la mise en ligne.",
       gallery: [
-        "/assets/projects/terralec/services-grid.png",
-        "/assets/projects/terralec/int-desktop.png",
-        "/assets/projects/terralec/equipe-chantier.jpg",
+        { src: "/assets/projects/terralec/services-grid.png", alt: "Grille des services Terralec B.T.P sur le site" },
+        { src: "/assets/projects/terralec/int-desktop.png", alt: "Page intérieure du site Terralec B.T.P en version desktop" },
+        { src: "/assets/projects/terralec/equipe-chantier.jpg", alt: "Équipe Terralec B.T.P sur un chantier" },
       ],
       mobileImage: "/assets/projects/terralec/int-mobile.png",
     },
