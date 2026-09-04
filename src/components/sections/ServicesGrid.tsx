@@ -1,6 +1,25 @@
+"use client";
+
 import Link from "next/link";
+import type { MouseEvent } from "react";
 import { services, servicesHome } from "@/lib/content";
 import { Icon } from "@/components/ui/Icon";
+import { ServiceVisual } from "@/components/ui/ServiceVisual";
+
+/** Publishes the pointer position as a percentage on the card itself, so the
+ * spotlight is a plain CSS radial-gradient rather than a second JS-driven
+ * layer. One handler for all six cards. */
+function onCardMove(e: MouseEvent<HTMLElement>) {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty(
+    "--mx",
+    `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`
+  );
+  e.currentTarget.style.setProperty(
+    "--my",
+    `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`
+  );
+}
 
 /**
  * Home overview: one line per service, scannable in two seconds.
@@ -66,34 +85,50 @@ export function ServicesGrid() {
             >
               <Link
                 href={`/services#${service.slug}`}
-                className="flex h-full flex-col p-8 transition-colors duration-500 hover:bg-white/[0.018] lg:p-10"
+                onMouseMove={onCardMove}
+                className="relative flex h-full flex-col overflow-hidden p-8 transition-colors duration-500 hover:bg-white/[0.018] lg:p-10"
               >
+                {/* Light that follows the cursor — subtle, and only where
+                    the pointer actually is, rather than a static glow. */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "radial-gradient(240px circle at var(--mx,50%) var(--my,50%), color-mix(in oklab, var(--color-violet-500) 10%, transparent), transparent 70%)",
+                  }}
+                />
+
                 <span
                   aria-hidden="true"
                   className="absolute inset-x-0 top-[-1px] h-px origin-left scale-x-0 bg-gradient-to-r from-violet-500 to-violet-500/0 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100"
                 />
 
-                <div className="flex items-center justify-between gap-6">
+                <div className="relative flex items-center justify-between gap-6">
                   <span className="font-display text-[0.75rem] tracking-[0.16em] text-slate-dim transition-colors duration-500 group-hover:text-violet-300">
                     {service.index}
                   </span>
                   <Icon
                     name={service.icon}
-                    className="size-6 text-violet-400/70 transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-0.5 group-hover:text-violet-300"
+                    className="size-6 text-violet-400/70 transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:text-violet-300"
                   />
                 </div>
 
-                <h3 className="mt-14 text-[1.5rem] font-medium tracking-[-0.025em] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1">
+                <div className="relative mt-10">
+                  <ServiceVisual icon={service.icon} />
+                </div>
+
+                <h3 className="relative mt-6 text-[1.5rem] font-medium tracking-[-0.025em] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1">
                   {service.title}
                 </h3>
 
-                <p className="mt-3.5 max-w-xs text-[0.9375rem] leading-[1.7] text-mist">
+                <p className="relative mt-3.5 max-w-xs text-[0.9375rem] leading-[1.7] text-mist transition-colors duration-500 group-hover:text-chalk/90">
                   {service.short}
                 </p>
 
                 <Icon
                   name="arrow"
-                  className="mt-8 size-4 text-slate-dim transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5 group-hover:text-violet-300"
+                  className="relative mt-8 size-4 text-slate-dim transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5 group-hover:text-violet-300"
                 />
               </Link>
             </li>

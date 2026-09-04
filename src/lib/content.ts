@@ -68,11 +68,12 @@ export type TrustEntry = {
 };
 
 export const trust = {
-  eyebrow: "Ils nous font confiance",
+  eyebrow: "Projets & expérimentations",
   lead: "Des univers auxquels nous aimons donner vie.",
   entries: [
-    { name: "Mister Dalle", relation: "project", logo: null },
-    { name: "Nali Restaurant & Lounge", relation: "creative", logo: null },
+    { name: "Mister Dalle", relation: "project", logo: "/assets/projects/mister-dalle/logo.png" },
+    { name: "Mistral Pizza", relation: "creative", logo: "/assets/projects/mistral-pizza/logo.png" },
+    { name: "Terralec B.T.P", relation: "project", logo: "/assets/projects/terralec/logo.png" },
   ] as TrustEntry[],
   labels: {
     project: "Projet",
@@ -294,6 +295,25 @@ export const about = {
   eyebrow: "À propos",
   title: ["Une bonne idée ne suffit pas.", "Il faut la rendre évidente."],
   lead: "ASTRA n'est pas une agence qui fabrique des pages. Nous concevons des expériences digitales qui doivent servir une vraie activité.",
+  /** Why the studio exists at all — the question §13-14 of the brief keeps
+   * asking for, distinct from `vision` (what a site should do) and from
+   * `blocks` (how a project runs). Real reasoning, not a slogan: templates
+   * and generic themes already solve "a website" — the only reason to hire
+   * a studio instead is when the site has to fit one specific activity
+   * closely enough that a template would show its seams. */
+  why: {
+    eyebrow: "Pourquoi ASTRA",
+    body: "Un thème du marché peut habiller n'importe quelle activité — c'est justement sa limite. ASTRA existe pour les projets où ça ne suffit plus : quand le site doit épouser un métier précis plutôt que l'inverse. C'est pour ça que chaque projet est repris depuis la maquette, jamais depuis un modèle : le sur-mesure n'est pas un argument commercial, c'est la seule méthode qui tient quand le gabarit générique ne colle plus.",
+  },
+  vision: {
+    eyebrow: "Notre vision",
+    body: "Un site ne doit pas seulement être beau. Direction artistique et développement ne sont pas deux métiers séparés qui se transmettent un fichier : ils avancent ensemble, du premier croquis à la dernière ligne de code — c'est ce qui évite qu'une idée forte s'use en traversant l'équipe.",
+  },
+  portfolioLink: {
+    eyebrow: "Nos réalisations",
+    title: "Voir le travail plutôt que la promesse.",
+    cta: { label: "Découvrir les réalisations", href: "/realisations" },
+  },
   blocks: [
     {
       index: "01",
@@ -341,7 +361,7 @@ export type Project = {
    * work. Anything not actually built for a paying client stays "creative"
    * and is labelled as a creative direction, never as a réalisation.
    */
-  status: "delivered" | "creative" | "upcoming";
+  status: "delivered" | "built" | "creative" | "upcoming";
   study?: {
     context: string;
     objective: string;
@@ -349,6 +369,12 @@ export type Project = {
     build: string;
     outcome: string;
     gallery?: string[];
+    /** A real mobile capture, shown next to the desktop hero — proof the
+     * responsive work actually happened, not a claim about it. */
+    mobileImage?: string;
+    /** A real demo clip. Muted/looped, never autoplaying at full weight —
+     * see the <video> markup in [slug]/page.tsx. */
+    video?: string;
   };
 };
 
@@ -366,29 +392,92 @@ export const projectsIntro = {
  */
 export const projects: Project[] = [
   {
-    slug: "mistral-pizza",
+    slug: "mister-dalle",
     index: "01",
-    name: "Mistral Pizza",
-    category: "Restauration",
-    services: ["Direction artistique", "Web design", "Développement"],
+    name: "Mister Dalle",
+    category: "E-commerce · Shopify",
+    services: ["Direction artistique", "Développement Shopify", "Performance"],
     year: "—",
-    status: "upcoming",
-    body: "Une expérience digitale pensée pour une pizzeria locale qui veut donner envie avant même la première bouchée.",
+    status: "delivered",
+    image: "/assets/projects/mister-dalle/hero-lifestyle.webp",
+    body: "Une boutique Shopify reprise et refondue : thème sur mesure, structure repensée et parcours d'achat resserré.",
+    study: {
+      context:
+        "Mister Dalle vend des dalles et pavés personnalisables en ligne. Le thème Shopify existant ne mettait pas en valeur ce qui rend le produit spécial : la possibilité de le configurer avant achat.",
+      objective:
+        "Reprendre le thème pour resserrer le parcours d'achat et donner au configurateur de produit la place centrale qu'il méritait.",
+      direction:
+        "Identité de marque conservée (noir, violet), mise en page resserrée autour de la fiche produit et du configurateur plutôt que diluée dans des sections génériques.",
+      build:
+        "Développement sur un thème Shopify Liquid sur mesure, incluant une section de simulateur de personnalisation produit et une section FAQ dédiée.",
+      outcome:
+        "Boutique en ligne, thème sur mesure livré et déployé.",
+      gallery: ["/assets/projects/mister-dalle/logo.png"],
+    },
   },
   {
-    slug: "nali-restaurant-lounge",
+    slug: "mistral-pizza",
     index: "02",
-    name: "Nali Restaurant & Lounge",
-    category: "Restauration · Lounge",
-    services: ["Direction créative", "Exploration visuelle"],
+    name: "Mistral Pizza",
+    category: "Restauration · Projet conceptuel",
+    services: ["Direction artistique", "Web design", "Développement"],
     year: "—",
     status: "creative",
-    body: "Une exploration de direction créative autour d'un lieu qui mêle table et lounge. Ambiance, rythme, hiérarchie — le vocabulaire avant le site.",
+    image: "/assets/projects/mistral-pizza/hero-four.jpg",
+    body: "Un concept ASTRA pour une pizzeria au feu de bois : donner envie avant même la première bouchée, sans commande client à l'origine.",
+    study: {
+      context:
+        "Une pizzeria au feu de bois n'a presque jamais besoin d'un site — le bouche-à-oreille suffit. C'est justement ce qui en fait un bon terrain d'exploration : montrer qu'un site peut donner faim aussi efficacement qu'une vitrine, sans fiche technique (menu, horaires, adresse) en premier plan.",
+      objective:
+        "Concevoir, à titre d'exercice de studio, un site vitrine multi-pages complet — accueil, carte, galerie, réservation, à propos, contact — pour une pizzeria imaginée par ASTRA.",
+      direction:
+        "L'ambiance italienne classique (feu, pierre, bois) a été choisie parce qu'elle porte à elle seule tout l'argument commercial : personne n'a besoin d'un texte pour comprendre ce qu'une flamme dans un four en dit sur la cuisson. Photographie brute en ouverture, typographie éditoriale, une structure numérotée (le feu, la pâte, le temps) qui raconte la méthode avant de vendre le produit.",
+      build:
+        "Site multi-pages en HTML/CSS/JS, avec sitemap et robots.txt dédiés et une page de réservation fonctionnelle — construit avec le même soin technique qu'un projet client, précisément pour servir de démonstration.",
+      outcome:
+        "Concept abouti, non publié et sans client réel à ce jour : c'est une pièce de portfolio, pas une commande.",
+      gallery: [
+        "/assets/projects/mistral-pizza/pizza-table.jpg",
+        "/assets/projects/mistral-pizza/margherita.jpg",
+        "/assets/projects/mistral-pizza/pizza-charcuterie-four.jpg",
+      ],
+      video: "/assets/projects/mistral-pizza/mistral-four.mp4",
+    },
+  },
+  {
+    slug: "terralec-btp",
+    index: "03",
+    name: "Terralec B.T.P",
+    category: "BTP · Travaux publics",
+    services: ["Direction artistique", "Développement Next.js", "Responsive"],
+    year: "—",
+    status: "built",
+    image: "/assets/projects/terralec/hero-desktop.png",
+    body: "Un site vitrine complet pour une entreprise de travaux publics et réseaux (Enedis, GRDF, Orange), avec une scène 3D interactive et une direction artistique dédiée.",
+    study: {
+      context:
+        "TERRALEC B.T.P est une entreprise de travaux publics et réseaux (électricité Enedis, gaz GRDF, télécom Orange, éclairage public) basée en Moselle. Le site devait présenter clairement six métiers techniques à des donneurs d'ordre exigeants.",
+      objective:
+        "Construire un site vitrine complet et multilingue, capable de présenter l'entreprise, ses équipes et ses chantiers, et de recevoir de vraies demandes de devis qualifiées par métier.",
+      direction:
+        "Palette encre / pierre / orange, typographies Inter Tight et Inter. Une structure éditoriale sobre laisse respirer les photos de chantier réelles ; une scène 3D interactive (coupe de tranchée réseaux) illustre le métier dès la page d'accueil.",
+      build:
+        "Développé avec Next.js et React (TypeScript), animations au scroll avec GSAP, défilement fluide avec Lenis, interactions de menu avec Framer Motion, scène 3D avec React Three Fiber. Site multilingue, formulaire de demande de devis avec validation.",
+      outcome:
+        "Le site est fonctionnellement terminé. Il n'est pas encore publié : la configuration de la messagerie de devis et la finalisation des mentions légales restent à faire avant la mise en ligne.",
+      gallery: [
+        "/assets/projects/terralec/services-grid.png",
+        "/assets/projects/terralec/int-desktop.png",
+        "/assets/projects/terralec/equipe-chantier.jpg",
+      ],
+      mobileImage: "/assets/projects/terralec/int-mobile.png",
+    },
   },
 ];
 
 export const projectStatusLabel: Record<Project["status"], string> = {
   delivered: "Projet livré",
+  built: "Projet réalisé",
   creative: "Direction créative",
   upcoming: "En préparation",
 };
@@ -396,7 +485,7 @@ export const projectStatusLabel: Record<Project["status"], string> = {
 export const projectsHome = {
   eyebrow: "Réalisations",
   title: ["Le travail,", "pas la promesse."],
-  link: { label: "Voir les réalisations", href: "/realisations" },
+  link: { label: "Voir nos réalisations", href: "/realisations" },
 };
 
 /* ------------------------------------------------------------------ */
@@ -407,8 +496,11 @@ export type Offer = {
   index: string;
   name: string;
   from: string;
+  /** Who it's for — one line, answers "is this me?" before the price does. */
+  audience: string;
   pitch: string;
   includes: string[];
+  recommended?: boolean;
 };
 
 export const pricing = {
@@ -420,8 +512,10 @@ export const pricing = {
     {
       index: "01",
       name: "Essentiel",
-      from: "690 €",
-      pitch: "Pour un site vitrine simple et efficace.",
+      from: "450 €",
+      audience: "Vous démarrez ou refaites une présence web simple.",
+      pitch:
+        "Un site vitrine propre et rapide, qui présente clairement votre activité et donne envie de vous contacter.",
       includes: [
         "Jusqu'à 5 pages",
         "Design sur mesure",
@@ -432,21 +526,25 @@ export const pricing = {
     {
       index: "02",
       name: "Signature",
-      from: "1 190 €",
+      from: "850 €",
+      audience: "Votre marque a besoin d'une vraie identité en ligne.",
       pitch:
-        "Pour un site avec une vraie direction artistique, des animations et une expérience plus poussée.",
+        "Une direction artistique pensée pour vous, des animations soignées et une expérience qui donne au site une vraie personnalité.",
       includes: [
         "Direction artistique dédiée",
         "Animations et micro-interactions",
         "Pages sur mesure",
         "SEO technique complet",
       ],
+      recommended: true,
     },
     {
       index: "03",
       name: "Expérience",
-      from: "1 690 €",
-      pitch: "Pour un site plus technique, avec des interactions poussées.",
+      from: "1 100 €",
+      audience: "Votre projet demande plus de technique et d'ambition.",
+      pitch:
+        "Du développement sur mesure, des interactions avancées et une expérience utilisateur pensée dans le détail.",
       includes: [
         "3D légère",
         "Animations avancées",
@@ -461,6 +559,47 @@ export const pricing = {
     price: "Sur devis",
     cta: { label: "Parlons-en", href: "/contact" },
   },
+};
+
+/* ------------------------------------------------------------------ */
+/* Pricing — FAQ                                                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Answers only what the site can already back up elsewhere (the four-step
+ * process, the three tiers, the contact form) — no delivery-time promise,
+ * since none is fixed, and no claim about post-launch support beyond what
+ * `services` already states.
+ */
+export const pricingFaq = {
+  eyebrow: "Questions fréquentes",
+  title: "Avant de nous écrire.",
+  items: [
+    {
+      q: "Combien coûte un site avec ASTRA ?",
+      a: "Les tarifs affichés sont des points de départ : 450 € pour un site vitrine simple, 850 € pour une direction artistique dédiée avec animations, 1 100 € pour un projet plus technique. Le prix exact dépend du nombre de pages et des fonctionnalités — il est confirmé après un échange, jamais deviné à l'avance.",
+    },
+    {
+      q: "Combien de temps prend un projet ?",
+      a: "Cela dépend directement de sa taille et de sa complexité. Nous ne donnons pas de délai standard avant d'avoir vu le projet : un site vitrine de 5 pages et un site avec développement sur mesure ne se planifient pas de la même façon.",
+    },
+    {
+      q: "Comment se déroule un projet ?",
+      a: "Quatre étapes : on creuse votre activité et vos objectifs (découverte), vous validez le site avant qu'il existe (conception), l'intégration est testée sur tous les écrans (développement), puis vient le déploiement.",
+    },
+    {
+      q: "Puis-je demander des modifications après la mise en ligne ?",
+      a: "Oui — c'est le rôle de l'accompagnement : mises à jour, corrections et évolutions restent possibles une fois le site en ligne.",
+    },
+    {
+      q: "Le site sera-t-il optimisé pour mobile ?",
+      a: "Oui, systématiquement. Chaque largeur d'écran est composée séparément et vérifiée, pas simplement redimensionnée depuis le desktop.",
+    },
+    {
+      q: "Faites-vous du référencement (SEO) ?",
+      a: "Oui, en base technique : structure du code, métadonnées et données structurées font partie du développement, pas d'un plugin ajouté après coup. Nous ne garantissons pas de position sur Google — personne ne le peut honnêtement.",
+    },
+  ],
 };
 
 /* ------------------------------------------------------------------ */
@@ -500,8 +639,8 @@ export const contact = {
 export const cta = {
   title: ["Prêt à donner vie", "à votre projet ?"],
   lead: "Discutons de votre projet et créons ensemble un site qui fera la différence.",
-  primary: { label: "Démarrer mon projet", href: "/contact" },
-  secondary: { label: "Nous contacter", href: "/contact" },
+  primary: { label: "Démarrer un projet", href: "/contact" },
+  secondary: { label: "Voir nos réalisations", href: "/realisations" },
 };
 
 /* ------------------------------------------------------------------ */
@@ -517,8 +656,8 @@ export const company = {
   name: "ASTRA Studio",
   tagline:
     "Une agence digitale qui transforme les idées en expériences web.",
-  /** TODO */ email: null as string | null,
-  /** TODO */ phone: null as string | null,
+  email: "Ronydevvvv@gmail.com" as string | null,
+  phone: "06 52 80 67 94" as string | null,
   /** TODO */ availability: null as string | null,
   /** TODO */ address: null as string | null,
   /** TODO */ legalForm: null as string | null,
@@ -535,6 +674,16 @@ export const company = {
 /* ------------------------------------------------------------------ */
 /* Footer                                                              */
 /* ------------------------------------------------------------------ */
+
+/**
+ * The footer's own closing line — deliberately NOT `cta.title`. Most pages
+ * already end on the CTA section right above the footer; repeating the same
+ * headline twice in a row read as a stutter rather than emphasis.
+ */
+export const footerCta = {
+  title: ["On en discute", "quand vous voulez."],
+  cta: { label: "Écrire à ASTRA", href: "/contact" },
+};
 
 export const footer = {
   columns: [

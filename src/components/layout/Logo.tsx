@@ -17,8 +17,8 @@ export function Logo({
 }) {
   return (
     <Link
-      href="#accueil"
-      aria-label="ASTRA Studio — retour en haut"
+      href="/"
+      aria-label="ASTRA Studio — retour à l'accueil"
       className={`group/logo flex items-center gap-3.5 ${className}`}
     >
       <svg

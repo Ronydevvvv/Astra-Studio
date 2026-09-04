@@ -272,6 +272,23 @@ html.js [data-reveal].draw-x.is-visible {
   transition: transform 1.6s var(--ease-out-expo);
 }
 
+/* Variant: a clip-path mask that rises up over the visual rather than a
+   plain fade — reserved for the largest set-piece image on a page (a
+   project's hero visual) so that one moment reads as cinematic instead of
+   every reveal on the site using the same fade+rise. */
+[data-reveal].reveal-mask {
+  transform: none;
+}
+html.js [data-reveal].reveal-mask {
+  opacity: 1;
+  clip-path: inset(0 0 100% 0);
+}
+html.js [data-reveal].reveal-mask.is-visible {
+  clip-path: inset(0 0 0% 0);
+  transition: clip-path 1.1s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
 html.js [data-reveal].is-visible {
   opacity: 1;
   transform: none;

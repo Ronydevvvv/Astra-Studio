@@ -1,5 +1,6 @@
 import { services } from "@/lib/content";
 import { Icon } from "@/components/ui/Icon";
+import { ServiceVisual } from "@/components/ui/ServiceVisual";
 
 /**
  * One numbered spread per service, alternating side.
@@ -53,6 +54,10 @@ export function ServicesDetail() {
                       aria-hidden="true"
                       className="h-px flex-1 bg-gradient-to-r from-violet-500/50 to-transparent"
                     />
+                  </div>
+
+                  <div className="mt-8 rounded-md border border-white/[0.07] bg-white/[0.015] px-5 py-6">
+                    <ServiceVisual icon={service.icon} />
                   </div>
 
                   <p className="mt-8 text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim/70">

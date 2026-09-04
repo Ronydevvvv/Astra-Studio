@@ -1,0 +1,131 @@
+import type { IconName } from "@/lib/content";
+
+/**
+ * A small, distinct scene per service — the six cards should not read as one
+ * template repeated six times with a different icon swapped in. Each visual
+ * borrows the vocabulary of its own discipline (a palette for design, a
+ * terminal for code, a speed graph for performance…) rather than a shared
+ * abstract shape, and animates only on the parent card's hover (`group-hover`)
+ * so the grid stays quiet until someone actually looks at one.
+ */
+export function ServiceVisual({ icon }: { icon: IconName }) {
+  switch (icon) {
+    case "design":
+      return (
+        <div className="relative flex h-16 items-end gap-2" aria-hidden="true">
+          {["#7c3af5", "#c4b5fd", "#3d2a78"].map((c, i) => (
+            <span
+              key={c}
+              className="block w-6 rounded-sm transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1"
+              style={{
+                height: `${28 + i * 10}px`,
+                background: c,
+                transitionDelay: `${i * 70}ms`,
+              }}
+            />
+          ))}
+          <span className="ml-1 mb-1 size-2.5 rounded-full border border-white/40 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-2 group-hover:translate-y-[-6px]" />
+        </div>
+      );
+
+    case "code":
+      return (
+        <div
+          className="h-16 rounded-sm border border-white/10 bg-white/[0.03] px-3 py-2.5 font-mono text-[0.625rem] leading-[1.9] text-violet-300/80"
+          aria-hidden="true"
+        >
+          <span className="block w-0 overflow-hidden whitespace-nowrap text-mist/80 transition-[width] duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:w-full">
+            const site =
+          </span>
+          <span className="flex items-center whitespace-nowrap">
+            <span className="inline-block w-0 overflow-hidden transition-[width] duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:w-[7.5ch] [transition-delay:200ms]">
+              build(&apos;astra&apos;);
+            </span>
+            <span className="ml-px inline-block h-3 w-[2px] animate-pulse bg-violet-400" />
+          </span>
+        </div>
+      );
+
+    case "gauge":
+      return (
+        <svg viewBox="0 0 100 40" className="h-16 w-full" aria-hidden="true">
+          <polyline
+            points="0,32 18,26 34,30 50,14 66,20 82,6 100,10"
+            fill="none"
+            stroke="rgba(124,58,245,0.9)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            pathLength={1}
+            strokeDasharray="1"
+            strokeDashoffset="1"
+            className="transition-[stroke-dashoffset] duration-[1.1s] [transition-timing-function:var(--ease-out-expo)] group-hover:[stroke-dashoffset:0]"
+          />
+          <circle cx="100" cy="10" r="2.6" fill="#c4b5fd" />
+        </svg>
+      );
+
+    case "devices":
+      return (
+        <div className="flex h-16 items-end gap-3" aria-hidden="true">
+          <span className="h-16 w-10 rounded-[3px] border border-white/15 bg-white/[0.03] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1" />
+          <span className="h-12 w-9 rounded-[3px] border border-white/15 bg-white/[0.03] transition-transform delay-75 duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1" />
+          <span className="h-8 w-4 rounded-[2px] border border-white/15 bg-white/[0.03] transition-transform delay-150 duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1" />
+        </div>
+      );
+
+    case "search":
+      return (
+        <div className="flex h-16 flex-col justify-center gap-2 font-mono text-[0.625rem]" aria-hidden="true">
+          {[
+            { tag: "<h1>", w: "w-3/5" },
+            { tag: "<meta>", w: "w-4/5" },
+            { tag: "<link>", w: "w-2/5" },
+          ].map((row, i) => (
+            <div key={row.tag} className="flex items-center gap-2.5">
+              <span className="shrink-0 text-violet-400/70">{row.tag}</span>
+              <span
+                className={`h-1 origin-left scale-x-0 rounded-full bg-white/10 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100 ${row.w}`}
+                style={{ transitionDelay: `${i * 90}ms` }}
+              />
+              <span
+                className="ml-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                style={{ transitionDelay: `${i * 90 + 250}ms` }}
+              >
+                <svg viewBox="0 0 16 16" className="size-3 text-emerald-400">
+                  <path
+                    d="M3 8.5 6.5 12 13 4.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+
+    case "support":
+      return (
+        <div className="flex h-16 items-center gap-0" aria-hidden="true">
+          {[0, 1, 2, 3].map((i) => (
+            <span key={i} className="flex items-center">
+              <span
+                className="size-2 rounded-full bg-violet-400/70 transition-transform duration-500 group-hover:scale-125"
+                style={{ transitionDelay: `${i * 90}ms` }}
+              />
+              {i < 3 && (
+                <span className="h-px w-5 origin-left scale-x-0 bg-violet-500/40 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100" style={{ transitionDelay: `${i * 90 + 40}ms` }} />
+              )}
+            </span>
+          ))}
+        </div>
+      );
+
+    default:
+      return null;
+  }
+}

@@ -2,174 +2,147 @@ import Image from "next/image";
 import Link from "next/link";
 import { projects, projectStatusLabel, type Project } from "@/lib/content";
 import { Icon } from "@/components/ui/Icon";
-import { MouseParallax } from "@/components/ui/MouseParallax";
+import { ProjectMockup } from "@/components/ui/ProjectMockup";
 
 /**
- * Case studies. The layout follows the CONTENT, it does not compensate for it.
+ * Editorial case-study rows, not a hover-dependent list.
  *
- * `image` drives the composition, not just the picture:
- *
- *   without → copy-led, the visual column is a zone marked by two rules;
- *   with    → the image becomes the subject, takes the larger half, and gains
- *             parallax plus a hover that offsets the title.
- *
- * A filled panel — however dark — reads as an empty grey box, which is the one
- * thing a portfolio with no photographs cannot afford. Two hairlines fading
- * from the corner state the reserved area the way a crop mark does.
+ * The previous version kept every visual hidden behind a desktop-only hover
+ * (a sticky preview) and a plain text row — on first paint, three lines of
+ * names on a mostly empty page. Every project now carries its own real
+ * image at full size, alternating sides, so the section reads as proof of
+ * work the moment it enters the viewport rather than after an interaction
+ * a touch device can't even perform.
  */
-export function ProjectEntry({
-  project,
-  flip,
-}: {
-  project: Project;
-  flip: boolean;
-}) {
-  const hasImage = Boolean(project.image);
-  const href = `/realisations/${project.slug}`;
-
-  return (
-    <article className="group border-t border-white/[0.09] pt-8">
-      {/* The status rides the rule next to the year. A visitor must be able
-          to tell delivered work from a creative direction at a glance —
-          leaving that ambiguous is the one claim they can catch. */}
-      <div className="flex items-baseline justify-between gap-6">
-        <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
-          {project.index}
-        </span>
-        <span className="flex items-baseline gap-4 font-display text-[0.75rem] tracking-[0.2em] text-slate-dim">
-          <span
-            className={
-              project.status === "delivered" ? "text-violet-300" : undefined
-            }
-          >
-            {projectStatusLabel[project.status]}
-          </span>
-          <span aria-hidden="true" className="text-white/15">
-            /
-          </span>
-          {project.year}
-        </span>
-      </div>
-
-      <div
-        className={`mt-10 grid gap-x-16 gap-y-10 lg:items-center ${
-          hasImage
-            ? "lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]"
-            : "lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)]"
-        }`}
-      >
+function ProjectVisual({ project }: { project: Project }) {
+  if (project.image) {
+    return (
+      <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-white/[0.07]">
+        <Image
+          src={project.image}
+          alt={`Aperçu du site ${project.name}`}
+          fill
+          sizes="(max-width: 1024px) 100vw, 42rem"
+          className="object-cover transition-transform duration-[1.4s] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.05]"
+        />
+        {/* A discrete light sweep on hover — the "premium, not just a
+            bigger picture" cue asked for in the brief, kept subtle enough
+            not to fight the photo itself. */}
         <div
-          className={
-            hasImage ? (flip ? "lg:order-1" : "lg:order-2") : "lg:order-1"
-          }
-        >
-          <p className="text-[0.75rem] uppercase tracking-[0.16em] text-slate-dim">
-            {project.category}
-          </p>
+          aria-hidden="true"
+          className="absolute inset-0 bg-[linear-gradient(135deg,rgba(154,107,255,0.16),transparent_55%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+        />
+      </div>
+    );
+  }
+  return (
+    <div className="rounded-md border border-white/[0.07] p-6">
+      <ProjectMockup name={project.name} category={project.category} />
+    </div>
+  );
+}
 
-          <h3
-            className={`mt-4 font-medium leading-[1.03] tracking-[-0.035em] transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] ${
-              hasImage
-                ? "text-[clamp(2rem,3.6vw,3.25rem)] group-hover:translate-x-1.5"
-                : "text-[clamp(2.25rem,4.2vw,3.75rem)]"
-            }`}
-          >
-            {project.name}
+function StatusBadge({ status }: { status: Project["status"] }) {
+  const isLive = status === "delivered";
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[0.6875rem] uppercase tracking-[0.16em] ${
+        isLive
+          ? "border-violet-400/40 bg-violet-500/10 text-violet-300"
+          : "border-white/[0.12] bg-white/[0.02] text-slate-dim"
+      }`}
+    >
+      {isLive && (
+        <span className="relative flex size-1.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400/70" />
+          <span className="relative inline-flex size-1.5 rounded-full bg-violet-400" />
+        </span>
+      )}
+      {projectStatusLabel[status]}
+    </span>
+  );
+}
+
+function ProjectRow({ project, flip }: { project: Project; flip: boolean }) {
+  return (
+    <li
+      className="group border-t border-white/[0.09] py-16 first:border-t-0 md:py-20"
+      data-reveal
+    >
+      <Link
+        href={`/realisations/${project.slug}`}
+        className="grid gap-x-14 gap-y-10 lg:grid-cols-2 lg:items-center"
+      >
+        <div className={flip ? "lg:order-2" : "lg:order-1"}>
+          <ProjectVisual project={project} />
+        </div>
+
+        <div className={flip ? "lg:order-1" : "lg:order-2"}>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+            <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
+              {project.index}
+            </span>
+            <span className="text-[0.6875rem] uppercase tracking-[0.16em] text-slate-dim">
+              {project.category}
+            </span>
+            <StatusBadge status={project.status} />
+          </div>
+
+          <h3 className="mt-5 text-[clamp(2.75rem,6.4vw,5.25rem)] font-medium uppercase leading-[0.9] tracking-[-0.035em] transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5 group-hover:text-violet-300">
+            {project.name.split(" ").map((word) => (
+              <span key={word} className="block">
+                {word}
+              </span>
+            ))}
           </h3>
 
-          <p className="mt-6 max-w-xl text-[1rem] leading-[1.8] text-mist">
+          <p className="mt-7 max-w-lg text-[0.9375rem] leading-[1.8] text-mist">
             {project.body}
           </p>
 
-          <div className="mt-10">
-            <p className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim/70">
-              Services réalisés
-            </p>
-            <ul className="mt-4 flex flex-wrap items-center gap-x-3.5 gap-y-2">
-              {project.services.map((s, j) => (
-                <li key={s} className="flex items-center gap-3.5">
-                  {j > 0 && (
-                    <span aria-hidden="true" className="h-3 w-px bg-white/15" />
-                  )}
-                  <span className="text-[0.875rem] text-mist">{s}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="mt-6 flex flex-wrap items-center gap-x-3.5 gap-y-2">
+            {project.services.map((s, j) => (
+              <li key={s} className="flex items-center gap-3.5">
+                {j > 0 && (
+                  <span aria-hidden="true" className="h-3 w-px bg-white/15" />
+                )}
+                <span className="text-[0.875rem] text-mist">{s}</span>
+              </li>
+            ))}
+          </ul>
 
-          <Link
-            href={href}
-            className="mt-11 inline-flex items-center gap-2.5 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-500 hover:text-violet-300"
-          >
-            <span className="link-wipe">Voir le projet</span>
-            <Icon
-              name="arrow"
-              className="size-4 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1"
-            />
-          </Link>
+          {/* Same markup as the shared ArrowLink (ring, then label, same
+              hover fill) — the whole card is already the link, so ArrowLink
+              itself can't be nested here, but the visual language must be
+              identical rather than a close-but-different reimplementation. */}
+          <span className="mt-8 inline-flex items-center gap-4 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-500 group-hover:text-violet-300">
+            <span className="relative grid size-11 shrink-0 place-items-center rounded-full border border-white/20 transition-colors duration-500 group-hover:border-violet-400/70">
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 scale-0 rounded-full bg-violet-500/15 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-100"
+              />
+              <Icon
+                name="arrow"
+                className="relative size-4 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-0.5"
+              />
+            </span>
+            Voir le projet
+          </span>
         </div>
-
-        {hasImage ? (
-          <MouseParallax
-            className={`relative ${flip ? "lg:order-2" : "lg:order-1"}`}
-          >
-            <Link
-              href={href}
-              aria-label={`${project.name} — voir le projet`}
-              className="relative block aspect-[4/3] overflow-hidden rounded-sm"
-            >
-              <div
-                className="absolute inset-[-3%]"
-                style={{
-                  transform:
-                    "translate3d(calc(var(--px,0) * 8px), calc(var(--py,0) * 6px), 0)",
-                }}
-              >
-                <Image
-                  src={project.image as string}
-                  alt={`Aperçu du site ${project.name}`}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 46vw"
-                  className="object-cover transition-transform duration-[1.4s] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.03]"
-                />
-              </div>
-
-              <span className="pointer-events-none absolute inset-0 flex items-end justify-center bg-gradient-to-t from-void/70 via-transparent to-transparent pb-7 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-                <span className="inline-flex translate-y-2 items-center gap-2.5 text-[0.75rem] font-medium uppercase tracking-[0.12em] text-chalk transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-y-0">
-                  Voir le projet
-                  <Icon name="arrow" className="size-4" />
-                </span>
-              </span>
-            </Link>
-          </MouseParallax>
-        ) : (
-          <div
-            aria-hidden="true"
-            className="relative hidden aspect-[4/3] lg:order-2 lg:block"
-          >
-            <span className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-white/[0.14] to-transparent" />
-            <span className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-white/[0.14] to-transparent" />
-            <span className="absolute left-0 top-0 h-px w-14 bg-violet-500/60" />
-          </div>
-        )}
-      </div>
-    </article>
+      </Link>
+    </li>
   );
 }
 
 export function ProjectsList() {
   return (
-    <section className="py-24 md:py-28 lg:py-32">
+    <section className="py-14 md:py-24 lg:py-32">
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 xl:px-16">
-        {projects.map((project, i) => (
-          <div
-            key={project.slug}
-            data-reveal
-            className={i > 0 ? "mt-24 lg:mt-32" : ""}
-          >
-            <ProjectEntry project={project} flip={i % 2 === 1} />
-          </div>
-        ))}
+        <ul>
+          {projects.map((project, i) => (
+            <ProjectRow key={project.slug} project={project} flip={i % 2 === 1} />
+          ))}
+        </ul>
       </div>
     </section>
   );

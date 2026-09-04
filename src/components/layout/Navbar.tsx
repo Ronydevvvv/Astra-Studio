@@ -10,12 +10,25 @@ import { Button } from "@/components/ui/Button";
 export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const lastY = useRef(0);
 
-  /* Opaque past the fold so the bar stays readable over any section. */
+  /* Opaque past the fold so the bar stays readable over any section.
+     Also folds away on a confident scroll down and returns on scroll up —
+     the header should not compete with content mid-read, but must never be
+     more than one upward flick away. */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      const delta = y - lastY.current;
+      if (y < 120) setHidden(false);
+      else if (delta > 4) setHidden(true);
+      else if (delta < -4) setHidden(false);
+      lastY.current = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -45,11 +58,11 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter,transform] duration-500 [transition-timing-function:var(--ease-out-expo)] ${
           scrolled
             ? "border-b border-white/[0.07] bg-void/80 backdrop-blur-xl"
             : "border-b border-transparent bg-transparent"
-        }`}
+        } ${hidden && !open ? "-translate-y-full" : "translate-y-0"}`}
       >
         <div className="mx-auto flex h-[var(--nav-h)] max-w-[1440px] items-center justify-between gap-6 px-6 md:px-10 xl:px-16">
           <Logo />

@@ -50,6 +50,15 @@ const paths: Record<string, React.ReactNode> = {
   ),
 
   /* --- interface --- */
+  mail: (
+    <>
+      <path d="M3.5 6.5h17v11h-17Z" />
+      <path d="m4 7 8 6.5L20 7" />
+    </>
+  ),
+  phone: (
+    <path d="M7.2 3.6 9.8 8l-2 2.2c1 2.2 2.8 4 5 5l2.2-2 4.4 2.6c.2 1.6-.9 3.6-2.5 4-6.6.2-13-6.2-12.8-12.8.4-1.6 2.4-2.7 4-2.5Z" />
+  ),
   arrow: <path d="M4 12h15m-6-6 6 6-6 6" />,
   check: <path d="m4.5 12.5 5 5 10-11" />,
   alert: (

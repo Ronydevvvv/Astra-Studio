@@ -29,7 +29,7 @@ export function PageHero({
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-void" />
       </div>
 
-      <div className="mx-auto max-w-[1440px] px-6 pb-20 pt-20 md:px-10 lg:pb-28 lg:pt-28 xl:px-16">
+      <div className="mx-auto max-w-[1440px] px-6 pb-12 pt-20 md:px-10 md:pb-20 lg:pb-28 lg:pt-28 xl:px-16">
         <p className="flex items-center gap-4 text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-violet-300/90">
           <span aria-hidden="true" className="h-px w-8 bg-violet-500/70" />
           {eyebrow}

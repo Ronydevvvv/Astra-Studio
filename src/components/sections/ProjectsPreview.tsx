@@ -1,14 +1,16 @@
+import Image from "next/image";
 import Link from "next/link";
 import { projects, projectsHome } from "@/lib/content";
 import { Icon } from "@/components/ui/Icon";
 
 /**
- * Home teaser — an index, not a gallery.
- *
- * The full case studies live at /realisations. Repeating them here would make
- * the home page carry the whole site, which is exactly what the multi-page
- * split is meant to stop. A ruled list of names reads as a table of contents
- * and gets the visitor to the real page in one click.
+ * Home teaser — an index with real proof attached, not a bare table of
+ * contents. The full case studies still live at /realisations (this list
+ * stays a summary), but a row that only reveals a monogram on hover reads
+ * as three lines of names on a mostly empty section — nothing here says
+ * "real work" until a visitor happens to hover. A small, always-visible
+ * thumbnail of the real project fixes that without turning this into the
+ * full gallery /realisations already is.
  */
 export function ProjectsPreview() {
   return (
@@ -55,6 +57,25 @@ export function ProjectsPreview() {
               >
                 <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400 sm:w-12 sm:shrink-0">
                   {project.index}
+                </span>
+
+                {/* A real thumbnail, always visible — the moment this list
+                    is on screen it already looks like proof of work, not a
+                    table of contents waiting for a hover to prove itself. */}
+                <span className="relative hidden h-14 w-20 shrink-0 overflow-hidden rounded-sm border border-white/[0.09] sm:block">
+                  {project.image ? (
+                    <Image
+                      src={project.image}
+                      alt=""
+                      fill
+                      sizes="80px"
+                      className="object-cover transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-110"
+                    />
+                  ) : (
+                    <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500/25 to-violet-800/10 font-display text-[0.9375rem] font-medium text-violet-200">
+                      {project.name.charAt(0)}
+                    </span>
+                  )}
                 </span>
 
                 <span className="min-w-0 flex-1 text-[clamp(1.5rem,2.6vw,2.25rem)] font-medium leading-tight tracking-[-0.03em] transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5">

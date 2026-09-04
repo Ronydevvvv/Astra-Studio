@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/PageHero";
 import { Pricing } from "@/components/sections/Pricing";
+import { Faq } from "@/components/sections/Faq";
 import { pricing } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
@@ -20,6 +21,7 @@ export default function TarifsPage() {
         lead={pricing.lead}
       />
       <Pricing />
+      <Faq />
     </>
   );
 }

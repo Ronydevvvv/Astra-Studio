@@ -1,6 +1,23 @@
+"use client";
+
 import Link from "next/link";
-import type { ComponentProps } from "react";
+import type { ComponentProps, MouseEvent } from "react";
 import { Icon } from "./Icon";
+
+/** A very small magnetic pull — a few pixels, not the exaggerated version
+ * that feels like it's fighting the cursor. Skipped entirely under
+ * prefers-reduced-motion, which globals.css also zeroes the transition for. */
+function magnetic(e: MouseEvent<HTMLElement>) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const r = e.currentTarget.getBoundingClientRect();
+  const x = ((e.clientX - r.left) / r.width - 0.5) * 8;
+  const y = ((e.clientY - r.top) / r.height - 0.5) * 8;
+  e.currentTarget.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+function resetMagnetic(e: MouseEvent<HTMLElement>) {
+  e.currentTarget.style.transform = "";
+}
 
 type Variant = "primary" | "outline" | "quiet" | "ghost";
 
@@ -47,7 +64,12 @@ export function Button({
   const sweep = sweeps[variant];
 
   return (
-    <Link className={`${base} ${variants[variant]} ${className}`} {...props}>
+    <Link
+      className={`${base} ${variants[variant]} ${className}`}
+      onMouseMove={magnetic}
+      onMouseLeave={resetMagnetic}
+      {...props}
+    >
       {sweep && (
         <span
           aria-hidden="true"

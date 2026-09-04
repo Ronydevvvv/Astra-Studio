@@ -17,8 +17,15 @@ export function TrustBar() {
   return (
     <section
       aria-label={trust.eyebrow}
-      className="border-y border-white/[0.06]"
+      className="relative border-b border-white/[0.06]"
     >
+      {/* Catches the dot the Hero's descent arc hands off at this exact
+          seam — a lit border instead of a flat one, so the cut into this
+          section reads as the trajectory landing, not a new box starting. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(154,107,255,0.55)_50%,transparent)]"
+      />
       <div className="mx-auto max-w-[1440px] px-6 py-12 md:px-10 lg:py-14 xl:px-16">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
           <div className="lg:max-w-xs">

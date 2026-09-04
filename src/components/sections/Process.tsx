@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { process, processIntro } from "@/lib/content";
 import { Starfield } from "@/components/ui/Starfield";
+import { ScrollTrack } from "@/components/ui/ScrollTrack";
 
 /**
  * ONE SCENE, FOUR FIGURES.
@@ -41,17 +42,18 @@ export function Process() {
         </div>
 
         {/* ---------------- desktop: horizontal scene ---------------- */}
-        <div className="relative mt-24 hidden lg:block">
-          {/* The rule sits at the figures' foot line and is drawn by the
-              reveal observer. It is behind them (-z-0 under the figures'
-              relative stacking) so it reads as ground, not as a divider. */}
+        <ScrollTrack steps={process.length} className="relative mt-24 hidden lg:block">
+          {/* The rule sits at the figures' foot line, behind them, and its
+              fill now tracks actual scroll position via --progress rather
+              than drawing once on enter — the section becomes something you
+              travel through instead of a fade-in. */}
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-[248px] h-px overflow-hidden"
+            className="absolute inset-x-0 top-[248px] h-px overflow-hidden bg-white/[0.06]"
           >
             <span
-              data-reveal
-              className="draw-x block h-px bg-[linear-gradient(90deg,transparent,rgba(124,58,245,0.55)_12%,rgba(124,58,245,0.55)_88%,transparent)]"
+              className="block h-px origin-left bg-[linear-gradient(90deg,rgba(124,58,245,0.9),rgba(154,107,255,0.9))]"
+              style={{ transform: "scaleX(var(--progress, 0))" }}
             />
           </div>
 
@@ -59,9 +61,8 @@ export function Process() {
             {process.map((step, i) => (
               <li
                 key={step.index}
-                data-reveal
-                style={{ ["--reveal-delay" as string]: `${220 + i * 140}ms` }}
-                className="group relative flex flex-col items-center text-center"
+                data-step
+                className="group relative flex flex-col items-center text-center opacity-80 grayscale-[0.35] transition-[opacity,filter] duration-700 [transition-timing-function:var(--ease-out-expo)] data-[active]:opacity-100 data-[active]:grayscale-0"
               >
                 {/* Identical CSS height across all four — this is what
                     reproduces the source strip's relative scale. */}
@@ -72,15 +73,15 @@ export function Process() {
                     width={step.width}
                     height={step.height}
                     sizes="(max-width: 1280px) 22vw, 260px"
-                    className="animate-float h-[240px] w-auto transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1.5"
+                    className="animate-float h-[240px] w-auto scale-95 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1.5 group-data-[active]:scale-100"
                     style={{ animationDelay: `${i * 900}ms` }}
                   />
                 </div>
 
-                {/* Node on the line. */}
+                {/* Node on the line — fills solid once its step is reached. */}
                 <span
                   aria-hidden="true"
-                  className="relative z-10 mt-[-5px] block size-2.5 rounded-full border border-violet-400/70 bg-void transition-colors duration-500 group-hover:bg-violet-500"
+                  className="relative z-10 mt-[-5px] block size-2.5 rounded-full border border-violet-400/70 bg-void transition-colors duration-500 group-hover:bg-violet-500 group-data-[active]:bg-violet-400 group-data-[active]:shadow-[0_0_12px_2px_rgba(154,107,255,0.6)]"
                 />
 
                 <span className="mt-7 font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
@@ -95,20 +96,25 @@ export function Process() {
               </li>
             ))}
           </ol>
-        </div>
+        </ScrollTrack>
 
         {/* ---------------- mobile: vertical timeline ---------------- */}
-        <ol className="relative mt-16 lg:hidden">
+        <ScrollTrack steps={process.length} className="relative mt-16 lg:hidden">
           <span
             aria-hidden="true"
-            className="absolute bottom-6 left-[46px] top-6 w-px bg-[linear-gradient(180deg,transparent,rgba(124,58,245,0.4)_10%,rgba(124,58,245,0.4)_90%,transparent)]"
-          />
-          {process.map((step, i) => (
+            className="absolute bottom-6 left-[46px] top-6 w-px overflow-hidden bg-white/[0.06]"
+          >
+            <span
+              className="block w-px origin-top bg-[linear-gradient(180deg,rgba(124,58,245,0.9),rgba(154,107,255,0.9))]"
+              style={{ height: "100%", transform: "scaleY(var(--progress, 0))" }}
+            />
+          </span>
+          <ol className="relative">
+          {process.map((step) => (
             <li
               key={step.index}
-              data-reveal
-              style={{ ["--reveal-delay" as string]: `${i * 110}ms` }}
-              className="relative flex gap-6 [&+&]:mt-14"
+              data-step
+              className="relative flex gap-6 opacity-80 transition-opacity duration-700 [transition-timing-function:var(--ease-out-expo)] data-[active]:opacity-100 [&+&]:mt-14"
             >
               <div className="relative z-10 flex w-[92px] shrink-0 justify-center">
                 <span
@@ -138,7 +144,8 @@ export function Process() {
               </div>
             </li>
           ))}
-        </ol>
+          </ol>
+        </ScrollTrack>
       </div>
     </section>
   );

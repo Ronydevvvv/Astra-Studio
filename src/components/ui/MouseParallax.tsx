@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ComponentPropsWithoutRef } from "react";
 
 /**
  * Publishes the pointer position as `--px` / `--py` (both in the -1..1 range)
@@ -11,10 +11,9 @@ import { useEffect, useRef, type ReactNode } from "react";
 export function MouseParallax({
   children,
   className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+  style,
+  ...rest
+}: ComponentPropsWithoutRef<"div">) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,7 +56,8 @@ export function MouseParallax({
     <div
       ref={ref}
       className={className}
-      style={{ ["--px" as string]: 0, ["--py" as string]: 0 }}
+      style={{ ["--px" as string]: 0, ["--py" as string]: 0, ...style }}
+      {...rest}
     >
       {children}
     </div>
