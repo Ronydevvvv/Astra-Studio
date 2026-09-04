@@ -79,7 +79,10 @@ export default async function ProjectPage({ params }: Params) {
       <section className="relative isolate overflow-hidden pt-[var(--nav-h)]">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <Starfield className="opacity-70" />
-          <div className="glow left-1/2 top-0 size-72 -translate-x-1/2 bg-violet-700/[0.16] md:size-[44rem]" />
+          <div
+            className="glow left-1/2 top-0 size-72 -translate-x-1/2 md:size-[44rem]"
+            style={{ background: project.accent ?? "rgba(80,15,217,0.16)" }}
+          />
         </div>
 
         <div className="mx-auto max-w-[1440px] px-6 pb-16 pt-16 md:px-10 md:pb-24 lg:pb-28 lg:pt-24 xl:px-16">

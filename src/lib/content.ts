@@ -337,6 +337,16 @@ export type Project = {
    * and is labelled as a creative direction, never as a réalisation.
    */
   status: "delivered" | "built" | "creative" | "upcoming";
+  /**
+   * A single accent used only for the case-study hero's ambient glow —
+   * never a full re-theme of ASTRA's own violet system. Set only when the
+   * project's own `study.direction` text already names a real palette, so
+   * the accent is a visualisation of a documented fact, not a decoration
+   * invented for variety. Omitted (falls back to violet) when no palette is
+   * on record — see Mister Dalle, whose direction text names "noir, violet"
+   * anyway.
+   */
+  accent?: string;
   study?: {
     context: string;
     objective: string;
@@ -403,6 +413,8 @@ export const projects: Project[] = [
     services: ["Direction artistique", "Web design", "Développement"],
     year: "—",
     status: "creative",
+    /** Documented below in study.direction: "feu, pierre, bois". */
+    accent: "rgba(217,119,6,0.16)",
     image: "/assets/projects/mistral-pizza/hero-four.jpg",
     body: "Un concept ASTRA pour une pizzeria au feu de bois : donner envie avant même la première bouchée, sans commande client à l'origine.",
     study: {
@@ -432,6 +444,8 @@ export const projects: Project[] = [
     services: ["Direction artistique", "Développement Next.js", "Responsive"],
     year: "—",
     status: "built",
+    /** Documented below in study.direction: "Palette encre / pierre / orange". */
+    accent: "rgba(234,88,12,0.14)",
     image: "/assets/projects/terralec/hero-desktop.png",
     body: "Un site vitrine complet pour une entreprise de travaux publics et réseaux (Enedis, GRDF, Orange), avec une scène 3D interactive et une direction artistique dédiée.",
     study: {
