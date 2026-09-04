@@ -46,39 +46,14 @@ export const hero = {
 /* ------------------------------------------------------------------ */
 
 /**
- * HONEST BY CONSTRUCTION.
- *
- * `relation` decides the wording, and there is deliberately no "client"
- * value to reach for:
- *
- *   "project"  — work actually delivered by the studio
- *   "creative" — a creative direction or demonstration, NOT commissioned work
- *
- * `logo` stays null until a real file exists. The official Mister Dalle mark
- * lives on Shopify's CDN (`shopify://shop_images/PNG-_-1.png` in the theme
- * export) and is not in this repository — download it from the Shopify admin
- * and drop it in /public/assets/clients/. Nothing is redrawn by hand: an
- * approximated logo misrepresents someone else's brand.
+ * Just the section's own copy — the entries themselves are the real
+ * `projects` array below (TrustBar renders it directly), so a project's
+ * name, image, category and status can never drift between the home page
+ * teaser and /realisations.
  */
-export type TrustEntry = {
-  name: string;
-  relation: "project" | "creative";
-  /** Path under /public/assets/clients/, or null while unavailable. */
-  logo: string | null;
-};
-
 export const trust = {
   eyebrow: "Projets & expérimentations",
   lead: "Des univers auxquels nous aimons donner vie.",
-  entries: [
-    { name: "Mister Dalle", relation: "project", logo: "/assets/projects/mister-dalle/logo.png" },
-    { name: "Mistral Pizza", relation: "creative", logo: "/assets/projects/mistral-pizza/logo.png" },
-    { name: "Terralec B.T.P", relation: "project", logo: "/assets/projects/terralec/logo.png" },
-  ] as TrustEntry[],
-  labels: {
-    project: "Projet",
-    creative: "Direction créative",
-  },
 };
 
 /* ------------------------------------------------------------------ */
@@ -853,7 +828,6 @@ export const pending = [
   "company.email / phone / availability",
   "company.address, legalForm, siret, vat, director, host",
   "company.socials[].href",
-  "trust.entries[].logo — logos officiels dans /public/assets/clients/",
   "projects[].image / year / status — passer à « delivered » à la livraison",
   "projects[].study — étude de cas pour /realisations/[slug]",
   "legal.* — compléter chaque « à renseigner »",

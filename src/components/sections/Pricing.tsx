@@ -23,7 +23,7 @@ export function Pricing() {
               style={{ ["--reveal-delay" as string]: `${i * 90}ms` }}
               className={`group relative border-b border-white/[0.09] py-10 transition-[background-color,box-shadow,transform] duration-500 [transition-timing-function:var(--ease-out-expo)] hover:z-10 hover:-translate-y-1 hover:bg-white/[0.025] hover:shadow-[0_30px_70px_-40px_rgba(124,58,245,0.5)] lg:py-14 ${
                 offer.recommended
-                  ? "bg-gradient-to-r from-violet-500/[0.06] via-transparent to-transparent"
+                  ? "bg-gradient-to-r from-violet-500/[0.06] via-transparent to-transparent lg:pl-6"
                   : ""
               }`}
             >
@@ -34,10 +34,19 @@ export function Pricing() {
                 }`}
               />
               {offer.recommended && (
-                <span
-                  aria-hidden="true"
-                  className="glow left-1/4 top-0 size-64 bg-violet-600/[0.1]"
-                />
+                <>
+                  <span
+                    aria-hidden="true"
+                    className="glow left-1/4 top-0 size-64 bg-violet-600/[0.1]"
+                  />
+                  {/* A left accent bar — the one graphic device only this
+                      row carries, so "recommended" reads at a glance even
+                      scrolling past, not just when the pill text is read. */}
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-y-0 left-0 hidden w-[3px] bg-gradient-to-b from-violet-400 via-violet-500 to-violet-500/20 lg:block"
+                  />
+                </>
               )}
 
               <div className="relative grid gap-y-8 lg:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-start lg:gap-x-12">
