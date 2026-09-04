@@ -237,25 +237,48 @@ export default async function ProjectPage({ params }: Params) {
 
           {chapters.length > 0 ? (
             <div className="mt-24 lg:mt-32">
-              {chapters.map((c, i) => (
-                <div
-                  key={c.title}
-                  data-reveal
-                  className="grid gap-x-20 gap-y-6 border-t border-white/[0.09] py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"
-                >
-                  <div className="flex items-baseline gap-5">
-                    <span className="font-display text-[0.6875rem] tracking-[0.16em] text-violet-400">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <h2 className="text-[1.25rem] font-medium tracking-[-0.02em]">
-                      {c.title}
-                    </h2>
+              {chapters.map((c, i) => {
+                /* "Direction artistique" breaks the row format on purpose —
+                   five identical text rows in a row is its own kind of
+                   template. The design decision is the one chapter worth
+                   reading as a statement rather than a paragraph, so it
+                   gets the scale of a pull-quote instead of a list item. */
+                if (c.title === "Direction artistique") {
+                  return (
+                    <div
+                      key={c.title}
+                      data-reveal
+                      className="border-t border-white/[0.09] py-16 lg:py-20"
+                    >
+                      <span className="font-display text-[0.6875rem] tracking-[0.16em] text-violet-400">
+                        {String(i + 1).padStart(2, "0")} — {c.title}
+                      </span>
+                      <p className="mt-6 max-w-4xl text-[clamp(1.5rem,3.4vw,2.5rem)] font-medium leading-[1.3] tracking-[-0.02em] text-chalk">
+                        {c.body}
+                      </p>
+                    </div>
+                  );
+                }
+                return (
+                  <div
+                    key={c.title}
+                    data-reveal
+                    className="grid gap-x-20 gap-y-6 border-t border-white/[0.09] py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"
+                  >
+                    <div className="flex items-baseline gap-5">
+                      <span className="font-display text-[0.6875rem] tracking-[0.16em] text-violet-400">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h2 className="text-[1.25rem] font-medium tracking-[-0.02em]">
+                        {c.title}
+                      </h2>
+                    </div>
+                    <p className="max-w-2xl text-[0.9375rem] leading-[1.85] text-mist">
+                      {c.body}
+                    </p>
                   </div>
-                  <p className="max-w-2xl text-[0.9375rem] leading-[1.85] text-mist">
-                    {c.body}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
 
               {/* --- desktop / mobile, side by side: the responsive claim
                   made in "Conception & développement" shown, not just
