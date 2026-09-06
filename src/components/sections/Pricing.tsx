@@ -74,7 +74,10 @@ export function Pricing() {
                     <span className="text-[0.75rem] uppercase tracking-[0.14em] text-slate-dim">
                       À partir de
                     </span>
-                    <span className="font-display text-[1.875rem] font-medium leading-none tracking-[-0.04em] text-violet-400">
+                    {/* The number is the one thing a visitor scans for first
+                        on a pricing page — it now reads at least as large as
+                        the offer's own name, not smaller than it. */}
+                    <span className="font-display text-[clamp(2.25rem,4vw,3.25rem)] font-medium leading-none tracking-[-0.045em] text-violet-400">
                       {offer.from}
                     </span>
                   </p>
