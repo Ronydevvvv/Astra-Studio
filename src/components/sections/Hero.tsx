@@ -3,7 +3,6 @@ import { hero } from "@/lib/content";
 import { Button, ArrowLink } from "@/components/ui/Button";
 import { Starfield } from "@/components/ui/Starfield";
 import { MouseParallax } from "@/components/ui/MouseParallax";
-import { Icon } from "@/components/ui/Icon";
 
 /** Entry choreography — everything rises on load, ~90ms apart. */
 const rise = (delay: number) => ({
@@ -202,14 +201,22 @@ export function Hero() {
         >
           <div>
             {/* Entry choreography for the scene: orbit first (it's the
-                backdrop geometry), then the badges left-to-right, then the
+                backdrop geometry), then the code window, then the
                 astronaut last — a small build rather than the whole scene
                 appearing as one flat block. Each stage gets its OWN outer
                 wrapper for the rise animation: astra-rise also animates
                 `transform` (translateY), so it cannot share an element with
-                the parallax `transform` below it without re-creating the
-                exact bug just fixed on the badges — the entrance animation
-                would win the property forever via fill-mode `both`. */}
+                the parallax `transform` below it — the entrance animation
+                would win the property forever via fill-mode `both`.
+
+                The two floating pill badges ("Direction artistique", "Code
+                sur mesure") that used to sit here are gone on purpose: at
+                several viewport widths they sat close enough to the laptop
+                screen and to each other to read as collision rather than
+                composition — two stickers glued onto the scene rather than
+                belonging to it. The scene now carries its meaning through
+                the illustration itself (astronaut, laptop, code, orbit)
+                instead of labels floating around it. */}
             {/* Positioning wrapper carries no transform of its own — same
                 fix as the badges below. It previously shared an element
                 with the entry animation, which (a) hijacked the containing
@@ -335,60 +342,13 @@ export function Hero() {
               </div>
             </div>
 
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute right-[14%] top-[-5%] hidden sm:block lg:right-[27%] lg:top-[-4%]"
-            >
-              <div style={rise(360)}>
-                <div
-                  style={{
-                    transform:
-                      "translate3d(calc(var(--px,0) * -3px), calc(var(--py,0) * -3px), 0)",
-                  }}
-                >
-                  <div
-                    className="animate-float flex items-center gap-2.5 rounded-full border border-white/10 bg-[#0b0e22]/80 px-3.5 py-2.5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)] backdrop-blur-sm"
-                    style={{ animationDelay: "-1.4s" }}
-                  >
-                    <Icon name="design" className="size-4 text-violet-300" />
-                    <span className="text-[0.6875rem] uppercase tracking-[0.12em] text-mist">
-                      Direction artistique
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-[11%] right-0 hidden md:block lg:right-[7%]"
-            >
-              <div style={rise(400)}>
-                <div
-                  style={{
-                    transform:
-                      "translate3d(calc(var(--px,0) * 3px), calc(var(--py,0) * -2px), 0)",
-                  }}
-                >
-                  <div
-                    className="animate-float flex items-center gap-2.5 rounded-full border border-white/10 bg-[#0b0e22]/80 px-3.5 py-2.5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)] backdrop-blur-sm"
-                    style={{ animationDelay: "-5s" }}
-                  >
-                    <Icon name="code" className="size-4 text-violet-300" />
-                    <span className="text-[0.6875rem] uppercase tracking-[0.12em] text-mist">
-                      Code sur mesure
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* The astronaut stays almost put — even the ±4px used before
                 read as "the image is dragging behind my cursor" once the
                 mouse moved with any speed, exactly the effect being removed.
                 At ±1.5px the character is effectively stable; what little
-                depth the scene has now comes from the orbit and badges
-                around it, not from the subject itself. */}
+                depth the scene has now comes from the orbit, the code
+                window and the independent midground drift around it, not
+                from the subject itself. */}
             <div style={rise(440)}>
               <div
                 className="[will-change:transform]"
