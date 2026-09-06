@@ -76,14 +76,20 @@ export function Navbar() {
                     <Link
                       href={item.href}
                       aria-current={active ? "page" : undefined}
-                      className={`relative px-3.5 py-2 text-[0.75rem] uppercase tracking-[0.12em] transition-colors duration-300 ${
+                      className={`group/nav relative px-3.5 py-2 text-[0.75rem] uppercase tracking-[0.12em] transition-colors duration-300 ${
                         active ? "text-chalk" : "text-mist hover:text-chalk"
                       }`}
                     >
                       {item.label}
+                      {/* Same underline-reveal language as link-wipe
+                          elsewhere on the site: permanently drawn for the
+                          current page, growing in from the centre on hover
+                          for every other link — hover previously only
+                          changed the text colour, the one nav item that
+                          didn't share the site's own line-reveal grammar. */}
                       <span
                         className={`absolute inset-x-3.5 bottom-0 h-px origin-center bg-violet-400 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] ${
-                          active ? "scale-x-100" : "scale-x-0"
+                          active ? "scale-x-100" : "scale-x-0 group-hover/nav:scale-x-100"
                         }`}
                       />
                     </Link>
