@@ -17,12 +17,12 @@ import { ProjectMockup } from "@/components/ui/ProjectMockup";
 function ProjectVisual({ project }: { project: Project }) {
   if (project.image) {
     return (
-      <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-white/[0.07]">
+      <div className="relative aspect-[16/11] overflow-hidden rounded-md border border-white/[0.07]">
         <Image
           src={project.image}
           alt={`Aperçu du site ${project.name}`}
           fill
-          sizes="(max-width: 1024px) 100vw, 42rem"
+          sizes="(max-width: 1024px) 100vw, 52rem"
           className="object-cover transition-transform duration-[1.4s] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.05]"
         />
         {/* A discrete light sweep on hover — the "premium, not just a
@@ -160,7 +160,7 @@ function ProjectRow({ project, flip }: { project: Project; flip: boolean }) {
     >
       <Link
         href={`/realisations/${project.slug}`}
-        className="grid gap-x-14 gap-y-10 lg:grid-cols-2 lg:items-center"
+        className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-center"
       >
         <div className={flip ? "lg:order-2" : "lg:order-1"}>
           <ProjectVisual project={project} />

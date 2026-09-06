@@ -128,11 +128,16 @@ export default async function ProjectPage({ params }: Params) {
         </div>
       </section>
 
-      {/* --- lead visual --- */}
-      <section className="px-6 md:px-10 xl:px-16">
-        <div className="relative mx-auto max-w-[1200px]" data-reveal>
+      {/* --- lead visual ---
+          Deliberately full-bleed rather than boxed at 1200px inside the
+          page's own gutters: the opening image of a case study is the one
+          place the site should let a real screenshot take the whole stage,
+          the same way the best studio portfolios open a project. Every
+          other image on the page stays contained — this one doesn't. */}
+      <section data-reveal>
+        <div className="relative">
           {project.image ? (
-            <div className="relative aspect-[16/9] overflow-hidden rounded-sm">
+            <div className="relative aspect-[16/8] overflow-hidden sm:aspect-[16/7]">
               <Image
                 src={project.image}
                 alt={`Aperçu du site ${project.name}`}
@@ -141,9 +146,13 @@ export default async function ProjectPage({ params }: Params) {
                 sizes="100vw"
                 className="object-cover"
               />
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#04050f] to-transparent"
+              />
             </div>
           ) : (
-            <div className="mx-auto max-w-3xl">
+            <div className="mx-auto max-w-3xl px-6 md:px-10 xl:px-16">
               <ProjectMockup
                 name={project.name}
                 category={project.category}
