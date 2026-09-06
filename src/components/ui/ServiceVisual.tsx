@@ -49,6 +49,25 @@ export function ServiceVisual({ icon }: { icon: IconName }) {
     case "gauge":
       return (
         <svg viewBox="0 0 100 40" className="h-16 w-full" aria-hidden="true">
+          {/* A faint grid — reads as a real measurement, not just a
+              decorative squiggle. */}
+          <g stroke="rgba(255,255,255,0.06)" strokeWidth="0.5">
+            <line x1="0" y1="10" x2="100" y2="10" />
+            <line x1="0" y1="22" x2="100" y2="22" />
+            <line x1="0" y1="34" x2="100" y2="34" />
+          </g>
+          {/* The "before" line — flatter, unoptimized, fading out to let the
+              real one take over. Narrates "optimization happened" instead
+              of just showing one confident curve. */}
+          <polyline
+            points="0,24 18,27 34,23 50,29 66,25 82,28 100,24"
+            fill="none"
+            stroke="rgba(255,255,255,0.14)"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray="0.5 2.5"
+          />
           <polyline
             points="0,32 18,26 34,30 50,14 66,20 82,6 100,10"
             fill="none"
@@ -121,17 +140,31 @@ export function ServiceVisual({ icon }: { icon: IconName }) {
     case "support":
       return (
         <div className="flex h-16 items-center gap-0" aria-hidden="true">
-          {[0, 1, 2, 3].map((i) => (
+          {/* Launch marker — a filled node distinct from the ones after it,
+              so the row reads as "site goes live, then the relationship
+              continues" rather than four interchangeable beads. */}
+          <span className="relative flex size-3 shrink-0 items-center justify-center rounded-full border border-violet-400 bg-violet-500/20 transition-transform duration-500 group-hover:scale-110">
+            <span className="size-1 rounded-full bg-violet-300" />
+          </span>
+          {[0, 1, 2].map((i) => (
             <span key={i} className="flex items-center">
               <span
-                className="size-2 rounded-full bg-violet-400/70 transition-transform duration-500 group-hover:scale-125"
-                style={{ transitionDelay: `${i * 90}ms` }}
+                className="h-px w-6 origin-left scale-x-0 bg-violet-500/40 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100"
+                style={{ transitionDelay: `${i * 100 + 60}ms` }}
               />
-              {i < 3 && (
-                <span className="h-px w-5 origin-left scale-x-0 bg-violet-500/40 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100" style={{ transitionDelay: `${i * 90 + 40}ms` }} />
-              )}
+              <span
+                className="size-1.5 shrink-0 rounded-full bg-violet-400/60 transition-transform duration-500 group-hover:scale-125"
+                style={{ transitionDelay: `${i * 100 + 100}ms` }}
+              />
             </span>
           ))}
+          {/* The line keeps going and fades — the relationship doesn't
+              have a fixed end date. */}
+          <span
+            aria-hidden="true"
+            className="h-px w-8 origin-left scale-x-0 bg-gradient-to-r from-violet-500/40 to-transparent transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100"
+            style={{ transitionDelay: "420ms" }}
+          />
         </div>
       );
 
