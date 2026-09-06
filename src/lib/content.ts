@@ -463,6 +463,7 @@ export const projects: Project[] = [
         { src: "/assets/projects/terralec/services-grid.png", alt: "Grille des services Terralec B.T.P sur le site" },
         { src: "/assets/projects/terralec/int-desktop.png", alt: "Page intérieure du site Terralec B.T.P en version desktop" },
         { src: "/assets/projects/terralec/equipe-chantier.jpg", alt: "Équipe Terralec B.T.P sur un chantier" },
+        { src: "/assets/projects/terralec/parc-flotte.jpg", alt: "Flotte de camions et véhicules Terralec B.T.P au dépôt" },
       ],
       mobileImage: "/assets/projects/terralec/int-mobile.png",
     },
