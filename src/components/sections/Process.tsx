@@ -64,6 +64,15 @@ export function Process() {
                 data-step
                 className="group relative flex flex-col items-center text-center opacity-80 grayscale-[0.35] transition-[opacity,filter] duration-700 [transition-timing-function:var(--ease-out-expo)] data-[active]:opacity-100 data-[active]:grayscale-0"
               >
+                {/* A light that only exists behind the current step — the
+                    scene has one spotlight that moves from figure to
+                    figure as you scroll, instead of four static columns
+                    with no sense of "here is where we are now". */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 top-[70px] size-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/0 opacity-0 blur-2xl transition-[opacity,background-color] duration-700 group-data-[active]:bg-violet-600/25 group-data-[active]:opacity-100"
+                />
+
                 {/* Identical CSS height across all four — this is what
                     reproduces the source strip's relative scale. */}
                 <div className="relative flex h-[260px] items-end justify-center">
@@ -73,7 +82,7 @@ export function Process() {
                     width={step.width}
                     height={step.height}
                     sizes="(max-width: 1280px) 22vw, 260px"
-                    className="animate-float h-[240px] w-auto scale-95 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1.5 group-data-[active]:scale-100"
+                    className="animate-float relative h-[240px] w-auto scale-95 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1.5 group-data-[active]:scale-100"
                     style={{ animationDelay: `${i * 900}ms` }}
                   />
                 </div>
@@ -84,13 +93,16 @@ export function Process() {
                   className="relative z-10 mt-[-5px] block size-2.5 rounded-full border border-violet-400/70 bg-void transition-colors duration-500 group-hover:bg-violet-500 group-data-[active]:bg-violet-400 group-data-[active]:shadow-[0_0_12px_2px_rgba(154,107,255,0.6)]"
                 />
 
-                <span className="mt-7 font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
+                <span className="relative mt-7 font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
                   {step.index}
                 </span>
-                <h3 className="mt-3 text-[1.375rem] font-medium tracking-[-0.02em]">
+                {/* The active step's title steps up in scale and color —
+                    "here is the one you should be reading right now",
+                    not identical typographic weight across all four. */}
+                <h3 className="relative mt-3 text-[1.375rem] font-medium tracking-[-0.02em] transition-[color,transform] duration-500 [transition-timing-function:var(--ease-out-expo)] group-data-[active]:scale-[1.08] group-data-[active]:text-violet-200">
                   {step.title}
                 </h3>
-                <p className="mt-3.5 max-w-[15rem] text-[0.875rem] leading-[1.7] text-mist">
+                <p className="relative mt-3.5 max-w-[15rem] text-[0.875rem] leading-[1.7] text-mist">
                   {step.body}
                 </p>
               </li>
@@ -114,12 +126,12 @@ export function Process() {
             <li
               key={step.index}
               data-step
-              className="relative flex gap-6 opacity-80 transition-opacity duration-700 [transition-timing-function:var(--ease-out-expo)] data-[active]:opacity-100 [&+&]:mt-14"
+              className="group relative flex gap-6 opacity-80 transition-opacity duration-700 [transition-timing-function:var(--ease-out-expo)] data-[active]:opacity-100 [&+&]:mt-14"
             >
               <div className="relative z-10 flex w-[92px] shrink-0 justify-center">
                 <span
                   aria-hidden="true"
-                  className="absolute left-1/2 top-1/2 size-[86px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(80,15,217,0.3),transparent_70%)]"
+                  className="absolute left-1/2 top-1/2 size-[86px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(80,15,217,0.16),transparent_70%)] transition-[background-color] duration-700 group-data-[active]:bg-[radial-gradient(circle,rgba(154,107,255,0.4),transparent_70%)]"
                 />
                 <Image
                   src={step.image}
@@ -127,7 +139,7 @@ export function Process() {
                   width={step.width}
                   height={step.height}
                   sizes="92px"
-                  className="relative h-[92px] w-auto"
+                  className="relative h-[92px] w-auto transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-data-[active]:scale-105"
                 />
               </div>
 
@@ -135,7 +147,7 @@ export function Process() {
                 <span className="font-display text-[0.6875rem] tracking-[0.2em] text-violet-400">
                   {step.index}
                 </span>
-                <h3 className="mt-2 text-[1.25rem] font-medium tracking-[-0.02em]">
+                <h3 className="mt-2 text-[1.25rem] font-medium tracking-[-0.02em] transition-colors duration-500 group-data-[active]:text-violet-200">
                   {step.title}
                 </h3>
                 <p className="mt-2.5 text-[0.875rem] leading-[1.7] text-mist">
