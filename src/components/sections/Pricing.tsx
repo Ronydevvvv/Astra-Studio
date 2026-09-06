@@ -125,17 +125,32 @@ export function Pricing() {
             "here's how we work" is one consistent claim across the site
             rather than a second, slightly different version invented for
             this page. Reassurance right before the money question, not
-            after. --- */}
+            after.
+
+            Framed as the path that follows a decision ("you've picked a
+            tier — here's what happens next"), not a second unrelated block
+            dropped under the offers: the eyebrow says so explicitly, and a
+            connecting line threads the four steps the same way Process
+            does on the home page, so this reads as a continuation of the
+            same visual language rather than a plain four-column list. --- */}
         <div className="mt-24 lg:mt-32" data-reveal>
           <p className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
             {processIntro.eyebrow}
           </p>
-          <h2 className="mt-4 text-[clamp(1.5rem,2.6vw,2rem)] font-medium leading-[1.1] tracking-[-0.03em]">
-            Comment se déroule un projet.
+          <h2 className="mt-4 max-w-lg text-[clamp(1.5rem,2.6vw,2rem)] font-medium leading-[1.1] tracking-[-0.03em]">
+            Une fois votre choix fait, voici comment se déroule le projet.
           </h2>
-          <ol className="mt-10 grid gap-x-8 gap-y-10 border-t border-white/[0.09] pt-10 sm:grid-cols-2 lg:grid-cols-4">
+          <ol className="relative mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 top-[7px] hidden h-px bg-gradient-to-r from-violet-500/50 via-violet-500/20 to-transparent lg:block"
+            />
             {process.map((step) => (
-              <li key={step.index}>
+              <li key={step.index} className="relative">
+                <span
+                  aria-hidden="true"
+                  className="relative z-10 mb-4 hidden size-[7px] rounded-full border border-violet-400/70 bg-void lg:block"
+                />
                 <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
                   {step.index}
                 </span>
