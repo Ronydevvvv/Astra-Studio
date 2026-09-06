@@ -129,30 +129,26 @@ export default async function ProjectPage({ params }: Params) {
       </section>
 
       {/* --- lead visual ---
-          Deliberately full-bleed rather than boxed at 1200px inside the
-          page's own gutters: the opening image of a case study is the one
-          place the site should let a real screenshot take the whole stage,
-          the same way the best studio portfolios open a project. Every
-          other image on the page stays contained — this one doesn't. */}
-      <section data-reveal>
-        <div className="relative">
+          Contained within the page's own gutters, like every other image on
+          the page — a full-bleed opening photo was letting the screenshot
+          out-narrate the project itself. A real, generous image, but one
+          that sits in the same column as the text that follows it rather
+          than taking the whole stage. */}
+      <section className="px-6 md:px-10 xl:px-16" data-reveal>
+        <div className="relative mx-auto max-w-[1200px]">
           {project.image ? (
-            <div className="relative aspect-[16/8] overflow-hidden sm:aspect-[16/7]">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-sm">
               <Image
                 src={project.image}
                 alt={`Aperçu du site ${project.name}`}
                 fill
                 priority
-                sizes="100vw"
+                sizes="(max-width: 1200px) 100vw, 1200px"
                 className="object-cover"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#04050f] to-transparent"
               />
             </div>
           ) : (
-            <div className="mx-auto max-w-3xl px-6 md:px-10 xl:px-16">
+            <div className="mx-auto max-w-3xl">
               <ProjectMockup
                 name={project.name}
                 category={project.category}
