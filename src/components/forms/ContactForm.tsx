@@ -175,6 +175,13 @@ export function ContactForm() {
         />
       </div>
 
+      {/* --- group: you — the two fields ASTRA needs to reply at all,
+          visually first and their own labelled group rather than mixed in
+          with optional context fields. --- */}
+      <p className="sm:col-span-2 text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
+        Vous
+      </p>
+
       {/* --- name --- */}
       <div>
         <label htmlFor={`${id}-name`} className={labelClass}>
@@ -200,23 +207,6 @@ export function ContactForm() {
             {errors.name}
           </p>
         )}
-      </div>
-
-      {/* --- company --- */}
-      <div>
-        <label htmlFor={`${id}-company`} className={labelClass}>
-          Entreprise
-        </label>
-        <div className="relative mt-3">
-          <input
-            id={`${id}-company`}
-            name="company"
-            type="text"
-            autoComplete="organization"
-            className={fieldClass(false)}
-          />
-          {underline}
-        </div>
       </div>
 
       {/* --- email --- */}
@@ -246,10 +236,27 @@ export function ContactForm() {
         )}
       </div>
 
+      {/* --- company --- */}
+      <div>
+        <label htmlFor={`${id}-company`} className={labelClass}>
+          Entreprise <span className="normal-case text-slate-dim">(facultatif)</span>
+        </label>
+        <div className="relative mt-3">
+          <input
+            id={`${id}-company`}
+            name="company"
+            type="text"
+            autoComplete="organization"
+            className={fieldClass(false)}
+          />
+          {underline}
+        </div>
+      </div>
+
       {/* --- phone --- */}
       <div>
         <label htmlFor={`${id}-phone`} className={labelClass}>
-          Téléphone
+          Téléphone <span className="normal-case text-slate-dim">(facultatif)</span>
         </label>
         <div className="relative mt-3">
           <input
@@ -262,6 +269,12 @@ export function ContactForm() {
           {underline}
         </div>
       </div>
+
+      {/* --- group: project — qualifiers that help ASTRA prepare a useful
+          first reply, clearly a second, optional step after "who are you". --- */}
+      <p className="sm:col-span-2 mt-2 text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
+        Votre projet
+      </p>
 
       {/* --- project type --- */}
       <div>
@@ -296,7 +309,7 @@ export function ContactForm() {
       {/* --- message --- */}
       <div className="sm:col-span-2">
         <label htmlFor={`${id}-message`} className={labelClass}>
-          Votre projet <span className="text-violet-400">*</span>
+          Décrivez votre projet <span className="text-violet-400">*</span>
         </label>
         <div className="relative mt-3">
           <textarea
