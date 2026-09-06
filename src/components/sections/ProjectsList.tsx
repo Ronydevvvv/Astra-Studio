@@ -17,7 +17,7 @@ import { ProjectMockup } from "@/components/ui/ProjectMockup";
 function ProjectVisual({ project }: { project: Project }) {
   if (project.image) {
     return (
-      <div className="relative aspect-[16/11] overflow-hidden rounded-md border border-white/[0.07]">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-white/[0.07]">
         <Image
           src={project.image}
           alt={`Aperçu du site ${project.name}`}
@@ -77,18 +77,52 @@ function StatusBadge({ status }: { status: Project["status"] }) {
 }
 
 /**
- * The lead project gets a different shape entirely — full-width image with
- * the title set over it, rather than the alternating two-column row every
- * other entry uses. Three identical rows in sequence is what makes a
- * portfolio read as a list; one deliberately larger opening breaks that
- * rhythm before it has a chance to set in, the way a magazine spread opens
- * wider than the pages that follow it.
+ * The lead project still opens the page differently from the two rows that
+ * follow, but the title and context now sit ABOVE the image as real text,
+ * not overlaid on top of it. The previous version put the whole story —
+ * category, status, name — inside the photo itself, which meant the image
+ * did all the narrating and the actual sentence about the project only
+ * showed up afterward, small, underneath. Read the name, the status, the
+ * category first; then look at the work.
  */
 function FeaturedProjectRow({ project }: { project: Project }) {
   return (
     <li className="group border-t-0 pb-16 md:pb-20" data-reveal>
       <Link href={`/realisations/${project.slug}`} className="block">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-md border border-white/[0.07] sm:aspect-[21/10]">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
+            {project.index}
+          </span>
+          <span className="text-[0.6875rem] uppercase tracking-[0.16em] text-slate-dim">
+            {project.category}
+          </span>
+          <StatusBadge status={project.status} />
+        </div>
+
+        <div className="mt-5 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+          <h3 className="text-[clamp(2.5rem,6vw,5rem)] font-medium uppercase leading-[0.92] tracking-[-0.035em] transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5 group-hover:text-violet-300">
+            {project.name}
+          </h3>
+          <span className="inline-flex shrink-0 items-center gap-4 pb-1 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-500 group-hover:text-violet-300">
+            <span className="relative grid size-12 shrink-0 place-items-center rounded-full border border-white/20 transition-colors duration-500 group-hover:border-violet-400/70">
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 scale-0 rounded-full bg-violet-500/15 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-100"
+              />
+              <Icon
+                name="arrow"
+                className="relative size-4 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-0.5"
+              />
+            </span>
+            Voir le projet
+          </span>
+        </div>
+
+        <p className="mt-4 max-w-2xl text-[1.0625rem] leading-[1.75] text-mist">
+          {project.body}
+        </p>
+
+        <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-md border border-white/[0.07] sm:aspect-[16/8]">
           {project.image ? (
             <Image
               src={project.image}
@@ -105,48 +139,9 @@ function FeaturedProjectRow({ project }: { project: Project }) {
           )}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-[#04050f] via-[#04050f]/10 to-transparent"
-          />
-          <div
-            aria-hidden="true"
             className="absolute inset-0 bg-[linear-gradient(135deg,rgba(154,107,255,0.14),transparent_55%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100"
           />
-
-          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-6 md:flex-row md:items-end md:justify-between md:p-10">
-            <div>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-300">
-                  {project.index}
-                </span>
-                <span className="text-[0.6875rem] uppercase tracking-[0.16em] text-mist">
-                  {project.category}
-                </span>
-                <StatusBadge status={project.status} />
-              </div>
-              <h3 className="mt-3 text-[clamp(2.5rem,7vw,6rem)] font-medium uppercase leading-[0.92] tracking-[-0.035em] text-chalk transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5">
-                {project.name}
-              </h3>
-            </div>
-
-            <span className="inline-flex shrink-0 items-center gap-4 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-500 group-hover:text-violet-300">
-              <span className="relative grid size-12 shrink-0 place-items-center rounded-full border border-white/25 backdrop-blur-sm transition-colors duration-500 group-hover:border-violet-400/70">
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-0 scale-0 rounded-full bg-violet-500/20 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-100"
-                />
-                <Icon
-                  name="arrow"
-                  className="relative size-4 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-0.5"
-                />
-              </span>
-              Voir le projet
-            </span>
-          </div>
         </div>
-
-        <p className="mt-6 max-w-2xl text-[1.0625rem] leading-[1.75] text-mist">
-          {project.body}
-        </p>
       </Link>
     </li>
   );
@@ -160,7 +155,7 @@ function ProjectRow({ project, flip }: { project: Project; flip: boolean }) {
     >
       <Link
         href={`/realisations/${project.slug}`}
-        className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-center"
+        className="grid gap-x-14 gap-y-10 lg:grid-cols-2 lg:items-center"
       >
         <div className={flip ? "lg:order-2" : "lg:order-1"}>
           <ProjectVisual project={project} />
