@@ -401,7 +401,7 @@ export const projects: Project[] = [
       outcome:
         "Boutique en ligne, thème sur mesure livré et déployé.",
       gallery: [
-        { src: "/assets/projects/mister-dalle/logo.png", alt: "Logo Mister Dalle" },
+        { src: "/assets/projects/mister-dalle/logo.webp", alt: "Logo Mister Dalle" },
       ],
     },
   },
