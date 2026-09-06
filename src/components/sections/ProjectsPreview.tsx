@@ -61,14 +61,18 @@ export function ProjectsPreview() {
 
                 {/* A real thumbnail, always visible — the moment this list
                     is on screen it already looks like proof of work, not a
-                    table of contents waiting for a hover to prove itself. */}
-                <span className="relative hidden h-14 w-20 shrink-0 overflow-hidden rounded-sm border border-white/[0.09] sm:block">
+                    table of contents waiting for a hover to prove itself.
+                    Sized larger than TrustBar's own thumbnails: TrustBar is
+                    the quick proof right under the hero, this index is the
+                    closer, more editorial look further down the page — it
+                    needs to read as its own moment, not a smaller repeat. */}
+                <span className="relative hidden h-20 w-32 shrink-0 overflow-hidden rounded-sm border border-white/[0.09] sm:block">
                   {project.image ? (
                     <Image
                       src={project.image}
                       alt=""
                       fill
-                      sizes="80px"
+                      sizes="128px"
                       className="object-cover transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-110"
                     />
                   ) : (
