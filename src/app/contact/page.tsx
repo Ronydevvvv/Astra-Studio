@@ -152,7 +152,7 @@ export default function ContactPage() {
                   than a separate decorative circle glued underneath — the
                   same signal the coordinates above are part of, not a
                   second unrelated illustration. */}
-              <div className="relative mt-10 hidden aspect-[16/10] max-w-md overflow-hidden rounded-lg border border-white/[0.07] lg:block">
+              <div className="relative mt-10 hidden aspect-[16/10] max-w-md overflow-hidden rounded-md border border-white/[0.07] lg:block">
                 <Starfield className="opacity-40" />
                 <div className="glow left-1/2 top-1/2 size-48 -translate-x-1/2 -translate-y-1/2 bg-violet-600/[0.16]" />
                 <svg

@@ -258,7 +258,7 @@ export function Hero() {
                   }}
                 >
                   <div
-                    className="animate-float-slow w-40 rounded-lg border border-white/10 bg-[#0b0e22]/80 p-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)] backdrop-blur-sm"
+                    className="animate-float-slow w-40 rounded-md border border-white/10 bg-[#0b0e22]/80 p-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)] backdrop-blur-sm"
                     style={{ animationDelay: "-3s" }}
                   >
                     <div className="flex items-center gap-1.5">
