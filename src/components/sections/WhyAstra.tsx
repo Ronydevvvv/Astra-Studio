@@ -44,15 +44,33 @@ export function WhyAstra() {
               key={point.title}
               data-reveal
               style={{ ["--reveal-delay" as string]: `${i * 110}ms` }}
-              className="group border-t border-white/[0.09] pt-7"
+              className="group relative overflow-hidden border-t border-white/[0.09] pt-7"
             >
-              <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
+              {/* The rule itself draws in on hover, in the same violet
+                  gradient used across the site's other progress lines —
+                  a still section gets one small confirmation of life
+                  without adding an icon or a card the brief deliberately
+                  avoids here. */}
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 top-[-1px] h-px origin-left scale-x-0 bg-gradient-to-r from-violet-500 via-violet-500/50 to-transparent transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100"
+              />
+              {/* A watermark numeral, the same device used on Services and
+                  À propos — real typographic weight behind the point
+                  instead of a small caption-sized index. */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-2 top-2 select-none font-display text-[5.5rem] font-medium leading-none text-white/[0.025]"
+              >
                 {point.index}
               </span>
-              <h3 className="mt-5 text-[1.375rem] font-medium leading-tight tracking-[-0.025em]">
+              <span className="relative font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
+                {point.index}
+              </span>
+              <h3 className="relative mt-5 text-[1.375rem] font-medium leading-tight tracking-[-0.025em]">
                 {point.title}
               </h3>
-              <p className="mt-4 max-w-sm text-[0.9375rem] leading-[1.75] text-mist">
+              <p className="relative mt-4 max-w-sm text-[0.9375rem] leading-[1.75] text-mist">
                 {point.body}
               </p>
             </li>
