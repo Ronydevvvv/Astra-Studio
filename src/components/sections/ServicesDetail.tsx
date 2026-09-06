@@ -1,4 +1,5 @@
 import { services } from "@/lib/content";
+import { ArrowLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { ServiceVisual } from "@/components/ui/ServiceVisual";
 
@@ -35,8 +36,8 @@ export function ServicesDetail() {
             >
               {isWide ? (
                 <div>
-                  <div className="flex items-baseline gap-5">
-                    <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
+                  <div className="flex items-start gap-6">
+                    <span className="font-display text-[clamp(2.25rem,4.5vw,3.5rem)] font-medium leading-[0.85] tracking-[-0.03em] text-violet-400/80">
                       {service.index}
                     </span>
                     <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-medium leading-none tracking-[-0.035em]">
@@ -66,13 +67,16 @@ export function ServicesDetail() {
                       <ServiceVisual icon={service.icon} />
                     </div>
                   </div>
+                  <ArrowLink href="/contact" className="mt-8">
+                    Discuter de ce chantier
+                  </ArrowLink>
                 </div>
               ) : (
               <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-start">
                 {/* --- copy --- */}
                 <div className={flip ? "lg:order-2" : "lg:order-1"}>
-                  <div className="flex items-baseline gap-5">
-                    <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
+                  <div className="flex items-start gap-6">
+                    <span className="font-display text-[clamp(2.25rem,4.5vw,3.5rem)] font-medium leading-[0.85] tracking-[-0.03em] text-violet-400/80">
                       {service.index}
                     </span>
                     <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-medium leading-none tracking-[-0.035em]">
@@ -133,6 +137,10 @@ export function ServicesDetail() {
                       </li>
                     ))}
                   </ul>
+
+                  <ArrowLink href="/contact" className="mt-8">
+                    Discuter de ce chantier
+                  </ArrowLink>
                 </div>
               </div>
               )}
