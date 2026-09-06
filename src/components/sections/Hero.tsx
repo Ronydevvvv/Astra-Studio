@@ -258,19 +258,41 @@ export function Hero() {
                   }}
                 >
                   <div
-                    className="animate-float-slow w-40 rounded-md border border-white/10 bg-[#0b0e22]/80 p-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)] backdrop-blur-sm"
+                    className="animate-float-slow w-[11.5rem] rounded-md border border-white/10 bg-[#0b0e22]/80 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)] backdrop-blur-sm"
                     style={{ animationDelay: "-3s" }}
                   >
-                    <div className="flex items-center gap-1.5">
+                    {/* Window chrome + filename tab — reads as a real
+                        editor, not an abstract "code-ish" card. */}
+                    <div className="flex items-center gap-1.5 border-b border-white/[0.06] px-3 py-2">
                       <span className="size-1.5 rounded-full bg-white/15" />
                       <span className="size-1.5 rounded-full bg-white/15" />
                       <span className="size-1.5 rounded-full bg-white/15" />
+                      <span className="ml-1.5 font-mono text-[0.5rem] tracking-tight text-slate-dim">
+                        studio.ts
+                      </span>
                     </div>
-                    <div className="mt-2.5 space-y-1.5">
-                      <span className="block h-1 w-4/5 rounded-full bg-violet-400/50" />
-                      <span className="block h-1 w-3/5 rounded-full bg-white/15" />
-                      <span className="block h-1 w-full rounded-full bg-white/10" />
-                      <span className="block h-1 w-2/5 rounded-full bg-violet-400/30" />
+                    {/* Real, short, plausible code — with line numbers, a
+                        keyword highlighted the same violet as the rest of
+                        the site's accents, and a blinking cursor closing
+                        the last line — an editorial detail, not a dashboard
+                        widget. */}
+                    <div className="flex gap-2.5 px-3 py-2.5 font-mono text-[0.5625rem] leading-[1.5] text-mist/80">
+                      <span aria-hidden="true" className="select-none text-white/15">
+                        1
+                        <br />2
+                        <br />3
+                        <br />4
+                      </span>
+                      <span>
+                        <span className="text-violet-300">export</span> function
+                        <br />
+                        &nbsp;&nbsp;<span className="text-violet-300">build</span>(&apos;astra&apos;) {"{"}
+                        <br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;craft: true
+                        <span className="ml-px inline-block h-3 w-[2px] translate-y-[2px] animate-pulse bg-violet-400" />
+                        <br />
+                        {"}"}
+                      </span>
                     </div>
                   </div>
                 </div>
