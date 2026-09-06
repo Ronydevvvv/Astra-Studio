@@ -12,37 +12,75 @@ export function ServiceVisual({ icon }: { icon: IconName }) {
   switch (icon) {
     case "design":
       return (
-        <div className="relative flex h-16 items-end gap-2" aria-hidden="true">
-          {["#7c3af5", "#c4b5fd", "#3d2a78"].map((c, i) => (
-            <span
-              key={c}
-              className="block w-6 rounded-sm transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1"
-              style={{
-                height: `${28 + i * 10}px`,
-                background: c,
-                transitionDelay: `${i * 70}ms`,
-              }}
-            />
-          ))}
-          <span className="ml-1 mb-1 size-2.5 rounded-full border border-white/40 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-2 group-hover:translate-y-[-6px]" />
+        <div className="relative flex h-16 items-end justify-between gap-3" aria-hidden="true">
+          {/* Faint layout grid behind everything — design work starts as a
+              grid before it becomes a palette or a typeface choice. */}
+          <div className="pointer-events-none absolute inset-0 grid grid-cols-4 gap-1.5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            {[0, 1, 2, 3].map((i) => (
+              <span key={i} className="border-x border-dashed border-white/[0.06]" />
+            ))}
+          </div>
+
+          {/* Palette — the same three swatches, but now sitting on the grid
+              instead of floating alone. */}
+          <div className="relative flex items-end gap-2">
+            {["#7c3af5", "#c4b5fd", "#3d2a78"].map((c, i) => (
+              <span
+                key={c}
+                className="block w-5 rounded-sm transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1"
+                style={{
+                  height: `${24 + i * 8}px`,
+                  background: c,
+                  transitionDelay: `${i * 70}ms`,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Type scale — two weights of the same mark, the other half of
+              a design system alongside colour. */}
+          <div className="relative flex items-baseline gap-1.5 pb-0.5 font-display">
+            <span className="text-[1.75rem] font-medium leading-none text-chalk/90 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1">
+              Aa
+            </span>
+            <span className="text-[0.8125rem] font-medium leading-none text-slate-dim transition-transform delay-75 duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-1">
+              Aa
+            </span>
+          </div>
         </div>
       );
 
     case "code":
       return (
         <div
-          className="h-16 rounded-sm border border-white/10 bg-white/[0.03] px-3 py-2.5 font-mono text-[0.625rem] leading-[1.9] text-violet-300/80"
+          className="h-16 overflow-hidden rounded-sm border border-white/10 bg-white/[0.03] font-mono text-[0.625rem] leading-[1.7] text-violet-300/80"
           aria-hidden="true"
         >
-          <span className="block w-0 overflow-hidden whitespace-nowrap text-mist/80 transition-[width] duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:w-full">
-            const site =
-          </span>
-          <span className="flex items-center whitespace-nowrap">
-            <span className="inline-block w-0 overflow-hidden transition-[width] duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:w-[7.5ch] [transition-delay:200ms]">
-              build(&apos;astra&apos;);
+          {/* Component tabs — a real editor has more than one file open;
+              this is what actually separates "code" from "a code look". */}
+          <div className="flex items-center gap-3 border-b border-white/[0.06] px-3 py-1.5 text-[0.5625rem] text-slate-dim">
+            <span className="text-violet-300">Hero.tsx</span>
+            <span className="opacity-50">Nav.tsx</span>
+          </div>
+          <div className="flex gap-2 px-3 py-1.5">
+            <span className="select-none text-white/15">
+              1<br />2<br />3
             </span>
-            <span className="ml-px inline-block h-3 w-[2px] animate-pulse bg-violet-400" />
-          </span>
+            <span>
+              <span className="block w-0 overflow-hidden whitespace-nowrap text-mist/80 transition-[width] duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:w-full">
+                {"<Hero"}
+              </span>
+              <span className="block w-0 overflow-hidden whitespace-nowrap text-white/40 transition-[width] delay-100 duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:w-full">
+                &nbsp;&nbsp;responsive
+              </span>
+              <span className="flex items-center whitespace-nowrap">
+                <span className="inline-block w-0 overflow-hidden transition-[width] duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:w-[3ch] [transition-delay:200ms]">
+                  {"/>"}
+                </span>
+                <span className="ml-px inline-block h-3 w-[2px] animate-pulse bg-violet-400" />
+              </span>
+            </span>
+          </div>
         </div>
       );
 

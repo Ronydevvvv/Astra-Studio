@@ -18,6 +18,13 @@ export function ServicesDetail() {
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 xl:px-16">
         {services.map((service, i) => {
           const flip = i % 2 === 1;
+          /* Performance is the one spread that breaks the alternating
+             two-column pattern on purpose: a speed graph read at half a
+             column's width is a squint, not a demonstration, and six
+             identical spreads in a row is its own kind of template. Full
+             width, chart underneath the copy instead of beside it — the
+             other five keep the alternating format. */
+          const isWide = service.slug === "performance";
 
           return (
             <article
@@ -26,6 +33,41 @@ export function ServicesDetail() {
               data-reveal
               className="group scroll-mt-32 border-t border-white/[0.09] pt-10 [&+&]:mt-20 lg:[&+&]:mt-28"
             >
+              {isWide ? (
+                <div>
+                  <div className="flex items-baseline gap-5">
+                    <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
+                      {service.index}
+                    </span>
+                    <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-medium leading-none tracking-[-0.035em]">
+                      {service.title}
+                    </h2>
+                  </div>
+                  <div className="mt-8 grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end">
+                    <p className="max-w-xl text-[1.0625rem] leading-[1.8] text-mist">
+                      {service.body}
+                    </p>
+                    <ul className="flex flex-wrap gap-x-8 gap-y-3 lg:justify-end">
+                      {service.deliverables.map((d) => (
+                        <li key={d} className="text-[0.9375rem] text-mist">
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {/* The graph gets the width it actually needs to be read
+                      as a real measurement, not a decoration. */}
+                  <div className="relative mt-10 overflow-hidden rounded-md border border-white/[0.07] bg-white/[0.015] px-6 py-8 sm:px-10">
+                    <span
+                      aria-hidden="true"
+                      className="glow left-1/2 top-0 size-64 -translate-x-1/2 bg-violet-600/[0.08]"
+                    />
+                    <div className="relative [&_svg]:h-24 sm:[&_svg]:h-32">
+                      <ServiceVisual icon={service.icon} />
+                    </div>
+                  </div>
+                </div>
+              ) : (
               <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-start">
                 {/* --- copy --- */}
                 <div className={flip ? "lg:order-2" : "lg:order-1"}>
@@ -93,6 +135,7 @@ export function ServicesDetail() {
                   </ul>
                 </div>
               </div>
+              )}
             </article>
           );
         })}
