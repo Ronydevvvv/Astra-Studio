@@ -49,13 +49,21 @@ export function Footer() {
           className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-8 px-6 py-20 md:px-10 lg:flex-row lg:items-end lg:py-28 xl:px-16"
           data-reveal
         >
-          <h2 className="max-w-2xl text-[clamp(2.25rem,5.5vw,4.5rem)] font-medium leading-[1.02] tracking-[-0.04em]">
+          <h2 className="max-w-2xl text-[clamp(2.5rem,6.5vw,5.25rem)] font-medium leading-[1.0] tracking-[-0.045em]">
             <span className="block">{footerCta.title[0]}</span>
             <span className="block text-violet-400">{footerCta.title[1]}</span>
           </h2>
-          <Button href={footerCta.cta.href} withArrow className="shrink-0">
-            {footerCta.cta.label}
-          </Button>
+          {/* A quiet pulse behind the last button on the site — the one
+              spot on the page where drawing the eye is exactly the job. */}
+          <div className="relative shrink-0">
+            <span
+              aria-hidden="true"
+              className="animate-breathe pointer-events-none absolute inset-0 -z-10 rounded-full bg-violet-500/40 blur-xl"
+            />
+            <Button href={footerCta.cta.href} withArrow>
+              {footerCta.cta.label}
+            </Button>
+          </div>
         </div>
       </div>
 
