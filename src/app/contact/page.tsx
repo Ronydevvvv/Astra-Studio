@@ -91,7 +91,20 @@ export default function ContactPage() {
             data-reveal
             style={{ ["--reveal-delay" as string]: "80ms" }}
           >
-            {contact.title[0]}
+            {/* Every other headline on the site carries a violet accent —
+                Contact's single-sentence title (from content.ts) was the
+                one flat, uniformly white exception. Splitting on the one
+                word that matters ("projet") rather than forcing an
+                artificial second line or duplicating the sentence here. */}
+            {contact.title[0].split(/(projet)/).map((chunk, i) =>
+              chunk === "projet" ? (
+                <span key={i} className="text-violet-400">
+                  {chunk}
+                </span>
+              ) : (
+                <span key={i}>{chunk}</span>
+              )
+            )}
           </h1>
           <p
             className="mt-7 max-w-lg text-[1.0625rem] leading-[1.8] text-mist"
