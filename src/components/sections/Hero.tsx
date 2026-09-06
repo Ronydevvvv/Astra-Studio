@@ -43,6 +43,42 @@ export function Hero() {
         {/* A single low ambient light, off to the left, so the type has
             somewhere to sit. Not a glow around the image. */}
         <div className="glow left-[-18%] top-[10%] size-[34rem] bg-violet-700/[0.13] lg:size-[46rem]" />
+        {/* A second, dimmer light seated behind the astronaut himself —
+            without it the only light source sits under the headline and
+            the scene on the right reads as unlit next to it. This is the
+            one cue that separates "background" from "the astronaut's own
+            space": barely visible on its own, but it's what keeps the
+            character from floating in front of a flat black backdrop. */}
+        <div
+          aria-hidden="true"
+          className="glow left-[78%] top-[38%] hidden size-[38rem] bg-violet-600/[0.09] lg:block"
+        />
+      </div>
+
+      {/* Midground depth: a handful of brighter, larger points that drift
+          on their own — much slower and further than the badges, and never
+          touched by the mouse parallax. This is what a background starfield
+          alone can't give: something visibly, independently alive behind
+          the character rather than a static print. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 hidden lg:block"
+      >
+        <span
+          className="animate-drift absolute left-[62%] top-[22%] size-[3px] rounded-full bg-violet-200/70 shadow-[0_0_8px_1px_rgba(196,181,253,0.6)]"
+          style={{ animationDuration: "44s" }}
+        />
+        <span
+          className="animate-drift absolute left-[85%] top-[58%] size-[2px] rounded-full bg-violet-200/50 shadow-[0_0_6px_1px_rgba(196,181,253,0.5)]"
+          style={{ animationDuration: "58s", animationDirection: "alternate-reverse" }}
+        />
+        <span
+          className="animate-drift absolute left-[71%] top-[72%] size-[2px] rounded-full bg-white/40"
+          style={{ animationDuration: "36s" }}
+        />
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent to-void" />
 
         {/* Descent arc: the same orbital line vocabulary as the scene on the
