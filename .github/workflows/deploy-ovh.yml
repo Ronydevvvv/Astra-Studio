@@ -37,12 +37,22 @@ jobs:
           test -f out/index.html || (echo "out/index.html manquant" && exit 1)
           echo "Build OK"
 
-      - name: Déployer sur OVH via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      # OVH mutualisé refuse AUTH TLS ("500 This security scheme is not
+      # implemented") — FTPS n'est pas une option sur cet hébergement.
+      # SFTP (SSH, port 22) utilise les mêmes identifiants FTP-SSH que
+      # ceux déjà configurés dans OVH_FTP_USERNAME/OVH_FTP_PASSWORD — ce
+      # sont les identifiants "FTP-SSH" visibles dans l'espace client OVH,
+      # pas un couple différent. Mêmes secrets, protocole différent.
+      - name: Déployer sur OVH via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
         with:
           server: ${{ secrets.OVH_FTP_SERVER }}
+          port: "22"
           username: ${{ secrets.OVH_FTP_USERNAME }}
           password: ${{ secrets.OVH_FTP_PASSWORD }}
-          protocol: ftps
-          local-dir: ./out/
-          server-dir: ${{ secrets.OVH_FTP_REMOTE_DIR }}
+          ssh_private_key: ""
+          sftp_only: true
+          local_path: "./out/*"
+          remote_path: ${{ secrets.OVH_FTP_REMOTE_DIR }}
+          # Ne jamais activer : viderait le dossier distant avant l'envoi.
+          delete_remote_files: false
