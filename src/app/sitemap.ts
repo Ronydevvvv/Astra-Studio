@@ -2,6 +2,9 @@ import type { MetadataRoute } from "next";
 import { projects } from "@/lib/content";
 import { SITE_URL } from "@/lib/seo";
 
+// Required for `output: "export"` — no dynamic segments, generated once.
+export const dynamic = "force-static";
+
 /**
  * Generated from the same route list and project data the site itself
  * renders from — a URL only appears here if a real page serves it.

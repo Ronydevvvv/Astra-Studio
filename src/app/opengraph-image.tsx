@@ -1,5 +1,9 @@
 import { ImageResponse } from "next/og";
 
+// Required for `output: "export"` — this route has no dynamic segments and
+// no request-dependent data, so it can be generated once at build time.
+export const dynamic = "force-static";
+
 export const alt = "ASTRA Studio — Agence de création de sites web sur mesure";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
