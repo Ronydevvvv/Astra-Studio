@@ -11,16 +11,25 @@ type Status = "idle" | "submitting" | "sent" | "not_configured" | "error";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/** Public by design — Web3Forms access keys are meant to be embedded in
+ * client-side code (their spam filtering happens server-side on their end,
+ * keyed to this value), unlike a real API secret. Baked in at build time
+ * from NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY — required precisely because this
+ * site ships as a static export with no server of its own to hide a key
+ * behind: there is nowhere else it could live. */
+const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+
 /**
  * Validation runs on submit, then per-field on change once a field has been
  * marked in error. Validating on every keystroke from the start shouts at
  * someone who is still typing their email; never re-validating leaves a red
  * field red after it has been fixed.
  *
- * Submits to /api/contact, which sends through Resend when RESEND_API_KEY
- * and CONTACT_EMAIL are set. When they aren't, the API answers
- * "not_configured" and this component says so plainly — a fake success
- * message would be worse than an honest gap.
+ * Submits straight to Web3Forms from the browser — this site is a static
+ * export (no server to run an API route on OVH's static hosting), so
+ * there's no backend left to post to. When the access key isn't configured,
+ * the form says so plainly instead of faking a success message.
  */
 export function ContactForm() {
   const id = useId();
@@ -61,21 +70,44 @@ export function ContactForm() {
       return;
     }
 
+    // Honeypot: a real visitor never fills a field hidden off-screen. A bot
+    // filling every input will. Pretend success — no signal for it to adapt
+    // to — without ever actually sending the submission.
+    if (String(data.get("website") ?? "").trim()) {
+      setStatus("sent");
+      return;
+    }
+
+    if (!WEB3FORMS_ACCESS_KEY) {
+      setStatus("not_configured");
+      return;
+    }
+
     setStatus("submitting");
     try {
-      const res = await fetch("/api/contact", { method: "POST", body: data });
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: "Nouvelle demande — astra-studio",
+          from_name: String(data.get("name") ?? ""),
+          name: String(data.get("name") ?? ""),
+          email: String(data.get("email") ?? ""),
+          company: String(data.get("company") ?? ""),
+          phone: String(data.get("phone") ?? ""),
+          type: String(data.get("type") ?? ""),
+          budget: String(data.get("budget") ?? ""),
+          message: String(data.get("message") ?? ""),
+        }),
+      });
       const body = (await res.json().catch(() => null)) as
-        | { ok: true }
-        | { ok: false; error: string; fields?: Errors }
+        | { success: true }
+        | { success: false; message?: string }
         | null;
 
-      if (body?.ok) {
+      if (res.ok && body?.success) {
         setStatus("sent");
-      } else if (body?.error === "not_configured") {
-        setStatus("not_configured");
-      } else if (body?.error === "validation" && body.fields) {
-        setErrors(body.fields);
-        setStatus("idle");
       } else {
         setStatus("error");
       }
@@ -140,9 +172,11 @@ export function ContactForm() {
             </h2>
             <p className="mt-4 max-w-lg text-[0.9375rem] leading-[1.75] text-mist">
               Le formulaire est valide, mais l&apos;envoi n&apos;est pas encore
-              branché : <code className="text-violet-300">RESEND_API_KEY</code>{" "}
-              et <code className="text-violet-300">CONTACT_EMAIL</code> ne sont
-              pas configurés côté serveur.
+              branché :{" "}
+              <code className="text-violet-300">
+                NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY
+              </code>{" "}
+              n&apos;est pas configurée pour ce build.
             </p>
             <button
               type="button"
