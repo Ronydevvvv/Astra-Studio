@@ -63,7 +63,11 @@ jobs:
       # Diagnostic temporaire : vérifie que les secrets arrivent bien et
       # non-vides côté runner, sans jamais afficher leur valeur. À retirer
       # une fois l'origine du "Permission denied" confirmée.
+      # continue-on-error : le test SSH ci-dessous échoue déjà de façon
+      # confirmée ("Permission denied") — sans ce flag, le job s'arrêterait
+      # ici et le test FTP (port 21) qui suit ne s'exécuterait jamais.
       - name: Diagnostic des secrets OVH (temporaire)
+        continue-on-error: true
         env:
           SSHPASS: ${{ secrets.OVH_FTP_PASSWORD }}
           SERVER: ${{ secrets.OVH_FTP_SERVER }}
@@ -81,24 +85,31 @@ jobs:
           sshpass -e ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no \
             -o StrictHostKeyChecking=yes -p 22 "$USER@$SERVER" "pwd"
 
-      # Test d'authentification isolé, sans upload : distingue un échec
-      # d'authentification (mot de passe/protocole) d'un échec de chemin
-      # distant ou de transfert, avant de toucher au contenu de out/.
-      # SSHPASS + `sshpass -e` : le mot de passe passe par une variable
-      # d'environnement, jamais en argument de ligne de commande (donc
-      # jamais visible dans `ps`/les logs de process du runner).
-      - name: Test d'authentification SFTP
+      # Test temporaire, protocole FTP classique (port 21), SANS transfert
+      # de fichier : sert uniquement à déterminer si OVH accepte
+      # l'authentification depuis le runner GitHub par ce protocole, après
+      # que la même authentification par SFTP/port 22 a été refusée
+      # ("Permission denied") alors qu'elle fonctionne dans FileZilla.
+      # curl est utilisé sans -v : le protocole FTP envoie USER/PASS en
+      # clair sur le fil, et un mode verbose afficherait ces commandes
+      # (donc le mot de passe) dans les logs du job. Le résultat du test
+      # repose uniquement sur le code de sortie de curl et le listing
+      # du répertoire distant (qui ne contient aucun secret).
+      - name: Test de connexion FTP (port 21, sans upload)
         env:
-          SSHPASS: ${{ secrets.OVH_FTP_PASSWORD }}
           OVH_FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
           OVH_FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
-          OVH_FTP_REMOTE_DIR: ${{ secrets.OVH_FTP_REMOTE_DIR }}
+          OVH_FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
         run: |
           set -euo pipefail
-          printf 'pwd\nls -la "%s"\n' "$OVH_FTP_REMOTE_DIR" > /tmp/sftp_test_batch
-          if ! sshpass -e sftp -o StrictHostKeyChecking=accept-new -o BatchMode=no \
-              -P 22 -b /tmp/sftp_test_batch "${OVH_FTP_USERNAME}@${OVH_FTP_SERVER}"; then
-            echo "::error::Échec de l'authentification ou de l'accès au chemin distant OVH_FTP_REMOTE_DIR. Voir la sortie sftp ci-dessus (aucun mot de passe n'y est affiché)."
+          if curl -s --connect-timeout 15 \
+              -u "${OVH_FTP_USERNAME}:${OVH_FTP_PASSWORD}" \
+              "ftp://${OVH_FTP_SERVER}:21/" --list-only -o /tmp/ftp_test_list.txt; then
+            echo "Connexion FTP (port 21) réussie. Contenu du répertoire distant :"
+            cat /tmp/ftp_test_list.txt
+          else
+            code=$?
+            echo "::error::Échec de la connexion FTP (port 21), code curl $code. Aucun mot de passe affiché."
             exit 1
           fi
 
