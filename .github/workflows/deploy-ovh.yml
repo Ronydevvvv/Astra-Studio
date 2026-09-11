@@ -60,6 +60,27 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p 22 -H "$OVH_FTP_SERVER" >> ~/.ssh/known_hosts 2>/dev/null
 
+      # Diagnostic temporaire : vérifie que les secrets arrivent bien et
+      # non-vides côté runner, sans jamais afficher leur valeur. À retirer
+      # une fois l'origine du "Permission denied" confirmée.
+      - name: Diagnostic des secrets OVH (temporaire)
+        env:
+          SSHPASS: ${{ secrets.OVH_FTP_PASSWORD }}
+          SERVER: ${{ secrets.OVH_FTP_SERVER }}
+          USER: ${{ secrets.OVH_FTP_USERNAME }}
+        run: |
+          set -euo pipefail
+          [ -n "$SERVER" ] && echo "OVH_FTP_SERVER : non vide" || (echo "::error::OVH_FTP_SERVER est vide" && exit 1)
+          [ -n "$USER" ] && echo "OVH_FTP_USERNAME : non vide" || (echo "::error::OVH_FTP_USERNAME est vide" && exit 1)
+          [ -n "$SSHPASS" ] && echo "OVH_FTP_PASSWORD : non vide" || (echo "::error::OVH_FTP_PASSWORD est vide" && exit 1)
+          echo "Longueur du mot de passe (caractères) : $(printf '%s' "$SSHPASS" | wc -c)"
+          echo "Username utilisé : $USER"
+          echo "Serveur utilisé : $SERVER"
+
+          echo "--- Test de connexion SSH minimal (password only, sans upload) ---"
+          sshpass -e ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no \
+            -o StrictHostKeyChecking=yes -p 22 "$USER@$SERVER" "pwd"
+
       # Test d'authentification isolé, sans upload : distingue un échec
       # d'authentification (mot de passe/protocole) d'un échec de chemin
       # distant ou de transfert, avant de toucher au contenu de out/.
