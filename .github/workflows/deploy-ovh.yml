@@ -11,7 +11,11 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    # Runner self-hosted (Windows, DESKTOP-QCEQ0TH) : les runners GitHub-hosted
+    # se sont vus refuser l'authentification SFTP par OVH ("Permission denied")
+    # alors que les mêmes identifiants fonctionnent depuis ce poste (FileZilla,
+    # sftp natif). Le déploiement s'exécute donc directement sur ce runner.
+    runs-on: self-hosted
 
     steps:
       - name: Récupérer le dépôt
@@ -33,54 +37,53 @@ jobs:
           NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY }}
 
       - name: Vérifier que out/ existe
+        shell: pwsh
         run: |
-          test -f out/index.html || (echo "out/index.html manquant" && exit 1)
-          echo "Build OK"
+          if (-not (Test-Path "out/index.html")) {
+            Write-Error "out/index.html manquant"
+            exit 1
+          }
+          Write-Output "Build OK"
 
-      # OVH mutualisé refuse AUTH TLS ("500 This security scheme is not
-      # implemented") — FTPS n'est pas une option sur cet hébergement.
-      # wlixcc/SFTP-Deploy-Action renvoyait "Permission denied" avec les
-      # mêmes identifiants qui fonctionnent dans FileZilla et en sftp
-      # natif — l'action elle-même est en cause, pas le mot de passe.
-      # On se connecte donc directement en SSH/SFTP avec le client
-      # OpenSSH standard (sshpass pour l'auth par mot de passe non
-      # interactive), sans passer par une action tierce.
-      - name: Installer sshpass
-        run: sudo apt-get update -y && sudo apt-get install -y sshpass
-
-      # accept-new : accepte et épingle la clé d'hôte au premier contact
-      # (visible dans les logs du job pour vérification), puis échoue si
-      # elle change ensuite — c'est le comportement le plus proche d'une
-      # vérification stricte que permet un hôte encore inconnu du runner.
-      - name: Préparer la clé d'hôte SSH
-        env:
-          OVH_FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
+      # Posh-SSH (module PowerShell) plutôt que sshpass/plink : permet de
+      # construire les identifiants en mémoire (PSCredential/SecureString)
+      # sans jamais les passer en argument de ligne de commande, donc sans
+      # exposition dans les logs ou la liste des process Windows.
+      - name: Installer le module Posh-SSH
+        shell: pwsh
         run: |
-          set -euo pipefail
-          mkdir -p ~/.ssh
-          ssh-keyscan -p 22 -H "$OVH_FTP_SERVER" >> ~/.ssh/known_hosts 2>/dev/null
+          if (-not (Get-Module -ListAvailable -Name Posh-SSH)) {
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser | Out-Null
+            Install-Module -Name Posh-SSH -Force -Scope CurrentUser -Confirm:$false
+          }
+          Import-Module Posh-SSH
 
-      - name: Déployer sur OVH via SFTP (OpenSSH natif)
+      # -AcceptKey accepte et épingle la clé d'hôte au premier contact (dans
+      # le magasin de clés connues de Posh-SSH sur ce runner), équivalent du
+      # StrictHostKeyChecking=accept-new utilisé côté OpenSSH.
+      - name: Déployer sur OVH via SFTP (Posh-SSH)
+        shell: pwsh
         env:
-          SSHPASS: ${{ secrets.OVH_FTP_PASSWORD }}
           OVH_FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
           OVH_FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
+          OVH_FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
           OVH_FTP_REMOTE_DIR: ${{ secrets.OVH_FTP_REMOTE_DIR }}
         run: |
-          set -euo pipefail
+          Import-Module Posh-SSH
 
-          # Construit un batch sftp qui envoie chaque entrée de out/ vers
-          # le dossier distant, en conservant les sous-dossiers (-r).
-          # Aucune suppression distante n'est demandée : les fichiers déjà
-          # présents et absents de out/ restent en place.
-          batch_file="$(mktemp)"
-          {
-            echo "cd ${OVH_FTP_REMOTE_DIR}"
-            for entry in out/*; do
-              name="$(basename "$entry")"
-              echo "put -r \"$entry\" \"$name\""
-            done
-          } > "$batch_file"
+          $securePassword = ConvertTo-SecureString -String $env:OVH_FTP_PASSWORD -AsPlainText -Force
+          $credential = New-Object System.Management.Automation.PSCredential($env:OVH_FTP_USERNAME, $securePassword)
 
-          sshpass -e sftp -o StrictHostKeyChecking=accept-new \
-            -P 22 -b "$batch_file" "${OVH_FTP_USERNAME}@${OVH_FTP_SERVER}"
+          $session = New-SFTPSession -ComputerName $env:OVH_FTP_SERVER -Port 22 -Credential $credential -AcceptKey -ErrorAction Stop
+
+          try {
+            # Envoie chaque entrée de out/ vers le dossier distant, en
+            # conservant les sous-dossiers. Aucune suppression distante :
+            # les fichiers déjà présents et absents de out/ restent en place.
+            Get-ChildItem -Path "out" | ForEach-Object {
+              Set-SFTPItem -SessionId $session.SessionId -Path $_.FullName -Destination $env:OVH_FTP_REMOTE_DIR -Force
+            }
+          }
+          finally {
+            Remove-SFTPSession -SessionId $session.SessionId | Out-Null
+          }
