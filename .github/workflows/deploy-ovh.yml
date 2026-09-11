@@ -52,17 +52,43 @@ jobs:
       # (visible dans les logs du job pour vérification), puis échoue si
       # elle change ensuite — c'est le comportement le plus proche d'une
       # vérification stricte que permet un hôte encore inconnu du runner.
-      - name: Déployer sur OVH via SFTP (OpenSSH natif)
+      - name: Préparer la clé d'hôte SSH
         env:
           OVH_FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 -H "$OVH_FTP_SERVER" >> ~/.ssh/known_hosts 2>/dev/null
+
+      # Test d'authentification isolé, sans upload : distingue un échec
+      # d'authentification (mot de passe/protocole) d'un échec de chemin
+      # distant ou de transfert, avant de toucher au contenu de out/.
+      # SSHPASS + `sshpass -e` : le mot de passe passe par une variable
+      # d'environnement, jamais en argument de ligne de commande (donc
+      # jamais visible dans `ps`/les logs de process du runner).
+      - name: Test d'authentification SFTP
+        env:
+          SSHPASS: ${{ secrets.OVH_FTP_PASSWORD }}
+          OVH_FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
           OVH_FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
-          OVH_FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
           OVH_FTP_REMOTE_DIR: ${{ secrets.OVH_FTP_REMOTE_DIR }}
         run: |
           set -euo pipefail
+          printf 'pwd\nls -la "%s"\n' "$OVH_FTP_REMOTE_DIR" > /tmp/sftp_test_batch
+          if ! sshpass -e sftp -o StrictHostKeyChecking=accept-new -o BatchMode=no \
+              -P 22 -b /tmp/sftp_test_batch "${OVH_FTP_USERNAME}@${OVH_FTP_SERVER}"; then
+            echo "::error::Échec de l'authentification ou de l'accès au chemin distant OVH_FTP_REMOTE_DIR. Voir la sortie sftp ci-dessus (aucun mot de passe n'y est affiché)."
+            exit 1
+          fi
 
-          mkdir -p ~/.ssh
-          ssh-keyscan -p 22 -H "$OVH_FTP_SERVER" >> ~/.ssh/known_hosts 2>/dev/null
+      - name: Déployer sur OVH via SFTP (OpenSSH natif)
+        env:
+          SSHPASS: ${{ secrets.OVH_FTP_PASSWORD }}
+          OVH_FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
+          OVH_FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
+          OVH_FTP_REMOTE_DIR: ${{ secrets.OVH_FTP_REMOTE_DIR }}
+        run: |
+          set -euo pipefail
 
           # Construit un batch sftp qui envoie chaque entrée de out/ vers
           # le dossier distant, en conservant les sous-dossiers (-r).
@@ -77,5 +103,5 @@ jobs:
             done
           } > "$batch_file"
 
-          sshpass -p "$OVH_FTP_PASSWORD" sftp -o StrictHostKeyChecking=accept-new \
+          sshpass -e sftp -o StrictHostKeyChecking=accept-new \
             -P 22 -b "$batch_file" "${OVH_FTP_USERNAME}@${OVH_FTP_SERVER}"
