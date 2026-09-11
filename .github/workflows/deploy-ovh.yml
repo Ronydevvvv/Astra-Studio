@@ -60,59 +60,6 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p 22 -H "$OVH_FTP_SERVER" >> ~/.ssh/known_hosts 2>/dev/null
 
-      # Diagnostic temporaire : vérifie que les secrets arrivent bien et
-      # non-vides côté runner, sans jamais afficher leur valeur. À retirer
-      # une fois l'origine du "Permission denied" confirmée.
-      # continue-on-error : le test SSH ci-dessous échoue déjà de façon
-      # confirmée ("Permission denied") — sans ce flag, le job s'arrêterait
-      # ici et le test FTP (port 21) qui suit ne s'exécuterait jamais.
-      - name: Diagnostic des secrets OVH (temporaire)
-        continue-on-error: true
-        env:
-          SSHPASS: ${{ secrets.OVH_FTP_PASSWORD }}
-          SERVER: ${{ secrets.OVH_FTP_SERVER }}
-          USER: ${{ secrets.OVH_FTP_USERNAME }}
-        run: |
-          set -euo pipefail
-          [ -n "$SERVER" ] && echo "OVH_FTP_SERVER : non vide" || (echo "::error::OVH_FTP_SERVER est vide" && exit 1)
-          [ -n "$USER" ] && echo "OVH_FTP_USERNAME : non vide" || (echo "::error::OVH_FTP_USERNAME est vide" && exit 1)
-          [ -n "$SSHPASS" ] && echo "OVH_FTP_PASSWORD : non vide" || (echo "::error::OVH_FTP_PASSWORD est vide" && exit 1)
-          echo "Longueur du mot de passe (caractères) : $(printf '%s' "$SSHPASS" | wc -c)"
-          echo "Username utilisé : $USER"
-          echo "Serveur utilisé : $SERVER"
-
-          echo "--- Test de connexion SSH minimal (password only, sans upload) ---"
-          sshpass -e ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no \
-            -o StrictHostKeyChecking=yes -p 22 "$USER@$SERVER" "pwd"
-
-      # Test temporaire, protocole FTP classique (port 21), SANS transfert
-      # de fichier : sert uniquement à déterminer si OVH accepte
-      # l'authentification depuis le runner GitHub par ce protocole, après
-      # que la même authentification par SFTP/port 22 a été refusée
-      # ("Permission denied") alors qu'elle fonctionne dans FileZilla.
-      # curl est utilisé sans -v : le protocole FTP envoie USER/PASS en
-      # clair sur le fil, et un mode verbose afficherait ces commandes
-      # (donc le mot de passe) dans les logs du job. Le résultat du test
-      # repose uniquement sur le code de sortie de curl et le listing
-      # du répertoire distant (qui ne contient aucun secret).
-      - name: Test de connexion FTP (port 21, sans upload)
-        env:
-          OVH_FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
-          OVH_FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
-          OVH_FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
-        run: |
-          set -euo pipefail
-          if curl -s --connect-timeout 15 \
-              -u "${OVH_FTP_USERNAME}:${OVH_FTP_PASSWORD}" \
-              "ftp://${OVH_FTP_SERVER}:21/" --list-only -o /tmp/ftp_test_list.txt; then
-            echo "Connexion FTP (port 21) réussie. Contenu du répertoire distant :"
-            cat /tmp/ftp_test_list.txt
-          else
-            code=$?
-            echo "::error::Échec de la connexion FTP (port 21), code curl $code. Aucun mot de passe affiché."
-            exit 1
-          fi
-
       - name: Déployer sur OVH via SFTP (OpenSSH natif)
         env:
           SSHPASS: ${{ secrets.OVH_FTP_PASSWORD }}
