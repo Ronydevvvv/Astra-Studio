@@ -63,20 +63,20 @@ export function ContactForm() {
     `w-full border-b bg-transparent py-3.5 text-[1rem] text-chalk outline-none transition-colors duration-300 placeholder:text-slate-dim/50 ${
       bad
         ? "border-red-400/70 focus:border-red-300"
-        : "border-white/[0.14] hover:border-white/25 focus:border-violet-400"
+        : "border-[var(--hairline-strong)] hover:border-white/30 focus:border-chalk"
     }`;
 
   const labelClass =
-    "block text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim";
+    "block t-mono text-slate-dim";
 
   if (sent) {
     return (
       <div
         role="status"
-        className="border-t border-violet-500/40 pt-10"
+        className="border-t border-[var(--hairline-strong)] pt-10"
       >
         <div className="flex items-start gap-4">
-          <Icon name="check" className="mt-1 size-6 shrink-0 text-violet-400" />
+          <Icon name="check" className="mt-1 size-6 shrink-0 text-chalk" />
           <div>
             <h2 className="text-[1.5rem] font-medium tracking-[-0.02em]">
               Message prêt à être envoyé.
@@ -85,16 +85,16 @@ export function ContactForm() {
               Le formulaire est valide, mais l&apos;envoi n&apos;est pas encore
               branché : aucune adresse de destination n&apos;a été renseignée.
               Connectez un service d&apos;e-mail et complétez{" "}
-              <code className="text-violet-300">company.email</code> dans{" "}
-              <code className="text-violet-300">content.ts</code> pour activer
+              <code className="text-chalk">company.email</code> dans{" "}
+              <code className="text-chalk">content.ts</code> pour activer
               la réception.
             </p>
             <button
               type="button"
               onClick={() => setSent(false)}
-              className="mt-8 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-500 hover:text-violet-300"
+              className="mt-8 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-500 hover:text-mist"
             >
-              <span className="link-wipe">Revenir au formulaire</span>
+              Revenir au formulaire
             </button>
           </div>
         </div>
@@ -107,7 +107,7 @@ export function ContactForm() {
       {/* --- name --- */}
       <div>
         <label htmlFor={`${id}-name`} className={labelClass}>
-          Nom <span className="text-violet-400">*</span>
+          Nom <span className="text-chalk">*</span>
         </label>
         <input
           id={`${id}-name`}
@@ -145,7 +145,7 @@ export function ContactForm() {
       {/* --- email --- */}
       <div>
         <label htmlFor={`${id}-email`} className={labelClass}>
-          E-mail <span className="text-violet-400">*</span>
+          E-mail <span className="text-chalk">*</span>
         </label>
         <input
           id={`${id}-email`}
@@ -227,7 +227,7 @@ export function ContactForm() {
       {/* --- message --- */}
       <div className="sm:col-span-2">
         <label htmlFor={`${id}-message`} className={labelClass}>
-          Votre projet <span className="text-violet-400">*</span>
+          Votre projet <span className="text-chalk">*</span>
         </label>
         <textarea
           id={`${id}-message`}
@@ -249,19 +249,22 @@ export function ContactForm() {
       </div>
 
       <div className="sm:col-span-2">
+        {/* Matches Button's `solid` variant exactly — squared, hairlined,
+            no coloured drop shadow. It cannot literally BE that component
+            because Button renders a Link and this must submit a form. */}
         <button
           type="submit"
-          className="group/btn relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full bg-violet-500 px-7 py-3.5 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.10)_inset,0_14px_40px_-12px_rgba(124,58,245,0.7)] transition-[transform,box-shadow] duration-500 [transition-timing-function:var(--ease-out-expo)] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.18)_inset,0_20px_54px_-12px_rgba(124,58,245,0.95)] active:scale-[0.98]"
+          className="group/btn inline-flex items-center justify-center gap-3 bg-chalk px-7 py-4 font-display text-[0.75rem] font-medium uppercase tracking-[0.12em] text-void transition-colors duration-300 hover:bg-white"
         >
           {contact.submit}
           <Icon
             name="arrow"
-            className="size-[1.15em] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover/btn:translate-x-1"
+            className="size-3.5 transition-transform duration-300 [transition-timing-function:var(--ease-out-expo)] group-hover/btn:translate-x-[3px]"
           />
         </button>
 
         <p className="mt-5 text-[0.8125rem] text-slate-dim">
-          Les champs marqués <span className="text-violet-400">*</span> sont
+          Les champs marqués <span className="text-chalk">*</span> sont
           obligatoires.
         </p>
       </div>

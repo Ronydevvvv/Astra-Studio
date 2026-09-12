@@ -1,74 +1,60 @@
 import Link from "next/link";
-import { projects, projectsHome } from "@/lib/content";
-import { Icon } from "@/components/ui/Icon";
+import { projects, projectsHome, projectStatusLabel } from "@/lib/content";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 /**
- * Home teaser — an index, not a gallery.
+ * The work, set as an index.
  *
- * The full case studies live at /realisations. Repeating them here would make
- * the home page carry the whole site, which is exactly what the multi-page
- * split is meant to stop. A ruled list of names reads as a table of contents
- * and gets the visitor to the real page in one click.
+ * There are no project screenshots in this repository yet — both entries
+ * are text-led on purpose (see `projects` in content.ts). A gallery of
+ * placeholder plates would be the single most dishonest thing on the
+ * site, so the presentation is built to be strong WITHOUT imagery:
+ * the project name is set at near-display scale and carries the row,
+ * the metadata sits in fixed columns beside it, and the status is
+ * stated plainly rather than implied.
+ *
+ * When a real image lands, the row has a natural place for it — the
+ * layout is already a full-width band, not a card that would have to
+ * be rebuilt.
  */
 export function ProjectsPreview() {
   return (
-    <section className="py-28 md:py-36 lg:py-44">
-      <div className="mx-auto max-w-[1440px] px-6 md:px-10 xl:px-16">
-        <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-8">
-          <div data-reveal>
-            <p className="flex items-center gap-4 text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-violet-300/90">
-              <span aria-hidden="true" className="h-px w-8 bg-violet-500/70" />
-              {projectsHome.eyebrow}
-            </p>
-            <h2 className="mt-8 text-[clamp(2.25rem,5vw,4rem)] font-medium leading-[1.04] tracking-[-0.04em]">
+    <section className="py-24 md:py-32 lg:py-40">
+      <div className="shell">
+        <SectionHeading
+          index="01"
+          label={projectsHome.eyebrow}
+          title={
+            <>
               <span className="block">{projectsHome.title[0]}</span>
-              <span className="block text-violet-400">
-                {projectsHome.title[1]}
-              </span>
-            </h2>
-          </div>
+              <span className="block text-mist">{projectsHome.title[1]}</span>
+            </>
+          }
+          link={projectsHome.link}
+        />
 
-          <Link
-            href={projectsHome.link.href}
-            className="group/all inline-flex items-center gap-2.5 pb-3 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-500 hover:text-violet-300"
-            data-reveal
-            style={{ ["--reveal-delay" as string]: "120ms" }}
-          >
-            <span className="link-wipe">{projectsHome.link.label}</span>
-            <Icon
-              name="arrow"
-              className="size-4 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover/all:translate-x-1"
-            />
-          </Link>
-        </div>
-
-        <ul className="mt-16 border-t border-white/[0.09] lg:mt-20">
+        <ul className="mt-16 border-t border-[var(--hairline)] lg:mt-24">
           {projects.map((project, i) => (
             <li
               key={project.slug}
               data-reveal
-              style={{ ["--reveal-delay" as string]: `${i * 90}ms` }}
+              style={{ ["--reveal-delay" as string]: `${i * 80}ms` }}
             >
               <Link
                 href={`/realisations/${project.slug}`}
-                className="group flex flex-col gap-3 border-b border-white/[0.09] py-8 transition-colors duration-500 hover:bg-white/[0.015] sm:flex-row sm:items-baseline sm:gap-8 lg:py-10"
+                className="group grid grid-cols-1 items-baseline gap-x-10 gap-y-4 border-b border-[var(--hairline)] py-10 lg:grid-cols-[3rem_minmax(0,1fr)_14rem_9rem] lg:py-14"
               >
-                <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400 sm:w-12 sm:shrink-0">
-                  {project.index}
-                </span>
+                <span className="t-mono text-slate-dim">{project.index}</span>
 
-                <span className="min-w-0 flex-1 text-[clamp(1.5rem,2.6vw,2.25rem)] font-medium leading-tight tracking-[-0.03em] transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5">
+                <h3 className="text-[clamp(1.75rem,3.6vw,2.75rem)] font-medium leading-[1.05] tracking-[-0.035em] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-2">
                   {project.name}
-                </span>
+                </h3>
 
-                <span className="text-[0.8125rem] uppercase tracking-[0.14em] text-slate-dim sm:w-44 sm:shrink-0">
-                  {project.category}
-                </span>
+                <p className="t-mono text-mist">{project.category}</p>
 
-                <Icon
-                  name="arrow"
-                  className="hidden size-4 shrink-0 text-slate-dim transition-all duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5 group-hover:text-violet-300 sm:block"
-                />
+                <p className="t-mono text-slate-dim lg:text-right">
+                  {projectStatusLabel[project.status]}
+                </p>
               </Link>
             </li>
           ))}

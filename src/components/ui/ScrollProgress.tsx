@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-/** A 1px violet rule that fills as the page scrolls. Deliberately barely there. */
+/** A 1px neutral rule that fills as the page scrolls. Deliberately barely there. */
 export function ScrollProgress() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -40,7 +40,7 @@ export function ScrollProgress() {
     >
       <div
         ref={ref}
-        className="h-full origin-left scale-x-0 bg-gradient-to-r from-violet-600 via-violet-400 to-violet-300"
+        className="h-full origin-left scale-x-0 bg-chalk/40"
       />
     </div>
   );

@@ -17,27 +17,27 @@ export function LegalBody({
 }) {
   return (
     <section className="pb-28 md:pb-36 lg:pb-44">
-      <div className="mx-auto max-w-[1440px] px-6 md:px-10 xl:px-16">
+      <div className="shell">
         <div className="grid gap-x-20 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-start">
           {/* Sticky index — a legal page is scanned, not read start to end. */}
           <nav
             aria-label="Sommaire"
             className="lg:sticky lg:top-[calc(var(--nav-h)+2.5rem)]"
           >
-            <p className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
+            <p className="t-mono text-slate-dim">
               Sommaire
             </p>
             <ol className="mt-6 space-y-3">
               {sections.map((s, i) => (
                 <li key={s.title} className="flex gap-4">
-                  <span className="font-display text-[0.6875rem] tracking-[0.16em] text-violet-400">
+                  <span className="t-mono text-slate-dim">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <a
                     href={`#s-${i + 1}`}
-                    className="text-[0.9375rem] text-mist transition-colors duration-300 hover:text-chalk"
+                    className="link-underline text-[0.9375rem] text-mist transition-colors duration-300 hover:text-chalk"
                   >
-                    <span className="link-wipe">{s.title}</span>
+                    {s.title}
                   </a>
                 </li>
               ))}
@@ -46,7 +46,7 @@ export function LegalBody({
 
           <div>
             <p
-              className="border-l-2 border-violet-500/50 py-1 pl-6 text-[0.9375rem] leading-[1.8] text-mist"
+              className="border-l border-[var(--hairline-strong)] py-1 pl-6 text-[0.9375rem] leading-[1.8] text-mist"
               data-reveal
             >
               {intro}
@@ -57,10 +57,10 @@ export function LegalBody({
                 key={s.title}
                 id={`s-${i + 1}`}
                 data-reveal
-                className="mt-16 scroll-mt-32 border-t border-white/[0.09] pt-8"
+                className="mt-16 scroll-mt-32 border-t [var(--hairline)] pt-8"
               >
                 <div className="flex items-baseline gap-5">
-                  <span className="font-display text-[0.6875rem] tracking-[0.16em] text-violet-400">
+                  <span className="t-mono text-slate-dim">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h2 className="text-[1.5rem] font-medium tracking-[-0.025em]">

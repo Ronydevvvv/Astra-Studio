@@ -15,7 +15,7 @@ export default function TarifsPage() {
   return (
     <>
       <PageHero
-        eyebrow={pricing.eyebrow}
+        label={pricing.eyebrow}
         title={pricing.title}
         lead={pricing.lead}
       />

@@ -1,60 +1,50 @@
 import { why } from "@/lib/content";
 
 /**
- * Replaces the old positioning band, which said things any agency could say.
+ * The page's one large statement.
  *
- * These three are specific enough to be falsifiable — who you talk to, when
- * you pay, who owns the code — which is what separates a claim from a slogan.
- * Numbered rules, no cards, no icons: the section is meant to be read, and
- * anything decorative here would compete with the sentence.
+ * Everything else on the homepage is an index — rows, numbers, columns.
+ * This section breaks that rhythm once, on purpose: the headline is set
+ * near display scale with nothing beside it, and the three points sit
+ * underneath in a plain three-column row. A page needs one moment where
+ * the type is simply allowed to be large, and this is the argument that
+ * earns it.
  *
- * It is also the page's one lighter ground, so the scroll changes register
- * once between the Hero and the CTA rather than running as unbroken black.
+ * No ground change, no glow, no watermark numerals. The break is the
+ * scale and the empty space around it.
  */
 export function WhyAstra() {
   return (
     <section
       aria-label={why.eyebrow}
-      className="relative overflow-hidden border-y border-white/[0.07] bg-[#0c0e1f] py-28 md:py-36 lg:py-44"
+      className="border-t border-[var(--hairline)] py-24 md:py-32 lg:py-44"
     >
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(124,58,245,0.5),transparent)]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(110%_85%_at_0%_0%,rgba(80,15,217,0.15),transparent_58%)]"
-      />
+      <div className="shell">
+        <p className="label" data-reveal>
+          <span className="text-slate-dim/60">03</span>
+          {why.eyebrow}
+        </p>
 
-      <div className="relative mx-auto max-w-[1440px] px-6 md:px-10 xl:px-16">
-        <div data-reveal>
-          <p className="flex items-center gap-4 text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-violet-300/90">
-            <span aria-hidden="true" className="h-px w-8 bg-violet-500/70" />
-            {why.eyebrow}
-          </p>
-          <h2 className="mt-8 text-[clamp(2.25rem,5vw,4rem)] font-medium leading-[1.04] tracking-[-0.04em]">
-            <span className="block">{why.title[0]}</span>
-            <span className="block text-violet-400">{why.title[1]}</span>
-          </h2>
-        </div>
+        <h2
+          className="t-display mt-10 max-w-[15ch]"
+          data-reveal
+          style={{ ["--reveal-delay" as string]: "60ms" }}
+        >
+          <span className="block">{why.title[0]}</span>
+          <span className="block text-mist">{why.title[1]}</span>
+        </h2>
 
-        <ol className="mt-20 grid gap-x-14 gap-y-12 lg:mt-28 lg:grid-cols-3">
+        <ol className="mt-20 grid gap-x-16 gap-y-12 lg:mt-28 lg:grid-cols-3">
           {why.points.map((point, i) => (
             <li
               key={point.title}
               data-reveal
-              style={{ ["--reveal-delay" as string]: `${i * 110}ms` }}
-              className="group border-t border-white/[0.09] pt-7"
+              style={{ ["--reveal-delay" as string]: `${i * 90}ms` }}
+              className="border-t border-[var(--hairline)] pt-6"
             >
-              <span className="font-display text-[0.75rem] tracking-[0.2em] text-violet-400">
-                {point.index}
-              </span>
-              <h3 className="mt-5 text-[1.375rem] font-medium leading-tight tracking-[-0.025em]">
-                {point.title}
-              </h3>
-              <p className="mt-4 max-w-sm text-[0.9375rem] leading-[1.75] text-mist">
-                {point.body}
-              </p>
+              <span className="t-mono text-slate-dim">{point.index}</span>
+              <h3 className="t-h3 mt-5">{point.title}</h3>
+              <p className="t-body mt-4 max-w-[40ch] text-mist">{point.body}</p>
             </li>
           ))}
         </ol>

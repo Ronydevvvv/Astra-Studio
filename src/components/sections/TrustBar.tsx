@@ -1,58 +1,33 @@
-import Image from "next/image";
 import { trust } from "@/lib/content";
 
 /**
- * Two named references, each labelled for what it actually is.
+ * A rail, not a section.
  *
- * The word "client" appears nowhere: one entry is work for a real business,
- * the other a creative direction that was never commissioned, and conflating
- * them would be the one claim a visitor can check and catch. `relation`
- * carries that distinction from content.ts to the label.
+ * There are two entries and one of them is a creative direction rather
+ * than commissioned work. A full-width "ILS NOUS FONT CONFIANCE" band
+ * with logo slots around two names is a section announcing that it has
+ * nothing to show — the honest form at this size is one quiet line that
+ * names them and says exactly what each one was.
  *
- * Logos render the moment a real file is set. Until then the name is set in
- * display type — a wordmark is an honest stand-in; a hand-redrawn logo is a
- * misrepresentation of someone else's brand.
+ * It grows into something larger the day there are more entries; until
+ * then it takes the space it has earned.
  */
 export function TrustBar() {
   return (
-    <section
-      aria-label={trust.eyebrow}
-      className="border-y border-white/[0.06]"
-    >
-      <div className="mx-auto max-w-[1440px] px-6 py-12 md:px-10 lg:py-14 xl:px-16">
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
-          <div className="lg:max-w-xs">
-            <h2 className="text-[0.6875rem] uppercase tracking-[0.2em] text-slate-dim">
-              {trust.eyebrow}
-            </h2>
-            <p className="mt-4 text-[1.0625rem] leading-[1.6] tracking-[-0.01em] text-chalk">
-              {trust.lead}
-            </p>
-          </div>
+    <section aria-label={trust.eyebrow} className="border-y border-[var(--hairline)]">
+      <div className="shell flex flex-col gap-x-16 gap-y-5 py-7 md:flex-row md:items-center">
+        <p className="t-mono shrink-0 text-slate-dim">{trust.eyebrow}</p>
 
-          <ul className="flex flex-wrap items-center gap-x-16 gap-y-8">
-            {trust.entries.map((entry) => (
-              <li key={entry.name} className="group">
-                {entry.logo ? (
-                  <Image
-                    src={entry.logo}
-                    alt={entry.name}
-                    width={160}
-                    height={40}
-                    className="h-8 w-auto opacity-60 transition-opacity duration-500 group-hover:opacity-100"
-                  />
-                ) : (
-                  <span className="block font-display text-[1.375rem] font-medium tracking-[-0.02em] text-mist transition-colors duration-500 group-hover:text-chalk">
-                    {entry.name}
-                  </span>
-                )}
-                <span className="mt-2 block text-[0.625rem] uppercase tracking-[0.2em] text-slate-dim/70">
-                  {trust.labels[entry.relation]}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul className="flex flex-col gap-x-12 gap-y-3 sm:flex-row sm:flex-wrap sm:items-center">
+          {trust.entries.map((entry) => (
+            <li key={entry.name} className="flex items-baseline gap-3">
+              <span className="text-[0.9375rem] text-chalk">{entry.name}</span>
+              <span className="t-mono text-slate-dim">
+                {trust.labels[entry.relation]}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

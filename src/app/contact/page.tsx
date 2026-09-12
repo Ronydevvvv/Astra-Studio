@@ -31,15 +31,15 @@ function Detail({
           href ? (
             <a
               href={href}
-              className="text-chalk transition-colors duration-300 hover:text-violet-300"
+              className="link-underline text-chalk transition-colors duration-300 hover:text-mist"
             >
-              <span className="link-wipe">{value}</span>
+              {value}
             </a>
           ) : (
             <span className="text-mist">{value}</span>
           )
         ) : (
-          <span className="text-violet-400/70">à renseigner</span>
+          <span className="italic text-slate-dim">à renseigner</span>
         )}
       </dd>
     </div>
@@ -52,13 +52,13 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow={contact.eyebrow}
+        label={contact.eyebrow}
         title={contact.title}
         lead={contact.lead}
       />
 
       <section className="pb-28 md:pb-36 lg:pb-44">
-        <div className="mx-auto max-w-[1440px] px-6 md:px-10 xl:px-16">
+        <div className="shell">
           {/* Reassurance left, form right. The single biggest reason a
               contact form goes unfilled is the visitor thinking they have
               nothing ready to say — so that objection is answered beside the

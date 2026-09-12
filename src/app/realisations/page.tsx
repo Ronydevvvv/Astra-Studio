@@ -16,7 +16,7 @@ export default function RealisationsPage() {
   return (
     <>
       <PageHero
-        eyebrow={projectsIntro.eyebrow}
+        label={projectsIntro.eyebrow}
         title={projectsIntro.title}
         lead={projectsIntro.lead}
       />

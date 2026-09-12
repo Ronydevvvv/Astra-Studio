@@ -16,7 +16,7 @@ export default function ServicesPage() {
   return (
     <>
       <PageHero
-        eyebrow={servicesPage.eyebrow}
+        label={servicesPage.eyebrow}
         title={servicesPage.title}
         lead={servicesPage.lead}
       />

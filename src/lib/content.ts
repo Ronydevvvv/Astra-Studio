@@ -24,21 +24,29 @@ export const nav: NavItem[] = [
 export const primaryCta = { label: "Démarrer un projet", href: "/contact" };
 
 /* ------------------------------------------------------------------ */
-/* Home — hero (VALIDATED, do not restructure)                         */
+/* Home — hero                                                         */
 /* ------------------------------------------------------------------ */
 
+/**
+ * The headline states the studio's actual position — built, not
+ * assembled — instead of describing a benefit ("propulse votre
+ * business") that every agency claims and none can prove on a
+ * homepage. The lead only asserts things this repository already
+ * establishes elsewhere: one person designs and codes (see `why`),
+ * and the work is scoped per project (see `pricing`).
+ */
 export const hero = {
-  eyebrow: "Agence de création de sites web",
+  kicker: "ASTRA — Studio créatif & digital",
   titleLines: [
-    [{ t: "Nous créons" }],
-    [{ t: "des " }, { t: "sites web", accent: true }],
-    [{ t: "qui propulsent" }],
-    [{ t: "votre business." }],
+    [{ t: "Des sites" }],
+    [{ t: "conçus," }],
+    [{ t: "pas " }, { t: "assemblés", accent: true }, { t: "." }],
   ] as { t: string; accent?: boolean }[][],
-  lead: "Des expériences digitales sur mesure, pensées pour être belles, rapides et réellement utiles à votre activité.",
-  primaryCta: { label: "Voir nos réalisations", href: "/realisations" },
-  secondaryCta: { label: "Parler à un expert", href: "/contact" },
-  signature: ["Space", "Design", "Technology"],
+  lead: "Direction artistique, design et développement. Menés de bout en bout par la personne qui vous répond.",
+  primaryCta: { label: "Voir le travail", href: "/realisations" },
+  secondaryCta: { label: "Démarrer un projet", href: "/contact" },
+  /** Disciplines, not adjectives. Rendered as a masthead rail. */
+  signature: ["Direction artistique", "Design", "Développement"],
 };
 
 /* ------------------------------------------------------------------ */
@@ -266,7 +274,13 @@ export const process: Step[] = [
 
 export const why = {
   eyebrow: "Pourquoi ASTRA",
-  title: ["Un interlocuteur.", "Pas un service client."],
+  title: ["Une idée mérite mieux", "qu'un gabarit."],
+  /**
+   * The three points are deliberately falsifiable — who you speak to,
+   * when you pay, who owns the code. A claim that cannot be checked
+   * ("passionnés par l'innovation") is decoration; these can be held
+   * against the studio, which is what makes them worth printing.
+   */
   points: [
     {
       index: "01",
@@ -497,11 +511,16 @@ export const contact = {
 /* CTA                                                                 */
 /* ------------------------------------------------------------------ */
 
+/**
+ * One action, not two. The previous block offered "Démarrer mon projet"
+ * and "Nous contacter" side by side — both pointing at /contact, which
+ * is a choice that isn't one, and reads as a layout needing a second
+ * button rather than a page needing a second option.
+ */
 export const cta = {
-  title: ["Prêt à donner vie", "à votre projet ?"],
-  lead: "Discutons de votre projet et créons ensemble un site qui fera la différence.",
-  primary: { label: "Démarrer mon projet", href: "/contact" },
-  secondary: { label: "Nous contacter", href: "/contact" },
+  title: ["Votre prochaine idée", "mérite de décoller."],
+  lead: "Décrivez-la en quelques lignes. Vous aurez un vrai avis, pas un devis automatique.",
+  primary: { label: "Démarrer un projet", href: "/contact" },
 };
 
 /* ------------------------------------------------------------------ */

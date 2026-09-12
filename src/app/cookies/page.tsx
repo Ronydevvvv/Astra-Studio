@@ -18,7 +18,7 @@ export default function CookiesPage() {
   const { eyebrow, title, intro, sections } = legal.cookies;
   return (
     <>
-      <PageHero eyebrow={eyebrow} title={[title]} />
+      <PageHero label={eyebrow} title={[title]} />
       <LegalBody intro={intro} sections={sections} />
     </>
   );

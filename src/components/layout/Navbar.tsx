@@ -51,11 +51,14 @@ export function Navbar() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <div className="mx-auto flex h-[var(--nav-h)] max-w-[1440px] items-center justify-between gap-6 px-6 md:px-10 xl:px-16">
+        <div className="shell flex h-[var(--nav-h)] items-center justify-between gap-6">
           <Logo />
 
+          {/* The active item is marked by a dot before it rather than an
+              underline sliding in violet — the nav should tell you where
+              you are without becoming the brightest thing on screen. */}
           <nav aria-label="Navigation principale" className="hidden lg:block">
-            <ul className="flex items-center gap-2">
+            <ul className="flex items-center gap-9">
               {nav.map((item) => {
                 const active = isActive(item.href);
                 return (
@@ -63,16 +66,17 @@ export function Navbar() {
                     <Link
                       href={item.href}
                       aria-current={active ? "page" : undefined}
-                      className={`relative px-3.5 py-2 text-[0.75rem] uppercase tracking-[0.12em] transition-colors duration-300 ${
+                      className={`relative font-display text-[0.75rem] font-medium uppercase tracking-[0.12em] transition-colors duration-300 ${
                         active ? "text-chalk" : "text-mist hover:text-chalk"
                       }`}
                     >
+                      {active && (
+                        <span
+                          aria-hidden="true"
+                          className="absolute -left-3.5 top-1/2 size-[3px] -translate-y-1/2 rounded-full bg-chalk"
+                        />
+                      )}
                       {item.label}
-                      <span
-                        className={`absolute inset-x-3.5 bottom-0 h-px origin-center bg-violet-400 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] ${
-                          active ? "scale-x-100" : "scale-x-0"
-                        }`}
-                      />
                     </Link>
                   </li>
                 );
@@ -80,13 +84,13 @@ export function Navbar() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {/* Responsive display sits on a wrapper: Button's base class sets
                 `inline-flex`, so a `hidden` passed through className is a
                 same-specificity display clash whose winner depends on
                 Tailwind's output order. */}
             <div className="hidden md:block">
-              <Button href={primaryCta.href} variant="quiet" withArrow>
+              <Button href={primaryCta.href} variant="line" className="px-5 py-3">
                 {primaryCta.label}
               </Button>
             </div>
@@ -97,7 +101,7 @@ export function Navbar() {
               aria-expanded={open}
               aria-controls="menu-mobile"
               aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-              className="grid size-11 place-items-center rounded-full border border-white/15 text-chalk transition-colors duration-300 hover:border-white/30 lg:hidden"
+              className="grid size-11 place-items-center border border-[var(--hairline-strong)] text-chalk transition-colors duration-300 hover:border-chalk lg:hidden"
             >
               <span className="relative block h-3 w-4.5">
                 <span
@@ -126,31 +130,31 @@ export function Navbar() {
           open ? "visible opacity-100" : "invisible opacity-0"
         }`}
       >
-        <div className="flex h-full flex-col px-6 pb-10 pt-[calc(var(--nav-h)+2.5rem)]">
+        <div className="shell flex h-full flex-col pb-10 pt-[calc(var(--nav-h)+2rem)]">
           <nav aria-label="Navigation mobile">
             <ul>
               {nav.map((item, i) => (
-                <li key={item.href} className="border-b border-white/[0.07]">
+                <li key={item.href} className="border-b border-[var(--hairline)]">
                   <Link
                     href={item.href}
                     tabIndex={open ? 0 : -1}
                     aria-current={isActive(item.href) ? "page" : undefined}
                     onClick={() => setOpen(false)}
-                    className="flex items-baseline justify-between py-5 font-display text-[1.75rem] font-medium tracking-[-0.03em] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)]"
+                    className="flex items-baseline justify-between gap-6 py-5"
                     style={{
                       opacity: open ? 1 : 0,
-                      transform: open ? "translateY(0)" : "translateY(12px)",
-                      transition: `opacity 500ms ${120 + i * 55}ms, transform 600ms ${120 + i * 55}ms var(--ease-out-expo)`,
+                      transform: open ? "translateY(0)" : "translateY(10px)",
+                      transition: `opacity 450ms ${100 + i * 45}ms, transform 500ms ${100 + i * 45}ms var(--ease-out-expo)`,
                     }}
                   >
                     <span
-                      className={
-                        isActive(item.href) ? "text-violet-300" : "text-chalk"
-                      }
+                      className={`font-display text-[1.625rem] font-medium tracking-[-0.03em] ${
+                        isActive(item.href) ? "text-chalk" : "text-mist"
+                      }`}
                     >
                       {item.label}
                     </span>
-                    <span className="font-display text-[0.6875rem] tracking-[0.2em] text-slate-dim">
+                    <span className="t-mono text-slate-dim">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                   </Link>

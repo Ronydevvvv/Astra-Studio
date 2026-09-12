@@ -1,49 +1,62 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 /**
- * The site's one shared heading rhythm: eyebrow, display title, optional lead.
- * Sections vary their *layout*, never this internal spacing — that consistency
- * is most of what makes a page read as designed rather than assembled.
+ * The site's one section opening: a numbered label on the left, the title
+ * beneath it, and an optional link pushed to the far right of the same
+ * baseline. Sections vary their *content* layout below this; the opening
+ * never varies, which is most of what makes a page read as one document.
+ *
+ * The number is passed in rather than derived so the page's own order is
+ * visible in the page file — a section that moves takes its number with it.
  */
 export function SectionHeading({
-  eyebrow,
+  index,
+  label,
   title,
   lead,
-  align = "left",
+  link,
   className = "",
 }: {
-  eyebrow: string;
+  index: string;
+  label: string;
   title: ReactNode;
   lead?: ReactNode;
-  align?: "left" | "center";
+  link?: { label: string; href: string };
   className?: string;
 }) {
-  const centered = align === "center";
-
   return (
-    <div
-      className={`${centered ? "mx-auto max-w-3xl text-center" : "max-w-2xl"} ${className}`}
-    >
-      <p
-        className={`eyebrow ${centered ? "justify-center" : ""}`}
-        data-reveal
-      >
-        {eyebrow}
-      </p>
+    <div className={className}>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-10 gap-y-6">
+        <p className="label" data-reveal>
+          <span className="text-slate-dim/60">{index}</span>
+          {label}
+        </p>
+
+        {link && (
+          <Link
+            href={link.href}
+            className="link-underline t-mono text-mist transition-colors duration-300 hover:text-chalk"
+            data-reveal
+          >
+            {link.label}
+          </Link>
+        )}
+      </div>
 
       <h2
-        className="mt-6 text-[clamp(2rem,4.6vw,3.5rem)] font-medium leading-[1.06]"
+        className="t-h2 mt-7 max-w-[20ch]"
         data-reveal
-        style={{ ["--reveal-delay" as string]: "70ms" }}
+        style={{ ["--reveal-delay" as string]: "60ms" }}
       >
         {title}
       </h2>
 
       {lead && (
         <p
-          className={`mt-6 max-w-xl text-[1.0625rem] leading-[1.7] text-mist ${centered ? "mx-auto" : ""}`}
+          className="t-lead mt-6 max-w-[52ch] text-mist"
           data-reveal
-          style={{ ["--reveal-delay" as string]: "140ms" }}
+          style={{ ["--reveal-delay" as string]: "120ms" }}
         >
           {lead}
         </p>

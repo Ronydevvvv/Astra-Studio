@@ -1,58 +1,50 @@
-import { Starfield } from "@/components/ui/Starfield";
-
 /**
  * Masthead for every page except the home page.
  *
  * Deliberately NOT a second version of the home hero: no character, no
- * parallax, no scene. Those belong to the landing page alone — repeating them
- * on six inner pages is how a site turns into a gallery of illustrations.
- * What carries the identity here is the type, the rule and one low ambient
- * light, which is the same vocabulary at a quieter volume.
+ * scene. Those belong to the landing page alone — repeating them on six
+ * inner pages is how a site turns into a gallery of illustrations.
+ *
+ * The starfield and the violet ambient glow that used to sit behind this
+ * are gone. What is left is the page's own ground, a label, and type at
+ * one step below the home display size — the inner pages should feel
+ * like the same document at a lower volume, not like six more covers.
+ *
+ * The closing rule is what actually does the work the glow was pretending
+ * to do: it gives the masthead a bottom edge, so the content below starts
+ * somewhere rather than drifting up into the title.
  */
 export function PageHero({
-  eyebrow,
+  label,
   title,
   lead,
   children,
 }: {
-  eyebrow: string;
-  /** Rendered one line per entry. The last line takes the violet accent. */
+  label: string;
+  /** Rendered one line per entry; lines after the first are set back. */
   title: string[];
   lead?: string;
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative isolate overflow-hidden pt-[var(--nav-h)]">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <Starfield className="opacity-70" />
-        <div className="glow left-[-14%] top-[-10%] size-[32rem] bg-violet-700/[0.13] lg:size-[42rem]" />
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-void" />
-      </div>
+    <section className="pt-[var(--nav-h)]">
+      <div className="shell pb-14 pt-16 md:pt-24 lg:pb-20">
+        <p className="label">{label}</p>
 
-      <div className="mx-auto max-w-[1440px] px-6 pb-20 pt-20 md:px-10 lg:pb-28 lg:pt-28 xl:px-16">
-        <p className="flex items-center gap-4 text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-violet-300/90">
-          <span aria-hidden="true" className="h-px w-8 bg-violet-500/70" />
-          {eyebrow}
-        </p>
-
-        <h1 className="mt-8 max-w-4xl text-[clamp(2.5rem,6vw,4.75rem)] font-medium leading-[1.02] tracking-[-0.042em]">
+        <h1 className="t-h2 mt-7 max-w-[18ch] text-[clamp(2.25rem,5.5vw,4.25rem)]">
           {title.map((line, i) => (
-            <span
-              key={line}
-              className={`block ${i === title.length - 1 && title.length > 1 ? "text-violet-400" : ""}`}
-            >
+            <span key={line} className={`block ${i > 0 ? "text-mist" : ""}`}>
               {line}
             </span>
           ))}
         </h1>
 
-        {lead && (
-          <p className="mt-8 max-w-xl text-[1.0625rem] leading-[1.75] text-mist">
-            {lead}
-          </p>
-        )}
+        {lead && <p className="t-lead mt-8 max-w-[52ch] text-mist">{lead}</p>}
 
         {children}
+      </div>
+      <div className="shell">
+        <div className="h-px w-full bg-[var(--hairline)]" />
       </div>
     </section>
   );

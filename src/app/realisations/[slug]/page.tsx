@@ -58,16 +58,16 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <>
-      <PageHero eyebrow={project.category} title={[project.name]}>
-        <dl className="mt-14 grid max-w-3xl gap-x-12 gap-y-8 border-t border-white/[0.09] pt-8 sm:grid-cols-3">
+      <PageHero label={project.category} title={[project.name]}>
+        <dl className="mt-14 grid max-w-3xl gap-x-12 gap-y-8 border-t [var(--hairline)] pt-8 sm:grid-cols-3">
           <div>
-            <dt className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
+            <dt className="t-mono text-slate-dim">
               Année
             </dt>
             <dd className="mt-3 text-[0.9375rem] text-mist">{project.year}</dd>
           </div>
           <div>
-            <dt className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
+            <dt className="t-mono text-slate-dim">
               Catégorie
             </dt>
             <dd className="mt-3 text-[0.9375rem] text-mist">
@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: Params) {
             </dd>
           </div>
           <div>
-            <dt className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
+            <dt className="t-mono text-slate-dim">
               Services
             </dt>
             <dd className="mt-3 text-[0.9375rem] leading-[1.7] text-mist">
@@ -89,7 +89,7 @@ export default async function ProjectPage({ params }: Params) {
       {project.image && (
         <section className="px-6 md:px-10 xl:px-16">
           <div
-            className="relative mx-auto aspect-[16/9] max-w-[1440px] overflow-hidden rounded-sm"
+            className="relative aspect-[16/9] overflow-hidden"
             data-reveal
           >
             <Image
@@ -106,10 +106,10 @@ export default async function ProjectPage({ params }: Params) {
 
       {/* --- brief --- */}
       <section className="py-24 md:py-28 lg:py-32">
-        <div className="mx-auto max-w-[1440px] px-6 md:px-10 xl:px-16">
+        <div className="shell">
           <div className="grid gap-x-20 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
             <h2
-              className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim"
+              className="t-mono text-slate-dim"
               data-reveal
             >
               Présentation
@@ -128,10 +128,10 @@ export default async function ProjectPage({ params }: Params) {
                 <div
                   key={c.title}
                   data-reveal
-                  className="grid gap-x-20 gap-y-6 border-t border-white/[0.09] py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"
+                  className="grid gap-x-20 gap-y-6 border-t [var(--hairline)] py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"
                 >
                   <div className="flex items-baseline gap-5">
-                    <span className="font-display text-[0.6875rem] tracking-[0.16em] text-violet-400">
+                    <span className="t-mono text-slate-dim">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <h2 className="text-[1.25rem] font-medium tracking-[-0.02em]">
@@ -165,7 +165,7 @@ export default async function ProjectPage({ params }: Params) {
             </div>
           ) : (
             <p
-              className="mt-20 max-w-2xl border-l-2 border-violet-500/50 py-1 pl-6 text-[0.9375rem] leading-[1.8] text-mist lg:mt-24"
+              className="mt-20 max-w-2xl border-l border-[var(--hairline-strong)] py-1 pl-6 text-[0.9375rem] leading-[1.8] text-mist lg:mt-24"
               data-reveal
             >
               L&apos;étude de cas complète — objectif, direction artistique,
@@ -178,17 +178,17 @@ export default async function ProjectPage({ params }: Params) {
       {/* --- next --- */}
       {projects.length > 1 && (
         <section className="pb-24 md:pb-28">
-          <div className="mx-auto max-w-[1440px] px-6 md:px-10 xl:px-16">
+          <div className="shell">
             <Link
               href={`/realisations/${next.slug}`}
-              className="group flex flex-wrap items-baseline justify-between gap-6 border-t border-white/[0.09] py-10 transition-colors duration-500 hover:bg-white/[0.015]"
+              className="group flex flex-wrap items-baseline justify-between gap-6 border-t [var(--hairline)] py-10 transition-colors duration-500 hover:bg-white/[0.015]"
             >
-              <span className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
+              <span className="t-mono text-slate-dim">
                 Projet suivant
               </span>
               <span className="flex items-center gap-4 text-[clamp(1.5rem,3vw,2.25rem)] font-medium tracking-[-0.03em] transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5">
                 {next.name}
-                <Icon name="arrow" className="size-5 text-violet-400" />
+                <Icon name="arrow" className="size-4 text-mist" />
               </span>
             </Link>
           </div>

@@ -1,35 +1,29 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { Icon } from "./Icon";
 
-type Variant = "primary" | "outline" | "quiet" | "ghost";
+type Variant = "solid" | "line" | "text";
 
+/**
+ * Squared, not pilled; hairlined, not shadowed.
+ *
+ * The previous buttons were rounded-full with a coloured drop shadow
+ * (`0 14px 40px -12px rgba(124,58,245,.7)`) — the single most template-
+ * looking element on the page, because that exact treatment ships in
+ * every landing-page kit. A button on a studio site should read as a
+ * piece of set type with a box around it.
+ *
+ * Hover moves one property only: the fill, or the rule. Nothing scales,
+ * nothing glows, nothing translates.
+ */
 const base =
-  "group/btn relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full font-medium " +
-  "transition-[transform,color,border-color,box-shadow] duration-500 [transition-timing-function:var(--ease-out-expo)] " +
-  "active:scale-[0.98] whitespace-nowrap";
+  "group/btn inline-flex items-center justify-center gap-3 " +
+  "font-display text-[0.75rem] font-medium uppercase tracking-[0.12em] " +
+  "transition-colors duration-300 [transition-timing-function:var(--ease-soft)]";
 
 const variants: Record<Variant, string> = {
-  // Solid violet. The inset highlight keeps it from reading as a flat blob.
-  primary:
-    "bg-violet-500 text-white px-7 py-3.5 text-[0.8125rem] uppercase tracking-[0.1em] " +
-    "shadow-[0_0_0_1px_rgba(255,255,255,0.10)_inset,0_14px_40px_-12px_rgba(124,58,245,0.7)] " +
-    "hover:shadow-[0_0_0_1px_rgba(255,255,255,0.18)_inset,0_20px_54px_-12px_rgba(124,58,245,0.95)]",
-  // Outlined. A violet panel wipes up from the bottom on hover rather than
-  // the whole background switching colour — quieter, and it reads as crafted.
-  quiet:
-    "border border-white/20 text-chalk px-6 py-3 text-[0.75rem] uppercase tracking-[0.12em] " +
-    "hover:border-violet-400/70",
-  outline:
-    "border border-[var(--hairline-strong)] text-chalk px-7 py-3.5 text-[0.8125rem] uppercase tracking-[0.1em] " +
-    "hover:border-white/30",
-  ghost: "text-mist px-1 py-1 hover:text-chalk",
-};
-
-/** Variants whose hover state is a rising violet fill behind the label. */
-const sweeps: Partial<Record<Variant, string>> = {
-  quiet: "bg-violet-500",
-  outline: "bg-white/[0.07]",
+  solid: "bg-chalk px-7 py-4 text-void hover:bg-white",
+  line: "border border-[var(--hairline-strong)] px-7 py-4 text-chalk hover:border-chalk",
+  text: "text-chalk",
 };
 
 type Props = {
@@ -38,37 +32,24 @@ type Props = {
 } & ComponentProps<typeof Link>;
 
 export function Button({
-  variant = "primary",
+  variant = "solid",
   withArrow = false,
   className = "",
   children,
   ...props
 }: Props) {
-  const sweep = sweeps[variant];
-
   return (
     <Link className={`${base} ${variants[variant]} ${className}`} {...props}>
-      {sweep && (
-        <span
-          aria-hidden="true"
-          className={`absolute inset-0 origin-bottom scale-y-0 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover/btn:scale-y-100 ${sweep}`}
-        />
-      )}
-      <span className="relative">{children}</span>
-      {withArrow && (
-        <Icon
-          name="arrow"
-          className="relative size-[1.15em] shrink-0 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover/btn:translate-x-1"
-        />
-      )}
+      <span>{children}</span>
+      {withArrow && <Arrow />}
     </Link>
   );
 }
 
 /**
- * Secondary action drawn as a ringed arrow next to a label, from the hero
- * reference. Deliberately not a pill: two pills side by side compete, and the
- * eye should land on the primary action first.
+ * Secondary action: a label with a rule under it and an arrow that steps
+ * once on hover. No ring, no circle, no fill — it should be legible as
+ * "the other option", not compete with the primary.
  */
 export function ArrowLink({
   className = "",
@@ -77,20 +58,27 @@ export function ArrowLink({
 }: ComponentProps<typeof Link>) {
   return (
     <Link
-      className={`group/al inline-flex items-center gap-4 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-500 hover:text-violet-300 ${className}`}
+      className={`link-underline group/btn inline-flex items-center gap-3 font-display text-[0.75rem] font-medium uppercase tracking-[0.12em] text-mist transition-colors duration-300 hover:text-chalk ${className}`}
       {...props}
     >
-      <span className="relative grid size-11 place-items-center rounded-full border border-white/20 transition-colors duration-500 group-hover/al:border-violet-400/70">
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 scale-0 rounded-full bg-violet-500/15 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover/al:scale-100"
-        />
-        <Icon
-          name="arrow"
-          className="relative size-4 transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover/al:translate-x-0.5"
-        />
-      </span>
-      {children}
+      <span>{children}</span>
+      <Arrow />
     </Link>
+  );
+}
+
+/** 14px, 1px stroke, steps 3px right on hover. That is the whole gesture. */
+function Arrow() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      className="size-3.5 shrink-0 transition-transform duration-300 [transition-timing-function:var(--ease-out-expo)] group-hover/btn:translate-x-[3px]"
+    >
+      <path d="M1 7h12M8 2.5 12.5 7 8 11.5" />
+    </svg>
   );
 }

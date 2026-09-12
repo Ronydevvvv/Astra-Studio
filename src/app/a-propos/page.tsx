@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 export default function AProposPage() {
   return (
     <>
-      <PageHero eyebrow={about.eyebrow} title={about.title} lead={about.lead} />
+      <PageHero label={about.eyebrow} title={about.title} lead={about.lead} />
       {/* The masthead carries the title and lead, so the section drops both. */}
       <Approach heading={false} />
       <CTA />

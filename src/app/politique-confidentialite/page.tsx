@@ -18,7 +18,7 @@ export default function PolitiqueConfidentialitePage() {
   const { eyebrow, title, intro, sections } = legal.privacy;
   return (
     <>
-      <PageHero eyebrow={eyebrow} title={[title]} />
+      <PageHero label={eyebrow} title={[title]} />
       <LegalBody intro={intro} sections={sections} />
     </>
   );

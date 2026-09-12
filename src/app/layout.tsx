@@ -50,7 +50,7 @@ export default function RootLayout({
             does not exist on the other eight routes. */}
         <a
           href="#contenu"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-violet-500 focus:px-5 focus:py-3 focus:text-sm focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:bg-chalk focus:px-5 focus:py-3 focus:text-sm focus:text-void"
         >
           Aller au contenu
         </a>
