@@ -36,10 +36,27 @@ jobs:
           NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
           NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY }}
 
+      # `shell: powershell` (Windows PowerShell 5.1) et non `pwsh` :
+      # PowerShell 7 n'est pas installé par défaut sur Windows, et le run 14
+      # a échoué exactement à la première étape qui déclarait `pwsh` — les
+      # étapes précédentes, sans shell explicite, utilisaient le shell par
+      # défaut et passaient toutes.
       - name: Vérifier que out/ existe
-        shell: pwsh
+        shell: powershell
         run: |
           if (-not (Test-Path "out/index.html")) {
+            # Dit pourquoi plutôt que d'échouer en silence : sans ce
+            # listing, un out/ manquant ne se distingue pas d'un build
+            # sorti ailleurs ou d'un workspace laissé sale.
+            Write-Output "Répertoire de travail : $(Get-Location)"
+            Write-Output "Contenu de la racine :"
+            Get-ChildItem | Select-Object -ExpandProperty Name
+            if (Test-Path "out") {
+              Write-Output "Contenu de out/ :"
+              Get-ChildItem "out" | Select-Object -ExpandProperty Name
+            } else {
+              Write-Output "Le dossier out/ n'existe pas du tout."
+            }
             Write-Error "out/index.html manquant"
             exit 1
           }
@@ -50,7 +67,7 @@ jobs:
       # sans jamais les passer en argument de ligne de commande, donc sans
       # exposition dans les logs ou la liste des process Windows.
       - name: Installer le module Posh-SSH
-        shell: pwsh
+        shell: powershell
         run: |
           if (-not (Get-Module -ListAvailable -Name Posh-SSH)) {
             Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser | Out-Null
@@ -62,7 +79,7 @@ jobs:
       # le magasin de clés connues de Posh-SSH sur ce runner), équivalent du
       # StrictHostKeyChecking=accept-new utilisé côté OpenSSH.
       - name: Déployer sur OVH via SFTP (Posh-SSH)
-        shell: pwsh
+        shell: powershell
         env:
           OVH_FTP_SERVER: ${{ secrets.OVH_FTP_SERVER }}
           OVH_FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
