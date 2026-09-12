@@ -70,10 +70,22 @@ jobs:
         shell: powershell
         run: |
           if (-not (Get-Module -ListAvailable -Name Posh-SSH)) {
+            # Windows PowerShell 5.1 négocie TLS 1.0/1.1 par défaut, alors que
+            # la PowerShell Gallery n'accepte plus que TLS 1.2 depuis 2020 :
+            # sans cette ligne, Install-Module échoue sur "Unable to resolve
+            # package source". C'est le piège classique de PS 5.1, et la
+            # raison pour laquelle cette étape ne peut pas être plus courte.
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
             Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser | Out-Null
-            Install-Module -Name Posh-SSH -Force -Scope CurrentUser -Confirm:$false
+            # Marque la galerie comme fiable : sans cela, Install-Module pose
+            # une question interactive à laquelle personne ne répondra sur un
+            # runner, et l'étape reste bloquée jusqu'au timeout.
+            Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction SilentlyContinue
+            Install-Module -Name Posh-SSH -Force -Scope CurrentUser -AllowClobber -Confirm:$false
           }
           Import-Module Posh-SSH
+          Write-Output "Posh-SSH $((Get-Module Posh-SSH).Version) prêt"
 
       # -AcceptKey accepte et épingle la clé d'hôte au premier contact (dans
       # le magasin de clés connues de Posh-SSH sur ce runner), équivalent du
@@ -94,12 +106,27 @@ jobs:
           $session = New-SFTPSession -ComputerName $env:OVH_FTP_SERVER -Port 22 -Credential $credential -AcceptKey -ErrorAction Stop
 
           try {
+            Write-Output "Connecté. Envoi vers $env:OVH_FTP_REMOTE_DIR"
+
             # Envoie chaque entrée de out/ vers le dossier distant, en
             # conservant les sous-dossiers. Aucune suppression distante :
             # les fichiers déjà présents et absents de out/ restent en place.
-            Get-ChildItem -Path "out" | ForEach-Object {
-              Set-SFTPItem -SessionId $session.SessionId -Path $_.FullName -Destination $env:OVH_FTP_REMOTE_DIR -Force
+            $items = Get-ChildItem -Path "out"
+            foreach ($item in $items) {
+              Set-SFTPItem -SessionId $session.SessionId -Path $item.FullName -Destination $env:OVH_FTP_REMOTE_DIR -Force
+              Write-Output "  envoyé : $($item.Name)"
             }
+
+            # Vérifie côté serveur que la page d'accueil est bien arrivée :
+            # sans cela l'étape passerait au vert même si le transfert n'avait
+            # rien écrit, et le workflow annoncerait un déploiement qui n'a
+            # pas eu lieu.
+            $remoteIndex = "$env:OVH_FTP_REMOTE_DIR/index.html"
+            if (-not (Test-SFTPPath -SessionId $session.SessionId -Path $remoteIndex)) {
+              Write-Error "index.html absent de $remoteIndex après le transfert"
+              exit 1
+            }
+            Write-Output "Déploiement vérifié : $remoteIndex présent sur OVH"
           }
           finally {
             Remove-SFTPSession -SessionId $session.SessionId | Out-Null
