@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/content";
 import { PageHero } from "@/components/ui/PageHero";
-import { CTA } from "@/components/sections/CTA";
+import { Call } from "@/components/sections/Call";
 import { Icon } from "@/components/ui/Icon";
 import { pageMetadata } from "@/lib/seo";
 
@@ -61,13 +61,13 @@ export default async function ProjectPage({ params }: Params) {
       <PageHero label={project.category} title={[project.name]}>
         <dl className="mt-14 grid max-w-3xl gap-x-12 gap-y-8 border-t [var(--hairline)] pt-8 sm:grid-cols-3">
           <div>
-            <dt className="t-mono text-slate-dim">
+            <dt className="eyebrow text-dim">
               Année
             </dt>
             <dd className="mt-3 text-[0.9375rem] text-mist">{project.year}</dd>
           </div>
           <div>
-            <dt className="t-mono text-slate-dim">
+            <dt className="eyebrow text-dim">
               Catégorie
             </dt>
             <dd className="mt-3 text-[0.9375rem] text-mist">
@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: Params) {
             </dd>
           </div>
           <div>
-            <dt className="t-mono text-slate-dim">
+            <dt className="eyebrow text-dim">
               Services
             </dt>
             <dd className="mt-3 text-[0.9375rem] leading-[1.7] text-mist">
@@ -109,7 +109,7 @@ export default async function ProjectPage({ params }: Params) {
         <div className="shell">
           <div className="grid gap-x-20 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
             <h2
-              className="t-mono text-slate-dim"
+              className="eyebrow text-dim"
               data-reveal
             >
               Présentation
@@ -131,7 +131,7 @@ export default async function ProjectPage({ params }: Params) {
                   className="grid gap-x-20 gap-y-6 border-t [var(--hairline)] py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"
                 >
                   <div className="flex items-baseline gap-5">
-                    <span className="t-mono text-slate-dim">
+                    <span className="eyebrow text-dim">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <h2 className="text-[1.25rem] font-medium tracking-[-0.02em]">
@@ -183,7 +183,7 @@ export default async function ProjectPage({ params }: Params) {
               href={`/realisations/${next.slug}`}
               className="group flex flex-wrap items-baseline justify-between gap-6 border-t [var(--hairline)] py-10 transition-colors duration-500 hover:bg-white/[0.015]"
             >
-              <span className="t-mono text-slate-dim">
+              <span className="eyebrow text-dim">
                 Projet suivant
               </span>
               <span className="flex items-center gap-4 text-[clamp(1.5rem,3vw,2.25rem)] font-medium tracking-[-0.03em] transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-1.5">
@@ -195,7 +195,7 @@ export default async function ProjectPage({ params }: Params) {
         </section>
       )}
 
-      <CTA />
+      <Call />
     </>
   );
 }

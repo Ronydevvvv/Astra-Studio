@@ -27,7 +27,7 @@ export function Pricing() {
               className="group border-b border-[var(--hairline)] py-10 lg:py-14"
             >
               <div className="grid gap-y-8 lg:grid-cols-[3rem_minmax(0,1fr)_minmax(0,1.1fr)_auto] lg:items-start lg:gap-x-12">
-                <span className="t-mono text-slate-dim lg:pt-3">
+                <span className="eyebrow text-dim lg:pt-3">
                   {offer.index}
                 </span>
 
@@ -37,7 +37,7 @@ export function Pricing() {
                   </h2>
 
                   <p className="mt-6 flex items-baseline gap-3">
-                    <span className="t-mono text-slate-dim">À partir de</span>
+                    <span className="eyebrow text-dim">À partir de</span>
                     <span className="font-display text-[1.75rem] font-medium leading-none tracking-[-0.04em]">
                       {offer.from}
                     </span>
@@ -51,7 +51,7 @@ export function Pricing() {
                     {offer.includes.map((item) => (
                       <li
                         key={item}
-                        className="border-t border-[var(--hairline)] py-2.5 text-[0.8125rem] text-slate-dim"
+                        className="border-t border-[var(--hairline)] py-2.5 text-[0.8125rem] text-dim"
                       >
                         {item}
                       </li>
@@ -71,7 +71,7 @@ export function Pricing() {
           ))}
         </div>
 
-        <p className="mt-8 max-w-[52ch] text-[0.8125rem] leading-[1.7] text-slate-dim" data-reveal>
+        <p className="mt-8 max-w-[52ch] text-[0.8125rem] leading-[1.7] text-dim" data-reveal>
           {pricing.note}
         </p>
 
@@ -79,9 +79,9 @@ export function Pricing() {
         <div className="mt-24 border-t border-[var(--hairline)] pt-14 lg:mt-32" data-reveal>
           <div className="grid gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
             <div>
-              <h2 className="t-h2 max-w-[18ch]">{pricing.custom.title}</h2>
-              <p className="t-mono mt-7 text-slate-dim">
-                {pricing.custom.price}
+              <h2 className="t-display max-w-[18ch]">{pricing.custom.title}</h2>
+              <p className="eyebrow mt-7 text-dim">
+                {"Sur devis"}
               </p>
             </div>
             <div>

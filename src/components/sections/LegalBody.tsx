@@ -24,18 +24,18 @@ export function LegalBody({
             aria-label="Sommaire"
             className="lg:sticky lg:top-[calc(var(--nav-h)+2.5rem)]"
           >
-            <p className="t-mono text-slate-dim">
+            <p className="eyebrow text-dim">
               Sommaire
             </p>
             <ol className="mt-6 space-y-3">
               {sections.map((s, i) => (
                 <li key={s.title} className="flex gap-4">
-                  <span className="t-mono text-slate-dim">
+                  <span className="eyebrow text-dim">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <a
                     href={`#s-${i + 1}`}
-                    className="link-underline text-[0.9375rem] text-mist transition-colors duration-300 hover:text-chalk"
+                    className="underline-draw text-[0.9375rem] text-mist transition-colors duration-300 hover:text-chalk"
                   >
                     {s.title}
                   </a>
@@ -60,7 +60,7 @@ export function LegalBody({
                 className="mt-16 scroll-mt-32 border-t [var(--hairline)] pt-8"
               >
                 <div className="flex items-baseline gap-5">
-                  <span className="t-mono text-slate-dim">
+                  <span className="eyebrow text-dim">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h2 className="text-[1.5rem] font-medium tracking-[-0.025em]">

@@ -30,7 +30,7 @@ export function ServicesDetail() {
               {/* --- argument --- */}
               <div>
                 <div className="flex items-baseline gap-6">
-                  <span className="t-mono text-slate-dim">{service.index}</span>
+                  <span className="eyebrow text-dim">{service.index}</span>
                   <h2 className="text-[clamp(2rem,4vw,3rem)] font-medium leading-none tracking-[-0.035em]">
                     {service.title}
                   </h2>
@@ -47,7 +47,7 @@ export function ServicesDetail() {
 
               {/* --- deliverables --- */}
               <div className="lg:pt-2">
-                <p className="t-mono text-slate-dim">Ce que nous faisons</p>
+                <p className="eyebrow text-dim">Ce que nous faisons</p>
                 <ul className="mt-5">
                   {service.deliverables.map((d) => (
                     <li

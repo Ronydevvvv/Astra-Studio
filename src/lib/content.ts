@@ -1,9 +1,14 @@
 /**
- * Single source of truth for every piece of editorial content on the site.
+ * Single source of truth for every piece of editorial content.
  *
- * Nothing here asserts a fact about ASTRA Studio that has not been supplied:
- * no review scores, no headcount, no performance statistics, no invented
- * clients. What is still missing is listed in `pending` at the bottom.
+ * Nothing here asserts a fact about ASTRA that has not been supplied: no
+ * project count, no client roster, no performance figures. What is still
+ * missing is listed in `pending` at the bottom.
+ *
+ * Copy is written in lines, not paragraphs, because the display type is
+ * set line by line and each line animates on its own. Where a heading is
+ * an array, each entry is one rendered line — the break is a typographic
+ * decision and belongs with the words.
  */
 
 /* ------------------------------------------------------------------ */
@@ -27,86 +32,35 @@ export const primaryCta = { label: "Démarrer un projet", href: "/contact" };
 /* Home — hero                                                         */
 /* ------------------------------------------------------------------ */
 
-/**
- * The headline states the studio's actual position — built, not
- * assembled — instead of describing a benefit ("propulse votre
- * business") that every agency claims and none can prove on a
- * homepage. The lead only asserts things this repository already
- * establishes elsewhere: one person designs and codes (see `why`),
- * and the work is scoped per project (see `pricing`).
- */
 export const hero = {
-  kicker: "ASTRA — Studio créatif & digital",
-  titleLines: [
-    [{ t: "Des sites" }],
-    [{ t: "conçus," }],
-    [{ t: "pas " }, { t: "assemblés", accent: true }, { t: "." }],
-  ] as { t: string; accent?: boolean }[][],
-  lead: "Direction artistique, design et développement. Menés de bout en bout par la personne qui vous répond.",
-  primaryCta: { label: "Voir le travail", href: "/realisations" },
-  secondaryCta: { label: "Démarrer un projet", href: "/contact" },
-  /** Disciplines, not adjectives. Rendered as a masthead rail. */
-  signature: ["Direction artistique", "Design", "Développement"],
+  kicker: "ASTRA Studio",
+  title: ["Les idées qui", "méritent d'aller", "plus loin."],
+  /** The last line is set in the recessed grey — the sentence resolves
+   *  into the distance rather than shouting its own last word. */
+  titleMutedFrom: 2,
+  lead: "Nous concevons des identités, des sites et des expériences digitales pensées pour durer.",
+  scroll: "Découvrir",
 };
 
 /* ------------------------------------------------------------------ */
-/* Home — trust                                                        */
+/* Home — statement                                                    */
 /* ------------------------------------------------------------------ */
 
-/**
- * HONEST BY CONSTRUCTION.
- *
- * `relation` decides the wording, and there is deliberately no "client"
- * value to reach for:
- *
- *   "project"  — work actually delivered by the studio
- *   "creative" — a creative direction or demonstration, NOT commissioned work
- *
- * `logo` stays null until a real file exists. The official Mister Dalle mark
- * lives on Shopify's CDN (`shopify://shop_images/PNG-_-1.png` in the theme
- * export) and is not in this repository — download it from the Shopify admin
- * and drop it in /public/assets/clients/. Nothing is redrawn by hand: an
- * approximated logo misrepresents someone else's brand.
- */
-export type TrustEntry = {
-  name: string;
-  relation: "project" | "creative";
-  /** Path under /public/assets/clients/, or null while unavailable. */
-  logo: string | null;
-};
-
-export const trust = {
-  eyebrow: "Ils nous font confiance",
-  lead: "Des univers auxquels nous aimons donner vie.",
-  entries: [
-    { name: "Mister Dalle", relation: "project", logo: null },
-    { name: "Nali Restaurant & Lounge", relation: "creative", logo: null },
-  ] as TrustEntry[],
-  labels: {
-    project: "Projet",
-    creative: "Direction créative",
-  },
+export const statement = {
+  title: ["Nous ne créons pas", "des sites pour remplir", "des écrans."],
+  body: "Nous construisons des expériences qui donnent une forme claire aux idées.",
 };
 
 /* ------------------------------------------------------------------ */
 /* Services                                                            */
 /* ------------------------------------------------------------------ */
 
-export type IconName =
-  | "design"
-  | "code"
-  | "gauge"
-  | "devices"
-  | "search"
-  | "support";
-
 export type Service = {
   index: string;
   slug: string;
   title: string;
-  /** ONE sentence. The home grid must be readable in two seconds. */
+  /** One sentence. Shown under the title on the services page. */
   short: string;
-  icon: IconName;
   /** Long form, /services only. */
   body: string;
   deliverables: string[];
@@ -115,199 +69,171 @@ export type Service = {
 export const services: Service[] = [
   {
     index: "01",
-    slug: "design",
-    title: "Design",
-    short: "Une identité digitale pensée pour votre marque.",
-    icon: "design",
-    body: "On part de votre marché et de vos clients, pas d'un template. Tout est arbitré en maquette avant la première ligne de code — c'est là qu'une décision coûte une heure plutôt qu'une semaine.",
-    deliverables: [
-      "Direction artistique",
-      "UI/UX",
-      "Wireframes",
-      "Prototypes",
-      "Design system",
-    ],
+    slug: "direction-artistique",
+    title: "Direction artistique",
+    short: "Une intention claire avant la première maquette.",
+    body: "Tout part d'une décision, pas d'une tendance. On définit ce que le projet doit dire, à qui, et avec quelle voix — c'est la seule étape qui rend toutes les suivantes évidentes.",
+    deliverables: ["Territoire visuel", "Références", "Arbitrages", "Ton"],
   },
   {
     index: "02",
-    slug: "developpement",
-    title: "Développement",
-    short: "Un site rapide, propre et évolutif.",
-    icon: "code",
-    body: "Du code typé et lisible, choisi pour le projet et non l'inverse. Un site que vous ferez évoluer dans deux ans sans le réécrire.",
-    deliverables: [
-      "Sites vitrines",
-      "Développement sur mesure",
-      "Animations",
-      "Intégrations",
-      "CMS",
-    ],
+    slug: "identite-visuelle",
+    title: "Identité visuelle",
+    short: "Un système qui tient au-delà du logo.",
+    body: "Un logo ne fait pas une marque. On construit le système complet — typographie, couleur, grille, règles — pour que la marque reste elle-même partout où elle apparaît.",
+    deliverables: ["Logotype", "Typographie", "Palette", "Règles d'usage"],
   },
   {
     index: "03",
-    slug: "performance",
-    title: "Performance",
-    short: "Chaque détail optimisé pour la vitesse.",
-    icon: "gauge",
-    body: "La vitesse n'est pas une finition, c'est une contrainte de conception. Chaque image, chaque script est pesé — et mesuré.",
-    deliverables: [
-      "Images optimisées",
-      "Architecture",
-      "Core Web Vitals",
-      "Code propre",
-      "Chargement rapide",
-    ],
+    slug: "web-design",
+    title: "Web design",
+    short: "Des compositions dessinées écran par écran.",
+    body: "Chaque largeur est composée, pas comprimée depuis le desktop. Vous validez le site en maquette avant la première ligne de code — c'est là qu'une décision coûte une heure plutôt qu'une semaine.",
+    deliverables: ["Maquettes", "Design system", "Prototypes", "Responsive"],
   },
   {
     index: "04",
-    slug: "responsive",
-    title: "Responsive",
-    short: "Une expérience pensée pour chaque écran.",
-    icon: "devices",
-    body: "Le mobile n'est pas une version réduite du desktop. Chaque largeur est composée séparément, et vérifiée sur captures réelles.",
-    deliverables: ["Mobile", "Tablette", "Desktop", "Grands écrans"],
+    slug: "developpement",
+    title: "Développement",
+    short: "Du code lisible, que vous pourrez faire évoluer.",
+    body: "Du code typé et sobre, choisi pour le projet et non l'inverse. Un site que vous reprendrez dans deux ans sans devoir le réécrire.",
+    deliverables: ["Intégration", "Performance", "CMS", "Intégrations tierces"],
   },
   {
     index: "05",
-    slug: "seo",
-    title: "SEO",
-    short: "Une base technique faite pour être trouvée.",
-    icon: "search",
-    body: "Un site que les moteurs comprennent. Le référencement commence dans la structure du code, pas dans un plugin ajouté après coup.",
-    deliverables: [
-      "Structure",
-      "Métadonnées",
-      "Données structurées",
-      "Indexation",
-      "Performance",
-    ],
+    slug: "experience-digitale",
+    title: "Expérience digitale",
+    short: "Le mouvement, le rythme, le détail qui reste.",
+    body: "Une animation a une raison ou elle n'existe pas. On travaille le rythme du scroll, les transitions et les micro-états jusqu'à ce que le site paraisse simplement fluide.",
+    deliverables: ["Motion", "Micro-interactions", "Transitions", "Accessibilité"],
   },
   {
     index: "06",
     slug: "accompagnement",
     title: "Accompagnement",
-    short: "Un site qui continue d'évoluer avec vous.",
-    icon: "support",
-    body: "La mise en ligne est un début. Mises à jour, corrections, évolutions : on reste joignables.",
-    deliverables: ["Maintenance", "Évolutions", "Corrections", "Conseil"],
+    short: "La mise en ligne est un début, pas une fin.",
+    body: "Mises à jour, corrections, évolutions. Vous parlez à la personne qui a construit le site, pas à un service client.",
+    deliverables: ["Maintenance", "Évolutions", "Conseil", "Formation"],
   },
 ];
 
 export const servicesPage = {
   eyebrow: "Services",
-  title: ["Des solutions digitales", "pensées pour votre activité."],
-  lead: "Six domaines, un seul interlocuteur.",
+  title: ["Ce que nous", "pouvons construire."],
+  lead: "Six domaines, un seul interlocuteur, du premier croquis à la mise en ligne.",
 };
 
 export const servicesHome = {
-  eyebrow: "Nos services",
-  title: ["Créer des sites", "qui ont une raison d'exister."],
-  link: { label: "Voir le détail", href: "/services" },
+  eyebrow: "Services",
+  title: ["Ce que nous", "pouvons construire."],
+  link: { label: "Tous les services", href: "/services" },
 };
 
 /* ------------------------------------------------------------------ */
-/* Home — method                                                       */
+/* Projects                                                            */
 /* ------------------------------------------------------------------ */
 
-export const processIntro = {
-  eyebrow: "Notre méthode",
-  title: ["Quatre étapes.", "Aucune surprise."],
-};
-
-export type Step = {
+export type Project = {
+  slug: string;
   index: string;
-  title: string;
+  name: string;
+  category: string;
+  services: string[];
+  year: string;
   body: string;
-  image: string;
-  alt: string;
-  width: number;
-  height: number;
+  /** Real screenshot under /public/assets/projects/. The layout
+   *  re-composes around it when one exists. */
+  image?: string;
+  /** "delivered" is the ONLY value that presents the entry as
+   *  commissioned work. */
+  status: "delivered" | "creative" | "upcoming";
+  study?: {
+    context: string;
+    objective: string;
+    direction: string;
+    build: string;
+    outcome: string;
+    gallery?: string[];
+  };
 };
 
-/**
- * All four were cut from the same 724px-tall source strip, so rendering them
- * at an identical CSS height reproduces the original relative scale and the
- * shared ground line for free.
- */
-export const process: Step[] = [
+export const projectsIntro = {
+  eyebrow: "Réalisations",
+  title: ["Quelques projets.", "Beaucoup d'intention."],
+  lead: "Chaque projet est mené de bout en bout par le studio.",
+};
+
+export const projects: Project[] = [
   {
+    slug: "mistral-pizza",
     index: "01",
-    title: "Découverte",
-    body: "On creuse votre activité et vos objectifs.",
-    image: "/assets/process-01-discovery.webp",
-    alt: "Astronaute ASTRA examinant le terrain à la loupe",
-    width: 464,
-    height: 724,
+    name: "Mistral Pizza",
+    category: "Restauration",
+    services: ["Direction artistique", "Web design", "Développement"],
+    year: "—",
+    status: "upcoming",
+    body: "Une expérience digitale pensée pour donner envie avant même la première bouchée.",
   },
   {
+    slug: "nali-restaurant-lounge",
     index: "02",
-    title: "Conception",
-    body: "Vous validez le site avant qu'il existe.",
-    image: "/assets/process-02-design.webp",
-    alt: "Astronaute ASTRA tenant un grand crayon violet",
-    width: 460,
-    height: 724,
-  },
-  {
-    index: "03",
-    title: "Développement",
-    body: "Intégration au pixel, testée sur tous les écrans.",
-    image: "/assets/process-03-build.webp",
-    alt: "Astronaute ASTRA en train de coder sur un ordinateur portable",
-    width: 524,
-    height: 724,
-  },
-  {
-    index: "04",
-    title: "Mise en ligne",
-    body: "Déploiement, mesure, et la suite ensemble.",
-    image: "/assets/process-04-launch.webp",
-    alt: "Astronaute ASTRA plantant un drapeau sur la lune",
-    width: 580,
-    height: 724,
+    name: "Nali Restaurant & Lounge",
+    category: "Restauration · Lounge",
+    services: ["Direction créative", "Exploration visuelle"],
+    year: "—",
+    status: "creative",
+    body: "Une exploration autour d'un lieu qui mêle table et lounge. Ambiance, rythme, hiérarchie — le vocabulaire avant le site.",
   },
 ];
 
-/* ------------------------------------------------------------------ */
-/* Home — why ASTRA                                                    */
-/* ------------------------------------------------------------------ */
+export const projectStatusLabel: Record<Project["status"], string> = {
+  delivered: "Projet livré",
+  creative: "Direction créative",
+  upcoming: "En préparation",
+};
 
-export const why = {
-  eyebrow: "Pourquoi ASTRA",
-  title: ["Une idée mérite mieux", "qu'un gabarit."],
-  /**
-   * The three points are deliberately falsifiable — who you speak to,
-   * when you pay, who owns the code. A claim that cannot be checked
-   * ("passionnés par l'innovation") is decoration; these can be held
-   * against the studio, which is what makes them worth printing.
-   */
-  points: [
-    {
-      index: "01",
-      title: "Vous parlez à celui qui construit",
-      body: "Pas de chef de projet intermédiaire. La personne qui dessine est celle qui code, et celle qui vous répond.",
-    },
-    {
-      index: "02",
-      title: "Vous voyez avant de payer la suite",
-      body: "Les maquettes sont validées avant le développement. Aucun projet ne démarre sur une promesse.",
-    },
-    {
-      index: "03",
-      title: "Le site vous appartient",
-      body: "Code livré, hébergement au choix, aucune dépendance à un abonnement maison pour modifier une page.",
-    },
-  ],
+export const projectsHome = {
+  eyebrow: "Réalisations",
+  title: ["Quelques projets.", "Beaucoup d'intention."],
+  link: { label: "Voir les réalisations", href: "/realisations" },
 };
 
 /* ------------------------------------------------------------------ */
-/* About                                                               */
+/* Studio                                                              */
 /* ------------------------------------------------------------------ */
+
+/**
+ * FIGURES ARE VERIFIABLE ONLY.
+ *
+ * A "15+ projets" style counter was requested and is deliberately absent:
+ * this repository contains two entries, one still in preparation and one
+ * that is a creative direction rather than commissioned work. Printing a
+ * project count the work cannot back is the single easiest claim for a
+ * prospect to catch, and it would undermine every other sentence here.
+ *
+ * What is left is true and, as differentiators go, stronger: the studio is
+ * independent, nothing is templated, and there is exactly one person
+ * between the brief and the code.
+ */
+export const studio = {
+  eyebrow: "Studio",
+  title: ["On donne une direction", "aux idées qui cherchent", "encore leur forme."],
+  body: [
+    "ASTRA est un studio digital indépendant.",
+    "Nous mêlons direction artistique, design et développement pour créer des expériences cohérentes, singulières et utiles.",
+  ],
+  figures: [
+    { value: "01", label: "Studio indépendant" },
+    { value: "100%", label: "Sur mesure" },
+    { value: "01", label: "Interlocuteur, du brief au code" },
+  ],
+  link: { label: "À propos du studio", href: "/a-propos" },
+};
 
 export const about = {
   eyebrow: "À propos",
-  title: ["Une bonne idée ne suffit pas.", "Il faut la rendre évidente."],
-  lead: "ASTRA n'est pas une agence qui fabrique des pages. Nous concevons des expériences digitales qui doivent servir une vraie activité.",
+  title: ["Une idée n'a pas", "besoin d'être grande", "pour aller loin."],
+  lead: "ASTRA est un studio digital indépendant. Nous mêlons direction artistique, design et développement pour créer des expériences cohérentes, singulières et utiles.",
   blocks: [
     {
       index: "01",
@@ -333,87 +259,6 @@ export const about = {
 };
 
 /* ------------------------------------------------------------------ */
-/* Projects                                                            */
-/* ------------------------------------------------------------------ */
-
-export type Project = {
-  slug: string;
-  index: string;
-  name: string;
-  category: string;
-  services: string[];
-  year: string;
-  body: string;
-  /**
-   * Real screenshot. Drop the file in /public/assets/projects/ and set the
-   * path — the layout re-composes around it: the image becomes the subject
-   * and takes the larger half. Until then the entry stays text-led.
-   */
-  image?: string;
-  /**
-   * "delivered" is the ONLY value that presents the entry as commissioned
-   * work. Anything not actually built for a paying client stays "creative"
-   * and is labelled as a creative direction, never as a réalisation.
-   */
-  status: "delivered" | "creative" | "upcoming";
-  study?: {
-    context: string;
-    objective: string;
-    direction: string;
-    build: string;
-    outcome: string;
-    gallery?: string[];
-  };
-};
-
-export const projectsIntro = {
-  eyebrow: "Réalisations",
-  title: ["Quelques projets.", "Beaucoup d'intention."],
-  lead: "Chaque projet est mené de bout en bout par le studio.",
-};
-
-/**
- * Mistral Pizza is prepared as the lead entry but is NOT presented as
- * delivered: `status` stays "upcoming" and no year or image is claimed.
- * Set `status: "delivered"`, a real `year`, the `image` and the `study`
- * block the day it ships — the page re-composes around it.
- */
-export const projects: Project[] = [
-  {
-    slug: "mistral-pizza",
-    index: "01",
-    name: "Mistral Pizza",
-    category: "Restauration",
-    services: ["Direction artistique", "Web design", "Développement"],
-    year: "—",
-    status: "upcoming",
-    body: "Une expérience digitale pensée pour une pizzeria locale qui veut donner envie avant même la première bouchée.",
-  },
-  {
-    slug: "nali-restaurant-lounge",
-    index: "02",
-    name: "Nali Restaurant & Lounge",
-    category: "Restauration · Lounge",
-    services: ["Direction créative", "Exploration visuelle"],
-    year: "—",
-    status: "creative",
-    body: "Une exploration de direction créative autour d'un lieu qui mêle table et lounge. Ambiance, rythme, hiérarchie — le vocabulaire avant le site.",
-  },
-];
-
-export const projectStatusLabel: Record<Project["status"], string> = {
-  delivered: "Projet livré",
-  creative: "Direction créative",
-  upcoming: "En préparation",
-};
-
-export const projectsHome = {
-  eyebrow: "Réalisations",
-  title: ["Le travail,", "pas la promesse."],
-  link: { label: "Voir les réalisations", href: "/realisations" },
-};
-
-/* ------------------------------------------------------------------ */
 /* Pricing                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -435,44 +280,27 @@ export const pricing = {
       index: "01",
       name: "Essentiel",
       from: "690 €",
-      pitch: "Pour un site vitrine simple et efficace.",
-      includes: [
-        "Jusqu'à 5 pages",
-        "Design sur mesure",
-        "Responsive complet",
-        "SEO technique de base",
-      ],
+      pitch: "Un site vitrine clair, rapide, dessiné sur mesure.",
+      includes: ["Jusqu'à 5 pages", "Design sur mesure", "Responsive complet", "SEO technique"],
     },
     {
       index: "02",
       name: "Signature",
       from: "1 190 €",
-      pitch:
-        "Pour un site avec une vraie direction artistique, des animations et une expérience plus poussée.",
-      includes: [
-        "Direction artistique dédiée",
-        "Animations et micro-interactions",
-        "Pages sur mesure",
-        "SEO technique complet",
-      ],
+      pitch: "Une direction artistique tenue, du mouvement, une vraie présence.",
+      includes: ["Direction artistique dédiée", "Motion et micro-interactions", "Pages sur mesure", "SEO technique complet"],
     },
     {
       index: "03",
-      name: "Expérience",
-      from: "1 690 €",
-      pitch: "Pour un site plus technique, avec des interactions poussées.",
-      includes: [
-        "3D légère",
-        "Animations avancées",
-        "Interactions sur mesure",
-        "Développement spécifique",
-      ],
+      name: "Sur mesure",
+      from: "Sur devis",
+      pitch: "E-commerce, outil métier, intégration particulière.",
+      includes: ["Développement spécifique", "Interactions avancées", "Intégrations", "Accompagnement"],
     },
   ] as Offer[],
   custom: {
-    title: "E-commerce ou besoin très spécifique ?",
-    body: "Boutique en ligne, outil métier, intégration particulière : ces projets se chiffrent après un échange. Décrivez le vôtre, nous vous dirons franchement si nous sommes les bons interlocuteurs.",
-    price: "Sur devis",
+    title: "Un projet qui ne rentre dans aucune case ?",
+    body: "Décrivez-le. Nous vous dirons franchement si nous sommes les bons interlocuteurs.",
     cta: { label: "Parlons-en", href: "/contact" },
   },
 };
@@ -483,20 +311,10 @@ export const pricing = {
 
 export const contact = {
   eyebrow: "Contact",
-  title: ["Parlons de votre projet."],
-  lead: "Une idée, une refonte ou simplement envie d'en discuter ? Expliquez-nous votre projet.",
-  reassurance: {
-    title: "Pas besoin d'avoir tout préparé.",
-    body: "Quelques lignes suffisent pour commencer. On vous répond avec un premier avis, sans engagement.",
-  },
-  projectTypes: [
-    "Site vitrine",
-    "Site sur mesure",
-    "E-commerce",
-    "Refonte",
-    "Autre",
-  ],
-  budgetLabel: "Quel budget avez-vous prévu ?",
+  title: ["Votre prochaine idée", "mérite de décoller."],
+  lead: "Décrivez-nous votre projet. Nous reviendrons vers vous avec une première direction.",
+  projectTypes: ["Site vitrine", "Site sur mesure", "E-commerce", "Refonte", "Identité visuelle", "Autre"],
+  budgetLabel: "Votre budget",
   budgets: [
     "Moins de 700 €",
     "700 € – 1 200 €",
@@ -504,41 +322,25 @@ export const contact = {
     "Plus de 1 800 €",
     "Je ne sais pas encore",
   ],
-  submit: "Parler de mon projet",
+  submit: "Démarrer le projet",
 };
 
-/* ------------------------------------------------------------------ */
-/* CTA                                                                 */
-/* ------------------------------------------------------------------ */
-
-/**
- * One action, not two. The previous block offered "Démarrer mon projet"
- * and "Nous contacter" side by side — both pointing at /contact, which
- * is a choice that isn't one, and reads as a layout needing a second
- * button rather than a page needing a second option.
- */
-export const cta = {
+/* Closing block, used at the foot of every page except /contact. */
+export const call = {
   title: ["Votre prochaine idée", "mérite de décoller."],
-  lead: "Décrivez-la en quelques lignes. Vous aurez un vrai avis, pas un devis automatique.",
-  primary: { label: "Démarrer un projet", href: "/contact" },
+  lead: "Décrivez-nous votre projet. Nous reviendrons vers vous avec une première direction.",
+  cta: { label: "Démarrer le projet", href: "/contact" },
 };
 
 /* ------------------------------------------------------------------ */
 /* Company details — ALL PENDING                                       */
 /* ------------------------------------------------------------------ */
 
-/**
- * Every value below is unset. Components render an explicit "à renseigner"
- * marker rather than a plausible-looking placeholder: a fake address that
- * ships by accident is a legal problem, and nobody notices a convincing one.
- */
 export const company = {
   name: "ASTRA Studio",
-  tagline:
-    "Une agence digitale qui transforme les idées en expériences web.",
+  tagline: "Un studio digital qui transforme les idées en expériences web.",
   /** TODO */ email: null as string | null,
   /** TODO */ phone: null as string | null,
-  /** TODO */ availability: null as string | null,
   /** TODO */ address: null as string | null,
   /** TODO */ legalForm: null as string | null,
   /** TODO */ siret: null as string | null,
@@ -560,24 +362,18 @@ export const footer = {
     { title: "Navigation", links: nav },
     {
       title: "Services",
-      links: services.map((s) => ({
-        label: s.title,
-        href: `/services#${s.slug}`,
-      })),
+      links: services.map((s) => ({ label: s.title, href: `/services#${s.slug}` })),
     },
     {
-      title: "Infos",
+      title: "Informations",
       links: [
         { label: "Mentions légales", href: "/mentions-legales" },
-        {
-          label: "Politique de confidentialité",
-          href: "/politique-confidentialite",
-        },
+        { label: "Politique de confidentialité", href: "/politique-confidentialite" },
         { label: "Cookies", href: "/cookies" },
       ],
     },
   ],
-  copyright: `© ${new Date().getFullYear()} ASTRA Studio. Tous droits réservés.`,
+  copyright: `© ${new Date().getFullYear()} ASTRA Studio`,
 };
 
 /* ------------------------------------------------------------------ */
@@ -643,7 +439,7 @@ export const legal = {
       {
         title: "Données collectées",
         body: [
-          "Formulaire de contact : nom, entreprise, adresse e-mail, téléphone, type de projet, budget envisagé et message.",
+          "Formulaire de contact : nom, adresse e-mail, type de projet, budget envisagé et message.",
           "Ces données sont fournies volontairement par l'utilisateur et servent uniquement à répondre à sa demande.",
         ],
       },
@@ -664,7 +460,7 @@ export const legal = {
         title: "Destinataires et sous-traitants",
         body: [
           "Hébergeur du site : à renseigner.",
-          "Service d'acheminement des e-mails : à renseigner.",
+          "Service d'acheminement des e-mails : Web3Forms.",
           "Aucune donnée n'est cédée ni vendue à des tiers.",
         ],
       },
@@ -702,9 +498,7 @@ export const legal = {
       },
       {
         title: "Contact",
-        body: [
-          "Adresse pour toute question relative aux traceurs : à renseigner.",
-        ],
+        body: ["Adresse pour toute question relative aux traceurs : à renseigner."],
       },
     ] as LegalSection[],
   },
@@ -715,11 +509,12 @@ export const legal = {
 /* ------------------------------------------------------------------ */
 
 export const pending = [
-  "company.email / phone / availability",
+  "company.email / phone — le footer et les mentions légales affichent « à renseigner »",
   "company.address, legalForm, siret, vat, director, host",
   "company.socials[].href",
-  "trust.entries[].logo — logos officiels dans /public/assets/clients/",
-  "projects[].image / year / status — passer à « delivered » à la livraison",
+  "projects[].image — aucun visuel de projet dans le dépôt ; la mise en page se recompose dès qu'un fichier existe",
+  "projects[].year / status — passer à « delivered » à la livraison",
   "projects[].study — étude de cas pour /realisations/[slug]",
+  "Un visuel spatial éditorial pour /a-propos : les rendus 3D actuels sont des illustrations cartoon, pas de la photographie",
   "legal.* — compléter chaque « à renseigner »",
 ];

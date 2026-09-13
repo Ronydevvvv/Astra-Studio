@@ -51,7 +51,7 @@ export function Logo({
           ASTRA
         </span>
         <span
-          className={`mt-[3px] block font-display font-normal text-slate-dim ${
+          className={`mt-[3px] block font-display font-normal text-dim ${
             compact
               ? "text-[0.5rem] tracking-[0.4em]"
               : "text-[0.5625rem] tracking-[0.44em]"

@@ -1,15 +1,86 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/components/ui/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
+import { Lines } from "@/components/ui/Lines";
 import { contact, company } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact",
   description:
-    "Une idée, une refonte ou simplement envie d'en discuter ? Expliquez-nous votre projet : ASTRA Studio revient vers vous avec un premier avis, sans engagement.",
+    "Décrivez-nous votre projet. ASTRA Studio revient vers vous avec une première direction, sans engagement.",
   path: "/contact",
 });
+
+/**
+ * The contact page IS the closing statement — it does not carry a second
+ * one underneath, which is why `Call` is absent here.
+ *
+ * The title runs at full display scale with the form directly beneath it
+ * rather than beside it: a form pushed into a right-hand column reads as
+ * a widget bolted to a page, while one given the full measure reads as
+ * the point of the page. Contact details sit last, small, as a footnote
+ * to the form rather than a competing column.
+ */
+export default function ContactPage() {
+  return (
+    <>
+      <section className="pt-[var(--nav-h)]">
+        <div className="shell pb-24 pt-24 md:pb-32 md:pt-36 lg:pt-44">
+          <div data-reveal>
+            <p className="eyebrow">{contact.eyebrow}</p>
+            <Lines
+              as="h1"
+              lines={contact.title}
+              mutedFrom={1}
+              stagger={110}
+              className="t-hero mt-10 max-w-[14ch] md:mt-14"
+            />
+          </div>
+
+          <p
+            className="t-lead mt-14 max-w-[44ch] text-mist md:mt-20"
+            data-reveal
+            style={{ ["--reveal-delay" as string]: "300ms" }}
+          >
+            {contact.lead}
+          </p>
+        </div>
+      </section>
+
+      <section className="pb-28 md:pb-40">
+        <div className="shell">
+          <div
+            data-reveal
+            className="rule-draw mb-20 h-px w-full bg-[var(--hairline)] md:mb-28"
+          />
+
+          <div data-reveal>
+            <ContactForm />
+          </div>
+
+          {/* --- details, as a footnote --- */}
+          <dl className="mt-32 grid gap-x-16 gap-y-10 border-t border-[var(--hairline)] pt-10 sm:grid-cols-3 lg:mt-44">
+            <Detail
+              label="E-mail"
+              value={company.email}
+              href={company.email ? `mailto:${company.email}` : undefined}
+            />
+            <Detail
+              label="Téléphone"
+              value={company.phone}
+              href={
+                company.phone
+                  ? `tel:${company.phone.replace(/\s/g, "")}`
+                  : undefined
+              }
+            />
+            <Detail label="Réseaux" value={null} />
+          </dl>
+        </div>
+      </section>
+    </>
+  );
+}
 
 /** Unset details show an explicit gap, never plausible-looking data. */
 function Detail({
@@ -22,16 +93,14 @@ function Detail({
   href?: string;
 }) {
   return (
-    <div className="border-t border-white/[0.09] py-5">
-      <dt className="text-[0.6875rem] uppercase tracking-[0.18em] text-slate-dim">
-        {label}
-      </dt>
-      <dd className="mt-2.5 text-[0.9375rem]">
+    <div>
+      <dt className="eyebrow">{label}</dt>
+      <dd className="mt-3 text-[0.9375rem]">
         {value ? (
           href ? (
             <a
               href={href}
-              className="link-underline text-chalk transition-colors duration-300 hover:text-mist"
+              className="underline-draw text-chalk transition-colors duration-500 hover:text-mist"
             >
               {value}
             </a>
@@ -39,63 +108,9 @@ function Detail({
             <span className="text-mist">{value}</span>
           )
         ) : (
-          <span className="italic text-slate-dim">à renseigner</span>
+          <span className="italic text-dim">à renseigner</span>
         )}
       </dd>
     </div>
-  );
-}
-
-export default function ContactPage() {
-  const instagram = company.socials.find((s) => s.label === "Instagram");
-
-  return (
-    <>
-      <PageHero
-        label={contact.eyebrow}
-        title={contact.title}
-        lead={contact.lead}
-      />
-
-      <section className="pb-28 md:pb-36 lg:pb-44">
-        <div className="shell">
-          {/* Reassurance left, form right. The single biggest reason a
-              contact form goes unfilled is the visitor thinking they have
-              nothing ready to say — so that objection is answered beside the
-              first field, not buried under the submit button. */}
-          <div className="grid gap-x-20 gap-y-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:items-start">
-            <aside
-              className="lg:sticky lg:top-[calc(var(--nav-h)+2.5rem)]"
-              data-reveal
-            >
-              <h2 className="text-[clamp(1.5rem,2.6vw,2rem)] font-medium leading-[1.15] tracking-[-0.03em]">
-                {contact.reassurance.title}
-              </h2>
-              <p className="mt-5 max-w-sm text-[0.9375rem] leading-[1.8] text-mist">
-                {contact.reassurance.body}
-              </p>
-
-              <dl className="mt-12">
-                <Detail
-                  label="E-mail"
-                  value={company.email}
-                  href={company.email ? `mailto:${company.email}` : undefined}
-                />
-                <Detail
-                  label="Instagram"
-                  value={instagram?.href ? "@astra.studio" : null}
-                  href={instagram?.href ?? undefined}
-                />
-                <Detail label="Disponibilité" value={company.availability} />
-              </dl>
-            </aside>
-
-            <div data-reveal style={{ ["--reveal-delay" as string]: "120ms" }}>
-              <ContactForm />
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
   );
 }

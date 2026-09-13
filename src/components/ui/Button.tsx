@@ -58,7 +58,7 @@ export function ArrowLink({
 }: ComponentProps<typeof Link>) {
   return (
     <Link
-      className={`link-underline group/btn inline-flex items-center gap-3 font-display text-[0.75rem] font-medium uppercase tracking-[0.12em] text-mist transition-colors duration-300 hover:text-chalk ${className}`}
+      className={`underline-draw group/btn inline-flex items-center gap-3 font-display text-[0.75rem] font-medium uppercase tracking-[0.12em] text-mist transition-colors duration-300 hover:text-chalk ${className}`}
       {...props}
     >
       <span>{children}</span>

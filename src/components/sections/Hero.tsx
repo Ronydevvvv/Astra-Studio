@@ -1,134 +1,112 @@
 import Image from "next/image";
 import { hero } from "@/lib/content";
-import { Button, ArrowLink } from "@/components/ui/Button";
+import { Lines } from "@/components/ui/Lines";
 import { ScrollShift } from "@/components/ui/ScrollShift";
 
-/** Entry choreography — the page sets itself, top to bottom, ~70ms apart. */
-const rise = (delay: number) => ({
-  animation: `astra-in 0.8s var(--ease-out-expo) ${delay}ms both`,
-});
-
 /**
- * A masthead, not a slide.
+ * A full-height opening that is almost entirely empty.
  *
- * The previous hero was a two-column "text next to a picture" with a
- * starfield, a violet glow and a permanently floating illustration —
- * three decorative layers doing the work the composition should do.
+ * The headline is the only loud thing on the screen and it is set against
+ * the left margin at up to 150px. Everything else — the label above it,
+ * the sentence below, the scroll cue — is small, grey and far away from
+ * it. That distance is the composition; there is nothing else in here.
  *
- * What replaces them:
- *
- *   - the headline is the largest thing on the page by a wide margin and
- *     is set against the left margin, so the eye has one entry point;
- *   - the astronaut is cropped by the right edge of the viewport and sits
- *     BEHIND the type at reduced contrast. Overlapping the two is what
- *     makes it one composition rather than two panels side by side;
- *   - a rule and a meta rail close the frame at the bottom, the way a
- *     masthead closes a cover. The disciplines live there — small — which
- *     is the only place the page needs to list them.
- *
- * No starfield, no glow, no float. The only motion is the entrance and a
- * 40px drift on the image as the page scrolls past it.
+ * THE ASTRONAUT IS DELIBERATELY TINY. It sits in the upper right at a
+ * fraction of the viewport, dimmed to a third and pushed behind a
+ * vignette, so it reads as a figure lost in a large dark frame rather
+ * than as an illustration placed on a page. The source artwork is a
+ * bright 3D render carrying baked-in English UI copy on its right side;
+ * cropping hard into the figure and holding the exposure right down is
+ * what turns it into a silhouette instead of a sticker.
  */
 export function Hero() {
   return (
     <section
       id="accueil"
-      className="relative isolate flex min-h-[max(560px,88svh)] flex-col justify-end overflow-hidden pt-[var(--nav-h)]"
+      className="relative isolate flex min-h-[100svh] flex-col overflow-hidden pt-[var(--nav-h)]"
     >
-      {/* ---------------- the image, cropped by the viewport ---------------- */}
-      {/* Bleeds off the right edge and is masked into the ground on its left
-          and bottom, so there is no rectangle and no visible cut line. It is
-          aria-hidden: the headline already says what the page is, and a
-          decorative crop of an illustration adds nothing to a screen reader. */}
-      {/* The source artwork carries baked-in English UI copy on its right
-          third ("We create digital experiences that convert", a "Design /
-          Composants / Styles" panel, a code window). That is fake marketing
-          text inside the illustration, in the wrong language, and it cannot
-          be edited out of the asset here — so the crop excludes it: the
-          frame is zoomed onto the figure and anchored left of centre, which
-          pushes those panels outside the visible window at every width. */}
+      {/* --- the figure, small and far --- */}
       <div
         aria-hidden="true"
-        /* Below lg the band is a top-right corner presence with a capped
-           height; from lg it becomes the full-height right column of the
-           composition. */
-        className="pointer-events-none absolute right-0 top-0 -z-10 h-[58%] w-[74%] select-none overflow-hidden sm:h-[64%] sm:w-[60%] lg:inset-y-0 lg:h-auto lg:w-[60%] xl:w-[56%]"
-        style={rise(120)}
+        className="pointer-events-none absolute right-[6%] top-[13%] -z-10 w-[38%] max-w-[300px] select-none sm:right-[10%] sm:w-[22%] lg:right-[13%] lg:top-[15%] lg:w-[15%]"
       >
-        <ScrollShift distance={40} className="h-full">
-          <div className="relative h-full [mask-image:linear-gradient(to_right,transparent_0%,#000_46%)] lg:[mask-image:linear-gradient(to_right,transparent_0%,#000_42%)]">
-            <div className="absolute inset-0 [mask-image:linear-gradient(to_bottom,#000_52%,transparent_88%)] lg:[mask-image:linear-gradient(to_bottom,#000_58%,transparent_94%)]">
-              {/* Held far back below lg. Narrow viewports have no column to
-                  put the figure beside, so it can only sit *under* the
-                  headline — at full strength that is a giant astronaut behind
-                  the type, which is the composition this rebuild exists to
-                  avoid. At 0.3 it reads as atmosphere and the type keeps a
-                  near-black ground. */}
-              <Image
-                src="/assets/hero-astronaut.webp"
-                alt=""
-                fill
-                priority
-                sizes="(max-width: 640px) 86vw, (max-width: 1024px) 72vw, 60vw"
-                className="scale-[1.45] object-cover object-[31%_40%] opacity-30 lg:scale-[1.5] lg:object-[27%_46%] lg:opacity-[0.55]"
-              />
-            </div>
+        {/* The asset is a genuine cut-out (VP8X alpha), so there is no
+            rectangle to hide and no vignette needed — transparent pixels
+            simply show the page ground. The crop exists only to keep the
+            artwork's OTHER objects (laptop, panels, planets, and the
+            baked-in English UI copy they carry) out of frame, leaving the
+            figure alone in the dark. */}
+        <ScrollShift distance={70}>
+          {/* Crop derived from the artwork's own alpha and luminance, not
+              guessed: the figure occupies x 25–50% and y 9–83% of the
+              source — a 1:2 portrait. A square frame cannot hold that
+              without also catching the laptop at x>50%, which is why this
+              frame is 3:4 and the numbers below are what they are.
+
+              overflow-hidden is load-bearing: `scale` grows the rendered
+              box past the container, so without the clip the crop stops
+              being a crop and the whole scene spills out. */}
+          {/* The bottom fade does two jobs: it removes the laptop keys the
+              crop still catches below the figure's knees, and it lets the
+              figure emerge from the dark rather than sit in a box. */}
+          <div className="relative aspect-[3/4] overflow-hidden [mask-image:linear-gradient(to_bottom,#000_52%,transparent_86%)]">
+            <Image
+              src="/assets/hero-astronaut.webp"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 640px) 42vw, (max-width: 1024px) 26vw, 18vw"
+              className="scale-[1.47] object-cover object-[29%_25%] opacity-45 contrast-[1.12] grayscale-[0.4]"
+            />
           </div>
         </ScrollShift>
       </div>
 
-      {/* ---------------- the type ---------------- */}
-      <div className="shell relative z-10 pb-10 pt-20 md:pt-28">
-        <p className="t-mono text-slate-dim" style={rise(60)}>
-          {hero.kicker}
-        </p>
+      {/* --- type --- */}
+      <div className="shell relative flex flex-1 flex-col justify-center py-24">
+        <div data-reveal>
+          <p className="eyebrow">{hero.kicker}</p>
 
-        <h1 className="t-display mt-8 max-w-[16ch]" style={rise(140)}>
-          {hero.titleLines.map((line, i) => (
-            <span key={i} className="block">
-              {line.map((chunk, j) =>
-                chunk.accent ? (
-                  /* The one coloured word on the homepage. It carries the
-                     whole position — conçus vs. assemblés — so it is the
-                     only place the signature is spent here. */
-                  <span key={j} className="text-signal-soft">
-                    {chunk.t}
-                  </span>
-                ) : (
-                  <span key={j}>{chunk.t}</span>
-                )
-              )}
-            </span>
-          ))}
-        </h1>
-
-        <div
-          className="mt-12 grid gap-x-16 gap-y-9 md:grid-cols-[minmax(0,1fr)_auto] md:items-end"
-          style={rise(240)}
-        >
-          <p className="t-lead max-w-[46ch] text-mist">{hero.lead}</p>
-
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-            <Button href={hero.primaryCta.href} withArrow>
-              {hero.primaryCta.label}
-            </Button>
-            <ArrowLink href={hero.secondaryCta.href}>
-              {hero.secondaryCta.label}
-            </ArrowLink>
-          </div>
+          <Lines
+            as="h1"
+            lines={hero.title}
+            mutedFrom={hero.titleMutedFrom}
+            stagger={110}
+            className="t-hero mt-10 md:mt-14"
+          />
         </div>
+
+        <p
+          className="t-lead mt-14 max-w-[34ch] text-mist md:mt-20"
+          data-reveal
+          style={{ ["--reveal-delay" as string]: "420ms" }}
+        >
+          {hero.lead}
+        </p>
       </div>
 
-      {/* ---------------- masthead rail ---------------- */}
-      <div className="shell relative z-10 pb-8" style={rise(340)}>
-        <div className="h-px w-full bg-[var(--hairline)]" />
-        <ul className="flex flex-wrap items-center gap-x-8 gap-y-2 pt-5 md:gap-x-14">
-          {hero.signature.map((word) => (
-            <li key={word} className="t-mono text-slate-dim">
-              {word}
-            </li>
-          ))}
-        </ul>
+      {/* --- scroll cue --- */}
+      <div
+        className="shell relative pb-10"
+        data-reveal
+        style={{ ["--reveal-delay" as string]: "700ms" }}
+      >
+        <a
+          href="#suite"
+          className="group inline-flex items-center gap-4 text-dim transition-colors duration-500 hover:text-chalk"
+        >
+          <span className="eyebrow">{hero.scroll}</span>
+          <svg
+            viewBox="0 0 12 22"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            aria-hidden="true"
+            className="h-5 w-3 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-y-1.5"
+          >
+            <path d="M6 0v20M1 15l5 5 5-5" />
+          </svg>
+        </a>
       </div>
     </section>
   );

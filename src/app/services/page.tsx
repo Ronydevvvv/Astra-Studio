@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/PageHero";
 import { ServicesDetail } from "@/components/sections/ServicesDetail";
-import { CTA } from "@/components/sections/CTA";
+import { Call } from "@/components/sections/Call";
 import { servicesPage } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Services web",
+  title: "Services",
   description:
-    "Design, développement, performance, responsive, SEO et accompagnement : les six domaines couverts par ASTRA Studio, et ce que chacun recouvre concrètement.",
+    "Direction artistique, identité visuelle, web design, développement, expérience digitale et accompagnement : les six domaines couverts par ASTRA Studio.",
   path: "/services",
 });
 
@@ -21,7 +21,7 @@ export default function ServicesPage() {
         lead={servicesPage.lead}
       />
       <ServicesDetail />
-      <CTA />
+      <Call />
     </>
   );
 }

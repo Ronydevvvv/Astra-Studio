@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/PageHero";
 import { Pricing } from "@/components/sections/Pricing";
+import { Call } from "@/components/sections/Call";
 import { pricing } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Tarifs",
   description:
-    "Site vitrine, site sur mesure ou e-commerce : les trois formes que prennent la plupart des projets ASTRA Studio, et ce que chacune comprend.",
+    "Des offres claires, pas de formule toute faite. Chaque proposition est construite selon vos objectifs et le travail réellement nécessaire.",
   path: "/tarifs",
 });
 
@@ -20,6 +21,7 @@ export default function TarifsPage() {
         lead={pricing.lead}
       />
       <Pricing />
+      <Call />
     </>
   );
 }

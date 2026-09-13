@@ -116,14 +116,14 @@ export function ContactForm() {
   };
 
   const fieldClass = (bad: boolean) =>
-    `w-full border-b bg-transparent py-3.5 text-[1rem] text-chalk outline-none transition-colors duration-300 placeholder:text-slate-dim/50 ${
+    `w-full border-b bg-transparent py-3.5 text-[1rem] text-chalk outline-none transition-colors duration-300 placeholder:text-dim ${
       bad
         ? "border-red-400/70 focus:border-red-300"
         : "border-[var(--hairline-strong)] hover:border-white/30 focus:border-chalk"
     }`;
 
   const labelClass =
-    "block t-mono text-slate-dim";
+    "block eyebrow text-dim";
 
   if (status === "sent") {
     return (
@@ -141,7 +141,7 @@ export function ContactForm() {
             <button
               type="button"
               onClick={() => setStatus("idle")}
-              className="link-underline mt-8 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-300 hover:text-mist"
+              className="underline-draw mt-8 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-300 hover:text-mist"
             >
               Envoyer un autre message
             </button>
@@ -172,7 +172,7 @@ export function ContactForm() {
             <button
               type="button"
               onClick={() => setStatus("idle")}
-              className="link-underline mt-8 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-300 hover:text-mist"
+              className="underline-draw mt-8 text-[0.8125rem] font-medium uppercase tracking-[0.1em] text-chalk transition-colors duration-300 hover:text-mist"
             >
               Revenir au formulaire
             </button>
@@ -377,7 +377,7 @@ export function ContactForm() {
           </p>
         )}
 
-        <p className="mt-5 text-[0.8125rem] text-slate-dim">
+        <p className="mt-5 text-[0.8125rem] text-dim">
           Les champs marqués <span className="text-chalk">*</span> sont
           obligatoires.
         </p>

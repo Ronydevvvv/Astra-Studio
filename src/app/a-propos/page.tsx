@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/PageHero";
-import { Approach } from "@/components/sections/Approach";
-import { CTA } from "@/components/sections/CTA";
+import { StudioScene } from "@/components/sections/StudioScene";
+import { Call } from "@/components/sections/Call";
 import { about } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "À propos",
   description:
-    "ASTRA n'est pas une agence qui fabrique des pages. Comprendre, concevoir, construire, faire évoluer : notre manière de mener un projet web.",
+    "ASTRA est un studio digital indépendant. Direction artistique, design et développement, menés par la même personne du premier croquis à la mise en ligne.",
   path: "/a-propos",
 });
 
@@ -16,9 +16,8 @@ export default function AProposPage() {
   return (
     <>
       <PageHero label={about.eyebrow} title={about.title} lead={about.lead} />
-      {/* The masthead carries the title and lead, so the section drops both. */}
-      <Approach heading={false} />
-      <CTA />
+      <StudioScene />
+      <Call />
     </>
   );
 }
