@@ -4,109 +4,150 @@ import { Lines } from "@/components/ui/Lines";
 import { ScrollShift } from "@/components/ui/ScrollShift";
 
 /**
- * A full-height opening that is almost entirely empty.
+ * A cover, built on three anchors rather than one centred block.
  *
- * The headline is the only loud thing on the screen and it is set against
- * the left margin at up to 150px. Everything else — the label above it,
- * the sentence below, the scroll cue — is small, grey and far away from
- * it. That distance is the composition; there is nothing else in here.
+ * The previous hero centred a single lump of type in a full viewport, so
+ * the emptiness sat evenly above and below it and read as missing content.
+ * Here the screen is pinned at the top (label / mark), the upper-middle
+ * (headline) and the bottom (lead / scroll) — the void is BETWEEN composed
+ * elements, which is the difference between space and absence.
  *
- * THE ASTRONAUT IS DELIBERATELY TINY. It sits in the upper right at a
- * fraction of the viewport, dimmed to a third and pushed behind a
- * vignette, so it reads as a figure lost in a large dark frame rather
- * than as an illustration placed on a page. The source artwork is a
- * bright 3D render carrying baked-in English UI copy on its right side;
- * cropping hard into the figure and holding the exposure right down is
- * what turns it into a silhouette instead of a sticker.
+ * The figure is no longer an object in a corner. It runs as a tall band on
+ * the right grid column, from beneath the header to the foot of the
+ * section, and the headline's last line is allowed to cross into it. That
+ * overlap is the whole point: two planes interlocking read as one
+ * composition, two planes side by side read as a picture next to text.
+ *
+ * Diagonal tension: headline top-left, scroll cue bottom-right, lead
+ * bottom-left. Nothing is centred, and the right column is occupied all
+ * the way down instead of emptying out below the figure.
  */
 export function Hero() {
   return (
     <section
       id="accueil"
-      className="relative isolate flex min-h-[100svh] flex-col overflow-hidden pt-[var(--nav-h)]"
+      className="relative isolate flex min-h-[92svh] flex-col overflow-hidden pt-[var(--nav-h)]"
     >
-      {/* --- the figure, small and far --- */}
+      {/* ---------------- the figure, as a column ---------------- */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute right-[6%] top-[13%] -z-10 w-[38%] max-w-[300px] select-none sm:right-[10%] sm:w-[22%] lg:right-[13%] lg:top-[15%] lg:w-[15%]"
+        className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-[52%] select-none sm:w-[38%] lg:w-[26%] xl:w-[24%]"
       >
-        {/* The asset is a genuine cut-out (VP8X alpha), so there is no
-            rectangle to hide and no vignette needed — transparent pixels
-            simply show the page ground. The crop exists only to keep the
-            artwork's OTHER objects (laptop, panels, planets, and the
-            baked-in English UI copy they carry) out of frame, leaving the
-            figure alone in the dark. */}
-        <ScrollShift distance={70}>
-          {/* Crop derived from the artwork's own alpha and luminance, not
-              guessed: the figure occupies x 25–50% and y 9–83% of the
-              source — a 1:2 portrait. A square frame cannot hold that
-              without also catching the laptop at x>50%, which is why this
-              frame is 3:4 and the numbers below are what they are.
+        <ScrollShift distance={90} className="h-full">
+          {/* Crop geometry comes from the artwork's own alpha and
+              luminance, not from estimation: the figure occupies x 25–50%
+              and y 9–83% of the source, and the laptop it sits above
+              spans x 45–85%, y 55–95%.
+
+              Those two boxes overlap, so no horizontal crop that still
+              holds the figure can exclude the laptop. The bottom fade is
+              what removes it — and it leaves the figure dissolving into
+              the dark rather than ending on a cut.
 
               overflow-hidden is load-bearing: `scale` grows the rendered
               box past the container, so without the clip the crop stops
-              being a crop and the whole scene spills out. */}
-          {/* The bottom fade does two jobs: it removes the laptop keys the
-              crop still catches below the figure's knees, and it lets the
-              figure emerge from the dark rather than sit in a box. */}
-          <div className="relative aspect-[3/4] overflow-hidden [mask-image:linear-gradient(to_bottom,#000_52%,transparent_86%)]">
-            <Image
-              src="/assets/hero-astronaut.webp"
-              alt=""
-              fill
-              priority
-              sizes="(max-width: 640px) 42vw, (max-width: 1024px) 26vw, 18vw"
-              className="scale-[1.47] object-cover object-[29%_25%] opacity-45 contrast-[1.12] grayscale-[0.4]"
-            />
+              being a crop. */}
+          <div className="relative h-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_42%)]">
+            {/* `grain` belongs on the element carrying the vertical fade,
+                not on the wrapper: on the wrapper its ::after is clipped
+                horizontally but not vertically, so the noise runs past
+                where the image dissolves and lights a faint rectangle at
+                the foot of the band. */}
+            <div className="grain absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent,#000_20%,#000_52%,transparent_80%)]">
+              <Image
+                src="/assets/hero-astronaut.webp"
+                alt=""
+                fill
+                priority
+                sizes="(max-width: 640px) 52vw, (max-width: 1024px) 38vw, 26vw"
+                className="scale-[1.2] object-cover object-[32%_30%] opacity-[0.16] contrast-[1.12] grayscale-[0.45] sm:opacity-[0.24] lg:opacity-[0.34]"
+              />
+            </div>
           </div>
         </ScrollShift>
       </div>
 
-      {/* --- type --- */}
-      <div className="shell relative flex flex-1 flex-col justify-center py-24">
-        <div data-reveal>
-          <p className="eyebrow">{hero.kicker}</p>
+      {/* The grid line the figure's column starts on. It is structure made
+          visible, not ornament — remove the band and this rule has no
+          reason to exist, which is the test it has to pass. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-[26%] -z-10 hidden w-px bg-[linear-gradient(to_bottom,transparent,var(--hairline)_22%,var(--hairline)_70%,transparent)] lg:block xl:right-[24%]"
+      />
 
+      {/* ---------------- top: label and mark ---------------- */}
+      {/* Padded to the grid line rather than to the page edge, so the mark
+          lands ON the structure instead of floating over the figure. */}
+      <div className="shell relative pt-10 md:pt-14 lg:pr-[calc(26%+var(--gutter))] xl:pr-[calc(24%+var(--gutter))]" data-reveal>
+        <div className="flex items-baseline justify-between gap-8">
+          <p className="eyebrow">{hero.kicker}</p>
+          <p className="eyebrow hidden items-baseline gap-3 sm:flex">
+            <span>{hero.mark.index}</span>
+            <span className="text-dim/70" aria-hidden="true">
+              —
+            </span>
+            <span>{hero.mark.label}</span>
+          </p>
+        </div>
+      </div>
+
+      {/* ---------------- headline ---------------- */}
+      {/* mt-auto pushes it off the top anchor; the bottom rail then pins
+          the other end, so the remaining height falls as one deliberate
+          gap rather than two equal ones. */}
+      <div className="shell relative z-10 mt-auto pb-16 pt-24 md:pb-24">
+        {/* The reveal flag sits on a wrapper, not on Lines: the line
+            animation is driven by `[data-reveal] .line > span`, so the
+            attribute has to be on an ancestor element in the DOM. */}
+        <div data-reveal>
           <Lines
             as="h1"
             lines={hero.title}
             mutedFrom={hero.titleMutedFrom}
             stagger={110}
-            className="t-hero mt-10 md:mt-14"
+            className="t-hero max-w-[13ch]"
           />
         </div>
-
-        <p
-          className="t-lead mt-14 max-w-[34ch] text-mist md:mt-20"
-          data-reveal
-          style={{ ["--reveal-delay" as string]: "420ms" }}
-        >
-          {hero.lead}
-        </p>
       </div>
 
-      {/* --- scroll cue --- */}
-      <div
-        className="shell relative pb-10"
-        data-reveal
-        style={{ ["--reveal-delay" as string]: "700ms" }}
-      >
-        <a
-          href="#suite"
-          className="group inline-flex items-center gap-4 text-dim transition-colors duration-500 hover:text-chalk"
+      {/* ---------------- bottom rail ---------------- */}
+      <div className="shell relative z-10 pb-10 md:pb-14">
+        <div
+          data-reveal
+          className="rule-draw h-px w-full bg-[var(--hairline)]"
+          style={{ ["--reveal-delay" as string]: "500ms" }}
+        />
+
+        {/* The rule above runs the full width — it ties the type column to
+            the figure band. The content below stops at the grid line, so
+            the scroll cue stays on the dark ground and remains legible. */}
+        <div
+          className="flex flex-col gap-8 pt-7 md:flex-row md:items-start md:justify-between md:gap-16 lg:pr-[calc(26%+var(--gutter))] xl:pr-[calc(24%+var(--gutter))]"
+          data-reveal
+          style={{ ["--reveal-delay" as string]: "620ms" }}
         >
-          <span className="eyebrow">{hero.scroll}</span>
-          <svg
-            viewBox="0 0 12 22"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            aria-hidden="true"
-            className="h-5 w-3 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-y-1.5"
+          <p className="t-lead max-w-[38ch] text-mist">{hero.lead}</p>
+
+          {/* Opposite corner to the headline. An anchor, not a button:
+              the page has no filled controls, and a pill here would be
+              the loudest thing on the first screen. */}
+          <a
+            href="#suite"
+            className="group inline-flex shrink-0 items-center gap-4 self-start text-dim transition-colors duration-500 hover:text-chalk md:self-auto"
           >
-            <path d="M6 0v20M1 15l5 5 5-5" />
-          </svg>
-        </a>
+            <span className="eyebrow">{hero.scroll}</span>
+            <svg
+              viewBox="0 0 12 26"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              aria-hidden="true"
+              className="h-6 w-3 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-y-2"
+            >
+              <path d="M6 0v23M1 18l5 5 5-5" />
+            </svg>
+          </a>
+        </div>
       </div>
     </section>
   );

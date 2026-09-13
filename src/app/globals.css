@@ -189,6 +189,21 @@
     letter-spacing: 0.08em;
   }
 
+  /* Grain, applied to ONE element and never to the page.
+     The astronaut is a clean 3D render; a trace of noise over it is
+     what stops it reading as CGI dropped onto a flat ground. Scoped
+     to the image band on purpose — a full-page grain overlay is the
+     decorative trick this design removed, and at 3.5% over a single
+     crop it is doing a specific job instead. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
   /* Breathing room, as a scale rather than ad-hoc padding. `air-lg`
      is deliberately enormous: a section that takes most of a screen
      to say one sentence is the point, not an accident. */

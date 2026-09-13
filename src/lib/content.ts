@@ -34,12 +34,16 @@ export const primaryCta = { label: "Démarrer un projet", href: "/contact" };
 
 export const hero = {
   kicker: "ASTRA Studio",
+  /** Signature mark, set opposite the kicker. Deliberately not fake
+   *  telemetry — no coordinates, no "MISSION 001". It states what the
+   *  studio is and nothing more. */
+  mark: { index: "01", label: "Digital Studio" },
   title: ["Les idées qui", "méritent d'aller", "plus loin."],
   /** The last line is set in the recessed grey — the sentence resolves
    *  into the distance rather than shouting its own last word. */
   titleMutedFrom: 2,
   lead: "Nous concevons des identités, des sites et des expériences digitales pensées pour durer.",
-  scroll: "Découvrir",
+  scroll: "Explorer",
 };
 
 /* ------------------------------------------------------------------ */
