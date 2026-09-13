@@ -22,6 +22,22 @@ export const metadata: Metadata = pageMetadata({
  * to the form rather than a competing column.
  */
 export default function ContactPage() {
+  const details = [
+    company.email && {
+      label: "E-mail",
+      value: company.email,
+      href: `mailto:${company.email}`,
+    },
+    company.phone && {
+      label: "Téléphone",
+      value: company.phone,
+      href: `tel:${company.phone.replace(/\s/g, "")}`,
+    },
+    ...company.socials
+      .filter((s) => s.href)
+      .map((s) => ({ label: s.label, value: s.label, href: s.href as string })),
+  ].filter(Boolean) as { label: string; value: string; href: string }[];
+
   return (
     <>
       <section className="pt-[var(--nav-h)]">
@@ -58,58 +74,41 @@ export default function ContactPage() {
             <ContactForm />
           </div>
 
-          {/* --- details, as a footnote --- */}
-          <dl className="mt-32 grid gap-x-16 gap-y-10 border-t border-[var(--hairline)] pt-10 sm:grid-cols-3 lg:mt-44">
-            <Detail
-              label="E-mail"
-              value={company.email}
-              href={company.email ? `mailto:${company.email}` : undefined}
-            />
-            <Detail
-              label="Téléphone"
-              value={company.phone}
-              href={
-                company.phone
-                  ? `tel:${company.phone.replace(/\s/g, "")}`
-                  : undefined
-              }
-            />
-            <Detail label="Réseaux" value={null} />
-          </dl>
+          {/* Details appear only when they exist. With none set, the block
+              is absent entirely rather than printing "à renseigner" three
+              times — an unfinished footer is a backlog item, not content. */}
+          {details.length > 0 && (
+            <dl className="mt-32 grid gap-x-16 gap-y-10 border-t border-[var(--hairline)] pt-10 sm:grid-cols-3 lg:mt-44">
+              {details.map((d) => (
+                <Detail key={d.label} {...d} />
+              ))}
+            </dl>
+          )}
         </div>
       </section>
     </>
   );
 }
 
-/** Unset details show an explicit gap, never plausible-looking data. */
 function Detail({
   label,
   value,
   href,
 }: {
   label: string;
-  value: string | null;
-  href?: string;
+  value: string;
+  href: string;
 }) {
   return (
     <div>
       <dt className="eyebrow">{label}</dt>
       <dd className="mt-3 text-[0.9375rem]">
-        {value ? (
-          href ? (
-            <a
-              href={href}
-              className="underline-draw text-chalk transition-colors duration-500 hover:text-mist"
-            >
-              {value}
-            </a>
-          ) : (
-            <span className="text-mist">{value}</span>
-          )
-        ) : (
-          <span className="italic text-dim">à renseigner</span>
-        )}
+        <a
+          href={href}
+          className="underline-draw text-chalk transition-colors duration-500 hover:text-mist"
+        >
+          {value}
+        </a>
       </dd>
     </div>
   );

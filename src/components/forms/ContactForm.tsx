@@ -4,7 +4,7 @@ import { useId, useState } from "react";
 import { contact } from "@/lib/content";
 import { Icon } from "@/components/ui/Icon";
 
-type Field = "name" | "company" | "email" | "phone" | "type" | "budget" | "message";
+type Field = "name" | "company" | "email" | "phone" | "type" | "budget" | "deadline" | "message";
 type Errors = Partial<Record<Field, string>>;
 type Status = "idle" | "submitting" | "sent" | "not_configured" | "error";
 
@@ -95,6 +95,7 @@ export function ContactForm() {
           phone: String(data.get("phone") ?? ""),
           type: String(data.get("type") ?? ""),
           budget: String(data.get("budget") ?? ""),
+          deadline: String(data.get("deadline") ?? ""),
           message: String(data.get("message") ?? ""),
         }),
       });
@@ -317,6 +318,28 @@ export function ContactForm() {
           {contact.budgets.map((b) => (
             <option key={b} value={b} className="bg-ink">
               {b}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* --- deadline --- */}
+      <div>
+        <label htmlFor={`${id}-deadline`} className={labelClass}>
+          {contact.deadlineLabel}
+        </label>
+        <select
+          id={`${id}-deadline`}
+          name="deadline"
+          defaultValue=""
+          className={`mt-3 appearance-none ${fieldClass(false)}`}
+        >
+          <option value="" className="bg-ink">
+            Sélectionner…
+          </option>
+          {contact.deadlines.map((d) => (
+            <option key={d} value={d} className="bg-ink">
+              {d}
             </option>
           ))}
         </select>

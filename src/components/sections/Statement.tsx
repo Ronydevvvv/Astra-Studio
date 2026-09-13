@@ -20,14 +20,28 @@ export function Statement() {
         <Lines
           as="h2"
           lines={statement.title}
-          mutedFrom={2}
+          mutedFrom={statement.titleMutedFrom}
           stagger={110}
           className="t-display max-w-[15ch]"
         />
 
-        <p className="t-lead mt-16 max-w-[38ch] text-mist md:mt-24 lg:ml-[42%]">
-          {statement.body}
-        </p>
+        <div className="mt-20 grid gap-x-24 gap-y-14 md:mt-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <p className="t-lead max-w-[40ch] text-mist lg:col-start-2">
+            {statement.body}
+          </p>
+
+          {/* The three steps are an index, not a process diagram: no
+              connecting line, no arrows, no cards. Their only job is to
+              name the order the sentence above implies. */}
+          <ol className="flex flex-wrap gap-x-16 gap-y-6 lg:col-start-2">
+            {statement.steps.map((step) => (
+              <li key={step.index} className="flex items-baseline gap-3">
+                <span className="eyebrow">{step.index}</span>
+                <span className="eyebrow text-mist">{step.label}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );

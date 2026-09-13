@@ -47,8 +47,16 @@ export const hero = {
 /* ------------------------------------------------------------------ */
 
 export const statement = {
-  title: ["Nous ne créons pas", "des sites pour remplir", "des écrans."],
-  body: "Nous construisons des expériences qui donnent une forme claire aux idées.",
+  title: ["Nous ne remplissons", "pas des templates.", "Nous construisons", "des présences."],
+  /** The muted half starts at the second sentence, so the turn in the
+   *  argument and the turn in the colour happen on the same line. */
+  titleMutedFrom: 2,
+  body: "Une direction claire, un design qui lui répond, et du code qui tient. Menés dans cet ordre, par la même personne.",
+  steps: [
+    { index: "01", label: "Direction" },
+    { index: "02", label: "Design" },
+    { index: "03", label: "Développement" },
+  ],
 };
 
 /* ------------------------------------------------------------------ */
@@ -77,14 +85,6 @@ export const services: Service[] = [
   },
   {
     index: "02",
-    slug: "identite-visuelle",
-    title: "Identité visuelle",
-    short: "Un système qui tient au-delà du logo.",
-    body: "Un logo ne fait pas une marque. On construit le système complet — typographie, couleur, grille, règles — pour que la marque reste elle-même partout où elle apparaît.",
-    deliverables: ["Logotype", "Typographie", "Palette", "Règles d'usage"],
-  },
-  {
-    index: "03",
     slug: "web-design",
     title: "Web design",
     short: "Des compositions dessinées écran par écran.",
@@ -92,20 +92,28 @@ export const services: Service[] = [
     deliverables: ["Maquettes", "Design system", "Prototypes", "Responsive"],
   },
   {
-    index: "04",
+    index: "03",
     slug: "developpement",
     title: "Développement",
     short: "Du code lisible, que vous pourrez faire évoluer.",
     body: "Du code typé et sobre, choisi pour le projet et non l'inverse. Un site que vous reprendrez dans deux ans sans devoir le réécrire.",
-    deliverables: ["Intégration", "Performance", "CMS", "Intégrations tierces"],
+    deliverables: ["Intégration", "Performance", "CMS", "Animations"],
+  },
+  {
+    index: "04",
+    slug: "identite-digitale",
+    title: "Identité digitale",
+    short: "Un système qui tient au-delà du logo.",
+    body: "Un logo ne fait pas une marque. On construit le système — typographie, couleur, grille, règles — pour qu'elle reste elle-même partout où elle apparaît.",
+    deliverables: ["Logotype", "Typographie", "Palette", "Règles d'usage"],
   },
   {
     index: "05",
-    slug: "experience-digitale",
-    title: "Expérience digitale",
-    short: "Le mouvement, le rythme, le détail qui reste.",
-    body: "Une animation a une raison ou elle n'existe pas. On travaille le rythme du scroll, les transitions et les micro-états jusqu'à ce que le site paraisse simplement fluide.",
-    deliverables: ["Motion", "Micro-interactions", "Transitions", "Accessibilité"],
+    slug: "e-commerce",
+    title: "E-commerce",
+    short: "Une boutique qui donne envie d'aller au bout.",
+    body: "La vente en ligne se joue sur le parcours, pas sur le catalogue. Fiche produit, panier, paiement : chaque écran est dessiné pour retirer une raison d'abandonner.",
+    deliverables: ["Parcours d'achat", "Fiches produit", "Paiement", "Gestion"],
   },
   {
     index: "06",
@@ -311,9 +319,9 @@ export const pricing = {
 
 export const contact = {
   eyebrow: "Contact",
-  title: ["Votre prochaine idée", "mérite de décoller."],
-  lead: "Décrivez-nous votre projet. Nous reviendrons vers vous avec une première direction.",
-  projectTypes: ["Site vitrine", "Site sur mesure", "E-commerce", "Refonte", "Identité visuelle", "Autre"],
+  title: ["Parlons de", "votre projet."],
+  lead: "Décrivez-le en quelques lignes. Nous revenons vers vous avec une première direction, pas avec un devis automatique.",
+  projectTypes: ["Site vitrine", "Site sur mesure", "E-commerce", "Refonte", "Identité digitale", "Autre"],
   budgetLabel: "Votre budget",
   budgets: [
     "Moins de 700 €",
@@ -322,7 +330,14 @@ export const contact = {
     "Plus de 1 800 €",
     "Je ne sais pas encore",
   ],
-  submit: "Démarrer le projet",
+  deadlineLabel: "Votre délai",
+  deadlines: [
+    "Dès que possible",
+    "Sous 1 à 2 mois",
+    "Sous 3 à 6 mois",
+    "Pas de date arrêtée",
+  ],
+  submit: "Envoyer le projet",
 };
 
 /* Closing block, used at the foot of every page except /contact. */

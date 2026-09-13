@@ -81,8 +81,29 @@ export function WorkIndex({ heading = true }: { heading?: boolean }) {
                 )}
 
                 {/* --- copy --- */}
-                <div className="mt-12 grid gap-x-20 gap-y-8 md:mt-16 lg:grid-cols-[minmax(0,1fr)_18rem]">
-                  <p className="t-lead max-w-[46ch] text-mist">{project.body}</p>
+                <div className="mt-12 grid gap-x-20 gap-y-10 md:mt-16 lg:grid-cols-[minmax(0,1fr)_18rem]">
+                  <div>
+                    <p className="t-lead max-w-[46ch] text-mist">
+                      {project.body}
+                    </p>
+
+                    {/* Not a button: the whole row is already the link, so a
+                        second clickable control inside it would nest two
+                        anchors. This is the affordance, drawn as one. */}
+                    <span className="mt-10 inline-flex items-center gap-4 text-chalk">
+                      <span className="eyebrow text-chalk">Voir le projet</span>
+                      <svg
+                        viewBox="0 0 22 12"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1"
+                        aria-hidden="true"
+                        className="h-3 w-5 shrink-0 transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:translate-x-2"
+                      >
+                        <path d="M0 6h20M15 1l5 5-5 5" />
+                      </svg>
+                    </span>
+                  </div>
 
                   <dl className="text-[0.9375rem]">
                     <dt className="eyebrow">{project.category}</dt>

@@ -2,20 +2,6 @@ import Link from "next/link";
 import { company, footer } from "@/lib/content";
 import { Logo } from "./Logo";
 
-/**
- * Contact details and social links are unset in content.ts. Rather than
- * print a plausible-looking address, the footer renders an explicit
- * marker: a placeholder mistaken for real data is worse than a visible
- * gap, because nobody notices a convincing one before launch.
- */
-function Pending({ label }: { label: string }) {
-  return (
-    <span className="text-[0.9375rem] text-dim">
-      {label} <span className="italic">à renseigner</span>
-    </span>
-  );
-}
-
 const linkClass =
   "underline-draw text-[0.9375rem] text-mist transition-colors duration-500 hover:text-chalk";
 
@@ -48,31 +34,33 @@ export function Footer() {
             </nav>
           ))}
 
+          {/* Only real channels are listed. An e-mail address and social
+              handles are not set yet (see `pending` in content.ts), and
+              printing "à renseigner" in production advertises an unfinished
+              site to every visitor — the gap belongs in the backlog, not in
+              the footer. What is offered instead is the one route that
+              actually works today: the contact form. */}
           <div>
             <h2 className="eyebrow">Contact</h2>
             <ul className="mt-7 space-y-3.5">
-              <li>
-                {company.email ? (
+              {company.email && (
+                <li>
                   <a href={`mailto:${company.email}`} className={linkClass}>
                     {company.email}
                   </a>
-                ) : (
-                  <Pending label="E-mail" />
-                )}
-              </li>
-              <li>
-                {company.phone ? (
+                </li>
+              )}
+              {company.phone && (
+                <li>
                   <a
                     href={`tel:${company.phone.replace(/\s/g, "")}`}
                     className={linkClass}
                   >
                     {company.phone}
                   </a>
-                ) : (
-                  <Pending label="Téléphone" />
-                )}
-              </li>
-              {hasSocials ? (
+                </li>
+              )}
+              {hasSocials &&
                 company.socials
                   .filter((s) => s.href)
                   .map((s) => (
@@ -86,12 +74,12 @@ export function Footer() {
                         {s.label}
                       </a>
                     </li>
-                  ))
-              ) : (
-                <li>
-                  <Pending label="Réseaux" />
-                </li>
-              )}
+                  ))}
+              <li>
+                <Link href="/contact" className={linkClass}>
+                  Démarrer un projet
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
